@@ -13,6 +13,8 @@ $(document).on('DOMContentLoaded', () => {
 $('.drop-down').on('click', (e) => {
     e.preventDefault();
     $('.dropdown').toggleClass('active');
+    if ($('.dropdown').hasClass('active')) $('.material-icons.carrot').html('expand_less')
+    else $('.material-icons.carrot').html('expand_more')
 })
 
 $('.nav-toggler').on('click', () => {
