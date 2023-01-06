@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Amardeep Kesharwani">
+    <meta name="author" content="TNKBang">
     <title>@ViewData["Title"] - Website</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/jquery-ui.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
 </head>
 <body>
     <aside class="sidebar">
@@ -16,12 +17,12 @@
                 <img src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="">
             </div>
             <div>
-                <h3>Amardeep Kesharwani</h3>
-                <small>amardeep@gmail.com</small>
+                <h3>ABC 123</h3>
+                <small>abc123@gmail.com</small>
             </div>
         </div>
         <div class="search-box">
-            <input type="text" class="search" placeholder="Search here..." />
+            <input type="text" id="tags" class="search" placeholder="Search here..." />
         </div>
         <ul class="menu">
             <li>
@@ -52,8 +53,10 @@
     </aside>
     <div class="overlay"></div>
     @RenderBody()
-    <!-- script Amardeep kesharwani-->
+    <!-- script -->
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
-    <script src="~/js/script.js" defer></script>
+    <script src="~/js/jquery.js" asp-append-version="true"></script>
+    <script src="~/js/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
 </body>
 </html>
