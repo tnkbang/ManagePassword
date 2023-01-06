@@ -1,24 +1,24 @@
-﻿using Data.IRepositories;
-using Data.Models;
-using Logic.IRepositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.IRepositories;
+using Data.Models;
+using Logic.IRepositories;
 
 namespace Logic.Repositories
 {
-    public class UserServices : IUserServices
+    public class PasswordServices : IPasswordServices
     {
-        private readonly IUserRepository<User> repositories;
+        private readonly IPasswordRepository<HasPassword> repositories;
 
-        public UserServices(IUserRepository<User> repo)
+        public PasswordServices(IPasswordRepository<HasPassword> repo)
         {
             repositories = repo;
         }
 
-        public async Task<List<User>> GetList()
+        public async Task<List<HasPassword>> GetList()
         {
             try
             {
@@ -30,11 +30,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<User> Details(string id)
+        public async Task<HasPassword> Details(string id, string code, string uname)
         {
             try
             {
-                return await repositories.Details(id);
+                return await repositories.Details(id, code, uname);
             }
             catch
             {
@@ -42,11 +42,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Create(User u)
+        public void Create(HasPassword type)
         {
             try
             {
-                repositories.Create(u);
+                repositories.Create(type);
             }
             catch
             {
@@ -54,11 +54,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Update(User u)
+        public void Update(HasPassword type)
         {
             try
             {
-                repositories.Update(u);
+                repositories.Update(type);
             }
             catch
             {
@@ -66,11 +66,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Delete(User u)
+        public void Delete(HasPassword type)
         {
             try
             {
-                repositories.Delete(u);
+                repositories.Delete(type);
             }
             catch
             {

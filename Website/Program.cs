@@ -16,8 +16,16 @@ builder.Services.AddDbContext<PasswordManagerContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
 });
 
+//call linked three layer
+
 builder.Services.AddTransient(typeof(IUserRepository<>), typeof(UserRepository<>));
 builder.Services.AddScoped<IUserServices, UserServices>();
+
+builder.Services.AddTransient(typeof(ITypeRepository<>), typeof(TypeRepository<>));
+builder.Services.AddScoped<ITypeServices, TypeServices>();
+
+builder.Services.AddTransient(typeof(IPasswordRepository<>), typeof(PasswordRepository<>));
+builder.Services.AddScoped<IPasswordServices, PasswordServices>();
 
 var app = builder.Build();
 

@@ -1,24 +1,24 @@
-﻿using Data.IRepositories;
-using Data.Models;
-using Logic.IRepositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.IRepositories;
+using Data.Models;
+using Logic.IRepositories;
 
 namespace Logic.Repositories
 {
-    public class UserServices : IUserServices
+    public class TypeServices : ITypeServices
     {
-        private readonly IUserRepository<User> repositories;
+        private readonly ITypeRepository<TypePassword> repositories;
 
-        public UserServices(IUserRepository<User> repo)
+        public TypeServices(ITypeRepository<TypePassword> repo)
         {
             repositories = repo;
         }
 
-        public async Task<List<User>> GetList()
+        public async Task<List<TypePassword>> GetList()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<User> Details(string id)
+        public async Task<TypePassword> Details(string id)
         {
             try
             {
@@ -42,11 +42,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Create(User u)
+        public void Create(TypePassword type)
         {
             try
             {
-                repositories.Create(u);
+                repositories.Create(type);
             }
             catch
             {
@@ -54,11 +54,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Update(User u)
+        public void Update(TypePassword type)
         {
             try
             {
-                repositories.Update(u);
+                repositories.Update(type);
             }
             catch
             {
@@ -66,11 +66,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Delete(User u)
+        public void Delete(TypePassword type)
         {
             try
             {
-                repositories.Delete(u);
+                repositories.Delete(type);
             }
             catch
             {

@@ -8,22 +8,18 @@ namespace Website.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserServices userServices;
+        private readonly ITypeServices typeServices;
 
-        public HomeController(IUserServices uServices)
+        public HomeController(ITypeServices uServices)
         {
-            userServices = uServices;
+            typeServices = uServices;
         }
 
-        public async Task<IActionResult> ShowNguoiDung()
+        public async Task<IActionResult> Index()
         {
-            List<User> lst = await userServices.GetList();
+            List<TypePassword> lst= new List<TypePassword>();
+            lst = await typeServices.GetList();
             return View(lst);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
