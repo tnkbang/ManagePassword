@@ -40,7 +40,6 @@ img {
 
     25% {
         border-color: #3cc6d8;
-        ;
     }
 
     50% {
@@ -351,6 +350,10 @@ img {
 .action-btn-group.active .btn-3 {
     transform: translateY(0) scale(0.9);
     opacity: 1;
+}
+
+.ui-autocomplete-loading {
+    background: rgba(255,255,255,0.1) url("/css/images/loading.gif") right center no-repeat;
 }
 
 @keyframes fadeIn {

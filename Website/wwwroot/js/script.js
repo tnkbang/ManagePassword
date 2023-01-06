@@ -2,12 +2,22 @@
 const options = {
     strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
     typeSpeed: 100,
+    backSpeed: 100,
     loop: true,
 };
 
 $(document).on('DOMContentLoaded', () => {
-    const profession = document.querySelector("#profession");
-    new Typed(profession, options);
+    new Typed('#profession', options);
+
+    new Typed('#inpSearch', {
+        strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
+        typeSpeed: 100,
+        backSpeed: 100,
+        attr: 'placeholder',
+        shuffle: true,
+        bindInputFocusEvents: true,
+        loop: true
+    });
 })
 
 $('.drop-down').on('click', (e) => {
@@ -38,33 +48,20 @@ $('.overlay').on('click', () => {
     hideSidebar()
 })
 
-var availableTags = [
-    "ActionScript",
-    "AppleScript",
-    "Asp",
-    "BASIC",
-    "C",
-    "C++",
-    "Clojure",
-    "COBOL",
-    "ColdFusion",
-    "Erlang",
-    "Fortran",
-    "Groovy",
-    "Haskell",
-    "Java",
-    "JavaScript",
-    "Lisp",
-    "Perl",
-    "PHP",
-    "Python",
-    "Ruby",
-    "Scala",
-    "Scheme"
-];
-
-$("#tags").autocomplete({
-    source: availableTags
+$("#inpSearch").autocomplete({
+    source: function (request, response) {
+        $.ajax({
+            url: "/default/gettype",
+            type: 'GET',
+            data: {
+                term: request.term
+            },
+            success: function (data) {
+                response(data);
+            }
+        });
+    },
+    minLength: 1
 });
 
 $("#dialog").dialog({
