@@ -28,3 +28,11 @@ const options = {
 actionBtn.addEventListener("click", () => {
     document.querySelector(".action-btn-group").classList.toggle("active");
 });
+
+document.querySelector('.sidebar_header').addEventListener('click', () => {
+    hideSidebar()
+})
+
+document.querySelector('.overlay').addEventListener('click', () => {
+    hideSidebar()
+})
