@@ -64,3 +64,22 @@ var availableTags = [
 $("#tags").autocomplete({
     source: availableTags
 });
+
+$("#dialog").dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    show: {
+        effect: "clip",
+        duration: 1000
+    },
+    hide: {
+        effect: "explode",
+        duration: 1000
+    }
+});
+
+$("#opener").on("click", function () {
+    $("#dialog").dialog("open");
+});

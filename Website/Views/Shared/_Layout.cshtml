@@ -52,7 +52,23 @@
         </ul>
     </aside>
     <div class="overlay"></div>
-    @RenderBody()
+    <main class="main">
+        <div class="nav-toggler">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="content">
+            @RenderBody()
+        </div>
+        <div class="action-btn-group">
+            <button class="btn-1"><span class="material-icons">favorite</span></button>
+            <button class="btn-2"><span class="material-icons">web</span></button>
+            <button class="btn-3"><span class="material-icons">visibility</span></button>
+
+            <button class="action-btn"><span class="material-icons">edit</span></button>
+        </div>
+    </main>
     <!-- script -->
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
     <script src="~/js/jquery.js" asp-append-version="true"></script>
