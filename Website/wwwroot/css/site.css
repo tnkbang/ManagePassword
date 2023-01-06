@@ -22,6 +22,11 @@ a, a:hover {
 
 ul {
     list-style: none;
+    padding: 0;
+}
+
+ul p{
+    margin: 0;
 }
 
 img {
@@ -68,6 +73,11 @@ img {
     padding: 15px;
     display: block;
     animation: fade 0.5s;
+}
+
+.main button{
+    line-height: normal;
+    padding-top: 4px;
 }
 
 @keyframes fade {
