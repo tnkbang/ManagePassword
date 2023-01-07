@@ -74,7 +74,7 @@ $("#dialog").dialog({
         duration: 1000
     },
     hide: {
-        effect: "explode",
+        effect: "clip",
         duration: 1000
     }
 });
@@ -82,3 +82,7 @@ $("#dialog").dialog({
 $("#opener").on("click", function () {
     $("#dialog").dialog("open");
 });
+
+function runLoadAnimate(type) {
+    return type ? $('.task-runner').css('display', 'block') : $('.task-runner').css('display', 'none')
+}
