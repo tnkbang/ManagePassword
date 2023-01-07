@@ -1,4 +1,5 @@
 ﻿
+//Xử lý hiệu ứng tự gõ chữ
 const options = {
     strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
     typeSpeed: 100,
@@ -20,6 +21,7 @@ $(document).on('DOMContentLoaded', () => {
     });
 })
 
+//Xử lý thay đổi ký hiệu khi nhấn dropdown của nav
 $('.drop-down').on('click', (e) => {
     e.preventDefault();
     $('.dropdown').toggleClass('active');
@@ -27,6 +29,7 @@ $('.drop-down').on('click', (e) => {
     else $('.material-icons.carrot').html('expand_more')
 })
 
+//Xử lý ẩn hiện nav
 $('.nav-toggler').on('click', () => {
     $('.sidebar').addClass('show')
     navigator.vibrate([50, 100, 50]);
@@ -36,10 +39,6 @@ const hideSidebar = () => {
     $('.sidebar').removeClass('show')
 }
 
-$('.action-btn').on('click', () => {
-    $('.action-btn-group').toggleClass('active');
-})
-
 $('.sidebar_header').on('click', () => {
     hideSidebar()
 })
@@ -48,6 +47,12 @@ $('.overlay').on('click', () => {
     hideSidebar()
 })
 
+//Xử lý ẩn hiện icon group
+$('.action-btn').on('click', () => {
+    $('.action-btn-group').toggleClass('active');
+})
+
+//Xử lý đề xuất khi nhập vào textbox tìm kiếm
 $("#inpSearch").autocomplete({
     source: function (request, response) {
         $.ajax({
@@ -64,6 +69,7 @@ $("#inpSearch").autocomplete({
     minLength: 1
 });
 
+////////////
 $("#dialog").dialog({
     autoOpen: false,
     height: 400,
@@ -83,6 +89,39 @@ $("#opener").on("click", function () {
     $("#dialog").dialog("open");
 });
 
+//Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
 function runLoadAnimate(type) {
     return type ? $('.task-runner').css('display', 'block') : $('.task-runner').css('display', 'none')
 }
+
+//Xử lý đăng nhập và đăng ký
+$(".login-register").dialog({
+    autoOpen: false,
+    width: 350,
+    modal: true,
+    show: {
+        effect: "clip",
+        duration: 1000
+    },
+    hide: {
+        effect: "clip",
+        duration: 1000
+    }
+});
+
+$(".login-register").tabs();
+
+$(".contact").on("click", () => {
+    $(".login-register").dialog("open");
+});
+
+$('.view-pass').on('click', (e) => {
+    if (e.target.textContent == 'visibility') {
+        $(e.target.parentElement.firstElementChild).attr('type', 'text');
+        $(e.target).html('visibility_off')
+    }
+    else {
+        $(e.target.parentElement.firstElementChild).attr('type', 'password');
+        $(e.target).html('visibility')
+    }
+})

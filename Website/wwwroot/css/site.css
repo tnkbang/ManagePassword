@@ -419,3 +419,22 @@ img {
         transform: rotate(360deg);
     }
 }
+
+/* custom login and register*/
+
+.login-register {
+    padding: 0 !important;
+}
+
+    .login-register ul {
+        background: none;
+        border: none;
+    }
+
+.view-pass {
+    cursor: pointer;
+    user-select: none;
+    background-color: #fff;
+    border-top-right-radius: .375rem !important;
+    border-bottom-right-radius: .375rem !important;
+}
