@@ -77,5 +77,29 @@ namespace Logic.Repositories
                 throw;
             }
         }
+
+        public async Task<bool> HasUser(string uid)
+        {
+            try
+            {
+                return await repositories.HasUser(uid);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> HasType(string code)
+        {
+            try
+            {
+                return await repositories.HasType(code);
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -18,5 +18,9 @@ namespace Data.IRepositories
         void Update(HasPassword model);
 
         void Delete(HasPassword model);
+
+        Task<bool> HasUser(string uid);
+
+        Task<bool> HasType(string code);
     }
 }

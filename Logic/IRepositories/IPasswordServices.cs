@@ -18,5 +18,9 @@ namespace Logic.IRepositories
         void Update(HasPassword password);
 
         void Delete(HasPassword password);
+
+        Task<bool> HasUser(string uid);
+
+        Task<bool> HasType(string code);
     }
 }

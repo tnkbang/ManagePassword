@@ -1,4 +1,5 @@
 ﻿using Data.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,11 @@ namespace Logic.IRepositories
         void Update(TypePassword type);
 
         void Delete(TypePassword type);
+
+        Task<bool> HasCode(string code);
+
+        Task<bool> HasReferences(string code);
+
+        Task<string?> SetImages(string code, IFormFile img);
     }
 }

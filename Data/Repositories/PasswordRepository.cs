@@ -83,5 +83,31 @@ namespace Data.Repositories
                 throw;
             }
         }
+
+        public async Task<bool> HasUser(string uid)
+        {
+            try
+            {
+                var pass = await _db.HasPasswords.FirstOrDefaultAsync(x => x.Uid == uid);
+                return pass != null ? true : false;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> HasType(string code)
+        {
+            try
+            {
+                var pass = await _db.HasPasswords.FirstOrDefaultAsync(x => x.TypeCode == code);
+                return pass != null ? true : false;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
