@@ -1,6 +1,7 @@
 ﻿using Data.IRepositories;
 using Data.Models;
 using Logic.IRepositories;
+using Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,14 +43,23 @@ namespace Logic.Repositories
             }
         }
 
-        public void Create(string uname, string pass)
+        public async void Create(string uname, string pass)
         {
             try
             {
                 User user = new User();
-                user.Uid = "";
+
+                string ma = "";
+                do
+                {
+                    ma = StringGenerator.StringNumber(10);
+                    user = await repositories.Details(ma);
+                } while ( !string.IsNullOrEmpty(user.Uid) );
+
+                user = new User();
+                user.Uid = ma;
                 user.Username = uname;
-                user.Password = pass;
+                user.Password = Protect.AsPassword(pass, user.Uid);
                 user.Active = true;
                 user.Created = DateTime.Now;
 
