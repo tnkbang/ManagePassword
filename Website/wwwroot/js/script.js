@@ -112,6 +112,7 @@ $(".login-register").dialog({
 $(".login-register").tabs();
 
 $(".contact").on("click", () => {
+    clearLoginRegister()
     $(".login-register").dialog("open");
 });
 
@@ -124,4 +125,29 @@ $('.view-pass').on('click', (e) => {
         $(e.target.parentElement.firstElementChild).attr('type', 'password');
         $(e.target).html('visibility')
     }
+})
+
+function clearLoginRegister() {
+    $('#loginUsername').attr('class', 'form-control')
+    $('#loginPassword').attr('class', 'form-control')
+    $('#registerUsername').attr('class', 'form-control')
+    $('#registerPassword').attr('class', 'form-control')
+    $('#registerRePassword').attr('class', 'form-control')
+}
+
+function setStateInp(state, inp, lbl, text) {
+    if (state) {
+        $(inp).removeClass('is-invalid').addClass('is-valid')
+        $(lbl).removeClass('invalid-feedback').addClass('valid-feedback').hide()
+    }
+    else {
+        $(inp).removeClass('is-valid').addClass('is-invalid')
+        $(lbl).html(text).removeClass('valid-feedback').addClass('invalid-feedback').show()
+    }
+}
+
+$('#loginUsername').on('focusout', (e) => {
+    if ($(e.target).hasClass('is-valid'))
+        setStateInp(false, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
+    else setStateInp(true, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
 })
