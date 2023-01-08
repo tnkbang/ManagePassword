@@ -10,13 +10,13 @@ namespace Logic.Models
 {
     public static class Protect
     {
-        private static string Encrypt(string plainText, string keyBase64, string vectorBase64)
+        private static string Encrypt(string text, string key, string vector)
         {
             using (Aes aesAlgorithm = Aes.Create())
             {
                 //set the parameters with out keyword
-                keyBase64 = Convert.ToBase64String(aesAlgorithm.Key);
-                vectorBase64 = Convert.ToBase64String(aesAlgorithm.IV);
+                aesAlgorithm.Key = Convert.FromBase64String(key);
+                aesAlgorithm.IV = Convert.FromBase64String(vector);
 
                 // Create encryptor object
                 ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor();
@@ -30,7 +30,7 @@ namespace Logic.Models
                     {
                         using (StreamWriter sw = new StreamWriter(cs))
                         {
-                            sw.Write(plainText);
+                            sw.Write(text);
                         }
                         encryptedData = ms.ToArray();
                     }
@@ -40,17 +40,17 @@ namespace Logic.Models
             }
         }
 
-        private static string Decrypt(string cipherText, string keyBase64, string vectorBase64)
+        private static string Decrypt(string text, string key, string vector)
         {
             using (Aes aesAlgorithm = Aes.Create())
             {
-                aesAlgorithm.Key = Convert.FromBase64String(keyBase64);
-                aesAlgorithm.IV = Convert.FromBase64String(vectorBase64);
+                aesAlgorithm.Key = Convert.FromBase64String(key);
+                aesAlgorithm.IV = Convert.FromBase64String(vector);
 
                 // Create decryptor object
                 ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor();
 
-                byte[] cipher = Convert.FromBase64String(cipherText);
+                byte[] cipher = Convert.FromBase64String(text);
 
                 //Decryption will be done in a memory stream through a CryptoStream object
                 using (MemoryStream ms = new MemoryStream(cipher))
