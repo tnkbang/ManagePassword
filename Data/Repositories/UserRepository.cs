@@ -44,6 +44,19 @@ namespace Data.Repositories
             }
         }
 
+        public async Task<User> GetWithUsername(string uname)
+        {
+            try
+            {
+                var user = await _db.Users.FirstOrDefaultAsync(x => x.Username == uname);
+                return user != null ? user : new User();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Create(User model)
         {
             try

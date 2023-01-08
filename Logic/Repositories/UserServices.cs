@@ -42,11 +42,18 @@ namespace Logic.Repositories
             }
         }
 
-        public void Create(User u)
+        public void Create(string uname, string pass)
         {
             try
             {
-                repositories.Create(u);
+                User user = new User();
+                user.Uid = "";
+                user.Username = uname;
+                user.Password = pass;
+                user.Active = true;
+                user.Created = DateTime.Now;
+
+                repositories.Create(user);
             }
             catch
             {
@@ -71,6 +78,19 @@ namespace Logic.Repositories
             try
             {
                 repositories.Delete(u);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> HasUsername(string uname)
+        {
+            try
+            {
+                User user = await repositories.GetWithUsername(uname);
+                return string.IsNullOrEmpty(user.Username) ? true : false;
             }
             catch
             {

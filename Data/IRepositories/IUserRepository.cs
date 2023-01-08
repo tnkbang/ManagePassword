@@ -14,6 +14,8 @@ namespace Data.IRepositories
 
         Task<User> Details(string id);
 
+        Task<User> GetWithUsername(string uname);
+
         void Create(User model);
 
         void Update(User model);

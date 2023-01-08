@@ -13,10 +13,12 @@ namespace Logic.IRepositories
 
         Task<User> Details(string id);
 
-        void Create(User user);
+        void Create(string uname, string pass);
 
         void Update(User user);
 
         void Delete(User user);
+
+        Task<bool> HasUsername(string uname);
     }
 }
