@@ -9,15 +9,13 @@ public partial class User
 
     public string? FistName { get; set; }
 
-    public string LastName { get; set; } = null!;
+    public string? LastName { get; set; }
 
     public DateTime? Birthday { get; set; }
 
     public int? Sex { get; set; }
 
     public string? Phone { get; set; }
-
-    public string? Email { get; set; }
 
     public string Username { get; set; } = null!;
 
@@ -32,4 +30,6 @@ public partial class User
     public DateTime Created { get; set; }
 
     public virtual ICollection<HasPassword> HasPasswords { get; } = new List<HasPassword>();
+
+    public virtual HasVerified? HasVerified { get; set; }
 }

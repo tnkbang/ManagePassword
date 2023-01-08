@@ -17,19 +17,19 @@ public partial class PasswordManagerContext : DbContext
 
     public virtual DbSet<HasPassword> HasPasswords { get; set; }
 
+    public virtual DbSet<HasVerified> HasVerifieds { get; set; }
+
     public virtual DbSet<TypePassword> TypePasswords { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<HasPassword>(entity =>
         {
-            entity.HasKey(e => new { e.Uid, e.TypeCode, e.Username }).HasName("PK__HasPassw__FD48841E9D27B1A6");
+            entity.HasKey(e => new { e.Uid, e.TypeCode, e.Username }).HasName("PK__HasPassw__FD48841E10D45EA2");
 
             entity.ToTable("HasPassword");
 
@@ -44,31 +44,56 @@ public partial class PasswordManagerContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("type_code");
             entity.Property(e => e.Username)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("username");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Password)
-                .HasMaxLength(32)
+                .HasMaxLength(256)
                 .IsUnicode(false)
                 .HasColumnName("password");
 
             entity.HasOne(d => d.TypeCodeNavigation).WithMany(p => p.HasPasswords)
                 .HasForeignKey(d => d.TypeCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__HasPasswo__type___2A4B4B5E");
+                .HasConstraintName("FK__HasPasswo__type___2E1BDC42");
 
             entity.HasOne(d => d.UidNavigation).WithMany(p => p.HasPasswords)
                 .HasForeignKey(d => d.Uid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__HasPassword__uid__29572725");
+                .HasConstraintName("FK__HasPassword__uid__2D27B809");
+        });
+
+        modelBuilder.Entity<HasVerified>(entity =>
+        {
+            entity.HasKey(e => e.Uid).HasName("PK__HasVerif__DD70126419E31B47");
+
+            entity.ToTable("HasVerified");
+
+            entity.HasIndex(e => e.Email, "UQ__HasVerif__AB6E61648F3E09E6").IsUnique();
+
+            entity.Property(e => e.Uid)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("uid");
+            entity.Property(e => e.Email)
+                .HasMaxLength(75)
+                .IsUnicode(false)
+                .HasColumnName("email");
+            entity.Property(e => e.State).HasColumnName("state");
+
+            entity.HasOne(d => d.UidNavigation).WithOne(p => p.HasVerified)
+                .HasForeignKey<HasVerified>(d => d.Uid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__HasVerified__uid__286302EC");
         });
 
         modelBuilder.Entity<TypePassword>(entity =>
         {
-            entity.HasKey(e => e.TypeCode).HasName("PK__TypePass__2CB4DBF4B8FC51A9");
+            entity.HasKey(e => e.TypeCode).HasName("PK__TypePass__2CB4DBF4AA620F2C");
 
             entity.ToTable("TypePassword");
 
@@ -91,9 +116,9 @@ public partial class PasswordManagerContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Uid).HasName("PK__Users__DD7012642F3AC22F");
+            entity.HasKey(e => e.Uid).HasName("PK__Users__DD7012642E622ECD");
 
-            entity.HasIndex(e => e.Username, "UQ__Users__F3DBC572FE81DF8A").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__F3DBC57266F7EB5B").IsUnique();
 
             entity.Property(e => e.Uid)
                 .HasMaxLength(10)
@@ -110,10 +135,6 @@ public partial class PasswordManagerContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
-            entity.Property(e => e.Email)
-                .HasMaxLength(75)
-                .IsUnicode(false)
-                .HasColumnName("email");
             entity.Property(e => e.FistName)
                 .HasMaxLength(20)
                 .HasColumnName("fist_name");

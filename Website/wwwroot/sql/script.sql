@@ -7,17 +7,22 @@ GO
 create table Users(
 	uid char(10) primary key,
 	fist_name nvarchar(20),
-	last_name nvarchar(7) not null,
+	last_name nvarchar(7),
 	birthday datetime,
 	sex int,
 	phone varchar(11),
-	email varchar(75),
 	username varchar(20) not null unique,
 	password varchar(32) not null,
 	image varchar(100),
 	active bit not null,
 	description nvarchar(500),
 	created datetime not null
+)
+
+create table HasVerified(
+	uid char(10) primary key references Users(uid),
+	email varchar(75) not null unique,
+	state bit not null
 )
 
 create table TypePassword(
@@ -30,8 +35,8 @@ create table TypePassword(
 create table HasPassword(
 	uid char(10) references Users(uid),
 	type_code char(5) references TypePassword(type_code) not null,
-	username varchar(20) not null,
-	password varchar(32) not null,
+	username varchar(50) not null,
+	password varchar(256) not null,
 	created datetime not null,
 	primary key (uid, type_code, username)
 )
