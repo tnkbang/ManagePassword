@@ -23,6 +23,14 @@ namespace Website.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> CheckUsername(string uname)
+        {
+            bool check = await userServices.HasUsername(uname);
+
+            return Json(check);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> Create(string uname, string pass)
         {
             if (string.IsNullOrEmpty(uname) || string.IsNullOrEmpty(pass))

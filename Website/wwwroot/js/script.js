@@ -151,3 +151,62 @@ $('#loginUsername').on('focusout', (e) => {
         setStateInp(false, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
     else setStateInp(true, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
 })
+
+//Xử lý đăng ký tài khoản
+$('#registerUsername').on('focusout', (e) => {
+    var checker = /^[a-zA-Z0-9]{5,20}$/;
+    if (!checker.test($('#registerUsername').val())) {
+        setStateInp(false, e.target, '#ckcRegisterUsername', 'Tên người dùng không hợp lệ !')
+        return;
+    }
+
+    $.ajax({
+        url: "/user/checkusername",
+        type: 'POST',
+        data: {
+            uname: $('#registerUsername').val()
+        },
+        success: function (data) {
+            console.log(data)
+            if (!data) setStateInp(true, e.target, '#ckcRegisterUsername', 'Tên người dùng hợp lệ !')
+            else setStateInp(false, e.target, '#ckcRegisterUsername', 'Tên người dùng đã tồn tại !')
+        }
+    });
+})
+
+$('#registerPassword').on('focusout', (e) => {
+    setStateInp(true, e.target, '#ckcRegisterPassword', 'Mật khẩu hợp lệ !')
+})
+
+$('#registerRePassword').on('focusout', (e) => {
+    if ($('#registerPassword').val() == $('#registerRePassword').val()) {
+        setStateInp(true, e.target, '#ckcRegisterRePassword', 'Mật khẩu hợp lệ !')
+        $('#registerSubmit').prop('disabled', false);
+    }
+    else {
+        setStateInp(false, e.target, '#ckcRegisterRePassword', 'Nhập lại khẩu chưa khớp !')
+        $('#registerSubmit').prop('disabled', true);
+    }
+})
+
+$('#registerSubmit').on('click', (e) => {
+
+    e.preventDefault()
+
+    console.log($('#registerUsername').val())
+    console.log($('#registerPassword').val())
+    console.log($('#registerRePassword').val())
+
+
+    $.ajax({
+        url: "/user/create",
+        type: 'POST',
+        data: {
+            uname: $('#registerUsername').val(),
+            pass: $('#registerPassword').val()
+        },
+        success: function (data) {
+            console.log(data)
+        }
+    });
+})

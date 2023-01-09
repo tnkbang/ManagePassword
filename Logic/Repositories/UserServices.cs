@@ -100,7 +100,7 @@ namespace Logic.Repositories
             try
             {
                 User user = await repositories.GetWithUsername(uname);
-                return string.IsNullOrEmpty(user.Username) ? true : false;
+                return string.IsNullOrEmpty(user.Username) ? false : true;
             }
             catch
             {
