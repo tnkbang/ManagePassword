@@ -44,6 +44,19 @@ namespace Data.Repositories
             }
         }
 
+        public User Details(string uname, string pass)
+        {
+            try
+            {
+                var user = _db.Users.FirstOrDefault(x => x.Username == uname && x.Password == pass);
+                return user != null ? user : new User();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public User GetWithUsername(string uname)
         {
             try

@@ -157,36 +157,13 @@ function setStateInp(state, inp, lbl, text) {
     }
 }
 
-function isNewUser(isNew, inp, lbl) {
-    $.ajax({
-        url: "/user/checkusername",
-        type: 'POST',
-        data: {
-            uname: $(inp).val()
-        },
-        success: function (data) {
-            if (data) {
-                setStateInp(!isNew, inp, lbl, 'Tên người dùng đã tồn tại !')
-                return !isNew;
-            }
-            else {
-                setStateInp(isNew, inp, lbl, 'Không tìm thấy tên người dùng !')
-                return isNew;
-            }
-
-        }
-    });
-}
-
-function checkUsername(isRegister, inp, lbl) {
+function checkUsername(inp, lbl) {
     const checker = /^[a-zA-Z0-9]{5,20}$/;
     if (!checker.test($(inp).val())) {
         setStateInp(false, inp, lbl, 'Tên người dùng không hợp lệ !')
         return false;
     }
-
-    const ckcDb = isNewUser(isRegister, inp, lbl)
-    return ckcDb;
+    return true;
 }
 
 function checkPassword(inpUsername, inpPassword, lblPassword) {
@@ -217,45 +194,84 @@ function checkRePassword(inpPass, inpRePass, lblRePass) {
     }
 }
 
+function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
+    $.ajax({
+        url: "/user/checkusername",
+        type: 'POST',
+        data: {
+            uname: $(inpUsername).val()
+        },
+        success: function (data) {
+            if (data) setStateInp(!isRegister, inpUsername, ckcUsername, 'Tên người dùng đã tồn tại !')
+            else setStateInp(isRegister, inpUsername, ckcUsername, 'Không tìm thấy tên người dùng !')
+
+            if ($(inpUsername).hasClass('is-invalid')) return
+
+            if (isRegister) setRegister(inpUsername, inpPassword)
+            else setLogin(inpUsername, inpPassword)
+        }
+    })
+}
+
 //Xử lý đăng ký tài khoản
 $('#registerSubmit').on('click', (e) => {
     e.preventDefault()
 
-    const ckcUname = checkUsername(true, '#registerUsername', '#ckcRegisterUsername')
-    const ckcPass = checkPassword('#registerUsername', '#registerPassword', '#ckcRegisterPassword')
-    const ckcRePass = checkRePassword('#registerPassword', '#registerRePassword', '#ckcRegisterRePassword')
+    const inpUsername = '#registerUsername'
+    const inpPassword = '#registerPassword'
+    const inpRePassword = '#registerRePassword'
+    const ckcUsername = '#ckcRegisterUsername'
+    const ckcPassword = '#ckcRegisterPassword'
+    const ckcRePassword = '#ckcRegisterRePassword'
+
+    const ckcUname = checkUsername(inpUsername, ckcUsername)
+    const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
+    const ckcRePass = checkRePassword(inpPassword, inpRePassword, ckcRePassword)
     if (!ckcUname || !ckcPass || !ckcRePass) return;
 
+    callLoginRegister(true, inpUsername, inpPassword, ckcUsername)
+})
+
+function setRegister(inpUsername, inpPassword) {
     $.ajax({
         url: "/user/create",
         type: 'POST',
         data: {
-            uname: $('#registerUsername').val(),
-            pass: $('#registerPassword').val()
+            uname: $(inpUsername).val(),
+            pass: $(inpPassword).val()
         },
         success: function (data) {
             console.log(data)
         }
     });
-})
+}
 
 //Xử lý đăng nhập
 $('#loginSubmit').on('click', (e) => {
     e.preventDefault()
 
-    const ckcUname = checkUsername(false, '#loginUsername', '#ckcLoginUsername')
-    const ckcPass = checkPassword('#loginUsername', '#loginPassword', '#ckcLoginPassword')
-    if (!ckcUname || !ckcPass) return;
+    const inpUsername = '#loginUsername'
+    const inpPassword = '#loginPassword'
+    const ckcUsername = '#ckcLoginUsername'
+    const ckcPassword = '#ckcLoginPassword'
 
+    const ckcUname = checkUsername(inpUsername, ckcUsername)
+    const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
+    if (!ckcUname || !ckcPass) return
+
+    callLoginRegister(false, inpUsername, inpPassword, ckcUsername)
+})
+
+function setLogin(inpUsername, inpPassword) {
     $.ajax({
-        url: "/user/login",
+        url: "/user/getlogin",
         type: 'POST',
         data: {
-            uname: $('#loginUsername').val(),
-            pass: $('#loginPassword').val()
+            uname: $(inpUsername).val(),
+            pass: $(inpPassword).val()
         },
         success: function (data) {
             console.log(data)
         }
-    });
-})
+    })
+}

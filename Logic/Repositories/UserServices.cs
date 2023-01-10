@@ -43,6 +43,18 @@ namespace Logic.Repositories
             }
         }
 
+        public User Details(string uname, string pass)
+        {
+            try
+            {
+                return repositories.Details(uname, pass);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private string setUid()
         {
             User user = new User();
@@ -62,7 +74,7 @@ namespace Logic.Repositories
                 User user = new User();
                 user.Uid = setUid();
                 user.Username = uname;
-                user.Password = Protect.AsPassword(pass, user.Uid);
+                user.Password = Protect.AsPassword(pass, user.Username);
                 user.Active = true;
                 user.Created = DateTime.Now;
 
@@ -104,6 +116,18 @@ namespace Logic.Repositories
             {
                 User user = repositories.GetWithUsername(uname);
                 return string.IsNullOrEmpty(user.Username) ? false : true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string AsPassword(string uname, string pass)
+        {
+            try
+            {
+                return Protect.AsPassword(pass, uname);
             }
             catch
             {

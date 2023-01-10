@@ -1,6 +1,10 @@
 ﻿using Data.Models;
 using Logic.IRepositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Website.Controllers
 {
@@ -44,10 +48,60 @@ namespace Website.Controllers
             return Json(new { tt = true, mess = "Đăng ký tài khoản thành công !" });
         }
 
-        [HttpPost]
-        public JsonResult Login(string uname, string pass)
+        //Xác thực đăng nhập
+        private async Task<int> setLogin(string uname, string pass)
         {
-            return Json(new { tt = true, mess = "Đăng nhập thành công !" });
+            //Trạng thái của return:
+            // 0 - Email hoặc mật khẩu không chính xác
+            // 1 - Tài khoản bị khóa
+            // 2 - Đăng nhập thành công
+
+            User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
+
+            if (user.Uid != null)
+            {
+                if (!user.Active)
+                {
+                    return 1;
+                }
+
+                //Tạo list lưu chủ thể đăng nhập
+                List<Claim> claims = new List<Claim>() {
+                        new Claim("Uid", user.Uid),
+                        new Claim("Uname", user.Username)
+                    };
+
+                //Tạo Identity để xác thực và xác nhận
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                //Gọi hàm đăng nhập bất đồng bộ của HttpContext
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties()
+                {
+                    //Không nhớ tài khoản
+                    IsPersistent = false
+                });
+
+                return 2;
+            }
+
+            return 0;
+        }
+
+        //Gọi đăng nhập
+        [HttpPost]
+        public async Task<IActionResult> getLogin(string uname, string pass)
+        {
+            int login = await setLogin(uname, pass);
+            if (login == 2)
+            {
+                return Json(new { tt = true });
+            }
+            if (login == 1)
+            {
+                return Json(new { tt = false, mess = "Tài khoản của bạn bị khóa !" });
+            }
+            return Json(new { tt = false, mess = "Không tìm thấy tài khoản đăng nhập !" });
         }
     }
 }

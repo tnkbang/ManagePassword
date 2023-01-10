@@ -13,6 +13,8 @@ namespace Logic.IRepositories
 
         User Details(string id);
 
+        User Details(string uname, string pass);
+
         void Create(string uname, string pass);
 
         void Update(User user);
@@ -20,5 +22,7 @@ namespace Logic.IRepositories
         void Delete(User user);
 
         bool HasUsername(string uname);
+
+        string AsPassword(string uname, string pass);
     }
 }
