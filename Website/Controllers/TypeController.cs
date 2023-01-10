@@ -31,7 +31,7 @@ namespace Website.Controllers
             if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(name))
                 return Json(new { tt = false, mess = "Thiếu thông tin !" });
 
-            if (await typeServices.HasCode(code))
+            if (typeServices.HasCode(code))
                 return Json(new { tt = false, mess = "Mã loại mật khẩu đã tồn tại !"});
 
             TypePassword type = new TypePassword();
@@ -53,10 +53,10 @@ namespace Website.Controllers
             if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(name))
                 return Json(new { tt = false, mess = "Thiếu thông tin !" });
 
-            if (await typeServices.HasCode(code))
+            if (typeServices.HasCode(code))
                 return Json(new { tt = false, mess = "Mã loại mật khẩu đã tồn tại !" });
 
-            TypePassword type = await typeServices.Details(code);
+            TypePassword type = typeServices.Details(code);
             type.TypeName = name;
             type.Description = des;
 
@@ -69,14 +69,14 @@ namespace Website.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Delete(string code)
+        public JsonResult Delete(string code)
         {
-            TypePassword type = await typeServices.Details(code);
+            TypePassword type = typeServices.Details(code);
 
             if (string.IsNullOrEmpty(type.TypeCode))
                 return Json(new { tt = false, mess = "Không tìm thấy thông tin !" });
 
-            if(await typeServices.HasReferences(code))
+            if(typeServices.HasReferences(code))
                 return Json(new { tt = false, mess = "Không thể xóa loại mật khẩu này !" });
 
             typeServices.Delete(type);

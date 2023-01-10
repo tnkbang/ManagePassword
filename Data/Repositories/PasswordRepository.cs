@@ -32,11 +32,11 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<HasPassword> Details(string id, string code, string uname)
+        public HasPassword Details(string id, string code, string uname)
         {
             try
             {
-                var pass = await _db.HasPasswords.FirstOrDefaultAsync(x => x.Uid == id && x.TypeCode == code && x.Username == uname);
+                var pass = _db.HasPasswords.FirstOrDefault(x => x.Uid == id && x.TypeCode == code && x.Username == uname);
                 return pass != null ? pass : new HasPassword();
             }
             catch
@@ -84,11 +84,11 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<bool> HasUser(string uid)
+        public bool HasUser(string uid)
         {
             try
             {
-                var pass = await _db.HasPasswords.FirstOrDefaultAsync(x => x.Uid == uid);
+                var pass = _db.HasPasswords.FirstOrDefault(x => x.Uid == uid);
                 return pass != null ? true : false;
             }
             catch
@@ -97,11 +97,11 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<bool> HasType(string code)
+        public bool HasType(string code)
         {
             try
             {
-                var pass = await _db.HasPasswords.FirstOrDefaultAsync(x => x.TypeCode == code);
+                var pass = _db.HasPasswords.FirstOrDefault(x => x.TypeCode == code);
                 return pass != null ? true : false;
             }
             catch

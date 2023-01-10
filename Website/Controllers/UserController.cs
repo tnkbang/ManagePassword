@@ -23,20 +23,20 @@ namespace Website.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> CheckUsername(string uname)
+        public JsonResult CheckUsername(string uname)
         {
-            bool check = await userServices.HasUsername(uname);
+            bool check = userServices.HasUsername(uname);
 
             return Json(check);
         }
 
         [HttpPost]
-        public async Task<JsonResult> Create(string uname, string pass)
+        public JsonResult Create(string uname, string pass)
         {
             if (string.IsNullOrEmpty(uname) || string.IsNullOrEmpty(pass))
                 return Json(new { tt = false, mess = "Thiếu thông tin !" });
 
-            if (await userServices.HasUsername(uname))
+            if (userServices.HasUsername(uname))
                 return Json(new { tt = false, mess = "Tên người dùng đã tồn tại !" });
 
             userServices.Create(uname, pass);

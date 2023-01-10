@@ -98,11 +98,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<bool> HasUsername(string uname)
+        public bool HasUsername(string uname)
         {
             try
             {
-                User user = await repositories.GetWithUsername(uname);
+                User user = repositories.GetWithUsername(uname);
                 return string.IsNullOrEmpty(user.Username) ? false : true;
             }
             catch

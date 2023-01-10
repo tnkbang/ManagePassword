@@ -33,11 +33,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<TypePassword> Details(string id)
+        public TypePassword Details(string id)
         {
             try
             {
-                return await repositories.Details(id);
+                return repositories.Details(id);
             }
             catch
             {
@@ -81,15 +81,15 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<bool> HasCode(string code)
+        public bool HasCode(string code)
         {
-            TypePassword type = await Details(code);
+            TypePassword type = Details(code);
             return string.IsNullOrEmpty(type.TypeCode) ? true : false;
         }
 
-        public async Task<bool> HasReferences(string code)
+        public bool HasReferences(string code)
         {
-            return await passwordServices.HasType(code);
+            return passwordServices.HasType(code);
         }
 
         public async Task<string?> SetImages(string code, IFormFile img)
@@ -106,7 +106,7 @@ namespace Logic.Repositories
             var filePath = Path.Combine(basePath, fileName);
 
             //Xóa file cũ khỏi server
-            TypePassword type = await Details(code);
+            TypePassword type = Details(code);
             if (!String.IsNullOrEmpty(type.Image) && System.IO.File.Exists(Path.Combine(basePath, type.Image)))
             {
                 System.IO.File.Delete(basePath + type.Image);

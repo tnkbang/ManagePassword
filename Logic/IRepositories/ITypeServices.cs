@@ -12,7 +12,7 @@ namespace Logic.IRepositories
     {
         Task<List<TypePassword>> GetList();
 
-        Task<TypePassword> Details(string id);
+        TypePassword Details(string id);
 
         void Create(TypePassword type);
 
@@ -20,9 +20,9 @@ namespace Logic.IRepositories
 
         void Delete(TypePassword type);
 
-        Task<bool> HasCode(string code);
+        bool HasCode(string code);
 
-        Task<bool> HasReferences(string code);
+        bool HasReferences(string code);
 
         Task<string?> SetImages(string code, IFormFile img);
     }

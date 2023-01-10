@@ -11,7 +11,7 @@ namespace Data.IRepositories
     {
         Task<List<TypePassword>> GetList();
 
-        Task<TypePassword> Details(string id);
+        TypePassword Details(string id);
 
         void Create(TypePassword model);
 

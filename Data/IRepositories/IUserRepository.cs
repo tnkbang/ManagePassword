@@ -14,7 +14,7 @@ namespace Data.IRepositories
 
         User Details(string id);
 
-        Task<User> GetWithUsername(string uname);
+        User GetWithUsername(string uname);
 
         void Create(User model);
 

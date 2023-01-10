@@ -30,11 +30,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<HasPassword> Details(string id, string code, string uname)
+        public HasPassword Details(string id, string code, string uname)
         {
             try
             {
-                return await repositories.Details(id, code, uname);
+                return repositories.Details(id, code, uname);
             }
             catch
             {
@@ -78,11 +78,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<bool> HasUser(string uid)
+        public bool HasUser(string uid)
         {
             try
             {
-                return await repositories.HasUser(uid);
+                return repositories.HasUser(uid);
             }
             catch
             {
@@ -90,11 +90,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<bool> HasType(string code)
+        public bool HasType(string code)
         {
             try
             {
-                return await repositories.HasType(code);
+                return repositories.HasType(code);
             }
             catch
             {

@@ -31,11 +31,11 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<TypePassword> Details(string id)
+        public TypePassword Details(string id)
         {
             try
             {
-                var type = await _db.TypePasswords.FirstOrDefaultAsync(x => x.TypeCode == id);
+                var type = _db.TypePasswords.FirstOrDefault(x => x.TypeCode == id);
                 return type != null ? type : new TypePassword();
             }
             catch

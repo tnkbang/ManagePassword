@@ -11,7 +11,7 @@ namespace Logic.IRepositories
     {
         Task<List<HasPassword>> GetList();
 
-        Task<HasPassword> Details(string id, string code, string uname);
+        HasPassword Details(string id, string code, string uname);
 
         void Create(HasPassword password);
 
@@ -19,8 +19,8 @@ namespace Logic.IRepositories
 
         void Delete(HasPassword password);
 
-        Task<bool> HasUser(string uid);
+        bool HasUser(string uid);
 
-        Task<bool> HasType(string code);
+        bool HasType(string code);
     }
 }

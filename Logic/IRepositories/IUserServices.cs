@@ -19,6 +19,6 @@ namespace Logic.IRepositories
 
         void Delete(User user);
 
-        Task<bool> HasUsername(string uname);
+        bool HasUsername(string uname);
     }
 }
