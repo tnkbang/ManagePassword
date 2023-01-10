@@ -133,6 +133,17 @@ function clearLoginRegister() {
     $('#registerUsername').attr('class', 'form-control')
     $('#registerPassword').attr('class', 'form-control')
     $('#registerRePassword').attr('class', 'form-control')
+
+    $('#loginUsername').val("")
+    $('#loginPassword').val("")
+    $('#registerUsername').val("")
+    $('#registerPassword').val("")
+    $('#registerRePassword').val("")
+
+    $('#loginPassword').attr('type', 'password');
+    $('#registerPassword').attr('type', 'password');
+    $('#registerRePassword').attr('type', 'password');
+    $('.view-pass').html('visibility')
 }
 
 function setStateInp(state, inp, lbl, text) {
@@ -146,57 +157,68 @@ function setStateInp(state, inp, lbl, text) {
     }
 }
 
-$('#loginUsername').on('focusout', (e) => {
-    if ($(e.target).hasClass('is-valid'))
-        setStateInp(false, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
-    else setStateInp(true, e.target, '#ckcLoginUsername', 'Username đã tồn tại !')
-})
-
-//Xử lý đăng ký tài khoản
-$('#registerUsername').on('focusout', (e) => {
-    var checker = /^[a-zA-Z0-9]{5,20}$/;
-    if (!checker.test($('#registerUsername').val())) {
-        setStateInp(false, e.target, '#ckcRegisterUsername', 'Tên người dùng không hợp lệ !')
-        return;
+function checkUsername(inp, lbl) {
+    const checker = /^[a-zA-Z0-9]{5,20}$/;
+    if (!checker.test($(inp).val())) {
+        setStateInp(false, inp, lbl, 'Tên người dùng không hợp lệ !')
+        return false;
     }
 
     $.ajax({
         url: "/user/checkusername",
         type: 'POST',
         data: {
-            uname: $('#registerUsername').val()
+            uname: $(inp).val()
         },
         success: function (data) {
-            console.log(data)
-            if (!data) setStateInp(true, e.target, '#ckcRegisterUsername', 'Tên người dùng hợp lệ !')
-            else setStateInp(false, e.target, '#ckcRegisterUsername', 'Tên người dùng đã tồn tại !')
+            if (!data) {
+                setStateInp(true, inp, lbl, 'Tên người dùng hợp lệ !')
+                return true;
+            }
+            else {
+                setStateInp(false, inp, lbl, 'Tên người dùng đã tồn tại !')
+                return false;
+            }
         }
     });
-})
+}
 
-$('#registerPassword').on('focusout', (e) => {
-    setStateInp(true, e.target, '#ckcRegisterPassword', 'Mật khẩu hợp lệ !')
-})
+function checkPassword(inpUsername, inpPassword, lblPassword) {
+    const textPass = $(inpPassword).val()
 
-$('#registerRePassword').on('focusout', (e) => {
-    if ($('#registerPassword').val() == $('#registerRePassword').val()) {
-        setStateInp(true, e.target, '#ckcRegisterRePassword', 'Mật khẩu hợp lệ !')
-        $('#registerSubmit').prop('disabled', false);
+    if ($(inpUsername).val() == $(inpPassword).val()) {
+        setStateInp(false, inpPassword, lblPassword, 'Mật khẩu trùng với tên người dùng !')
+        return false;
+    }
+
+    if (!textPass.match(/[0-9]/) || !textPass.match(/[a-z]/) || !textPass.match(/[A-Z]/) || textPass.length < 5) {
+        setStateInp(false, inpPassword, lblPassword, 'Mật khẩu quá yếu !')
+        return false;
+    }
+
+    setStateInp(true, inpPassword, lblPassword, 'Mật khẩu hợp lệ !')
+    return true;
+}
+
+function checkRePassword(inpPass, inpRePass, lblRePass) {
+    if ($(inpPass).val() == $(inpRePass).val()) {
+        setStateInp(true, inpRePass, lblRePass, 'Mật khẩu hợp lệ !')
+        return true;
     }
     else {
-        setStateInp(false, e.target, '#ckcRegisterRePassword', 'Nhập lại khẩu chưa khớp !')
-        $('#registerSubmit').prop('disabled', true);
+        setStateInp(false, inpRePass, lblRePass, 'Nhập lại khẩu chưa khớp !')
+        return false;
     }
-})
+}
 
+//Xử lý đăng ký tài khoản
 $('#registerSubmit').on('click', (e) => {
-
     e.preventDefault()
 
-    console.log($('#registerUsername').val())
-    console.log($('#registerPassword').val())
-    console.log($('#registerRePassword').val())
-
+    const ckcUname = checkUsername('#registerUsername', '#ckcRegisterUsername')
+    const ckcPass = checkPassword('#registerUsername', '#registerPassword', '#ckcRegisterPassword')
+    const ckcRePass = checkRePassword('#registerPassword', '#registerRePassword', '#ckcRegisterRePassword')
+    if (!ckcUname || !ckcPass || !ckcRePass) return;
 
     $.ajax({
         url: "/user/create",
