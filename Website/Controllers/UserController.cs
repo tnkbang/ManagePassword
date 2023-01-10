@@ -95,10 +95,13 @@ namespace Website.Controllers
             int login = await setLogin(uname, pass);
             if (login == 2)
             {
-                string us = "";
-               if(User.Identity != null && User.Identity.IsAuthenticated)
-                    us = User.Claims.First().Value;
-                return Json(new { tt = true, us = us });
+                User user = new User();
+                if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    user = userServices.Details(User.Claims.First().Value);
+                }
+
+                return Json(new { tt = true, user = user });
             }
             if (login == 1)
             {

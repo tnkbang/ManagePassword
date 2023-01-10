@@ -53,10 +53,10 @@ $('.action-btn').on('click', () => {
 })
 
 //Xử lý đề xuất khi nhập vào textbox tìm kiếm
-$("#inpSearch").autocomplete({
+$('#inpSearch').autocomplete({
     source: function (request, response) {
         $.ajax({
-            url: "/default/gettype",
+            url: '/default/gettype',
             type: 'GET',
             data: {
                 term: request.term
@@ -70,23 +70,23 @@ $("#inpSearch").autocomplete({
 });
 
 ////////////
-$("#dialog").dialog({
+$('#dialog').dialog({
     autoOpen: false,
     height: 400,
     width: 350,
     modal: true,
     show: {
-        effect: "clip",
+        effect: 'clip',
         duration: 1000
     },
     hide: {
-        effect: "clip",
+        effect: 'clip',
         duration: 1000
     }
 });
 
-$("#opener").on("click", function () {
-    $("#dialog").dialog("open");
+$('#opener').on('click', function () {
+    $('#dialog').dialog('open');
 });
 
 //Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
@@ -95,23 +95,27 @@ function runLoadAnimate(type) {
 }
 
 //Xử lý đăng nhập và đăng ký
-$(".login-register").dialog({
+$('.login-register').dialog({
     autoOpen: false,
     width: 350,
     modal: true,
     show: {
-        effect: "clip",
+        effect: 'clip',
         duration: 1000
     },
     hide: {
-        effect: "clip",
+        effect: 'clip',
         duration: 1000
     }
 });
 
-$(".login-register").tabs();
+$('.login-register').tabs({
+    activate: () => {
+        clearLoginRegister()
+    }
+});
 
-$(".contact").on("click", () => {
+$('.btn-login').on('click', () => {
     clearLoginRegister()
     $(".login-register").dialog("open");
 });
@@ -134,11 +138,11 @@ function clearLoginRegister() {
     $('#registerPassword').attr('class', 'form-control')
     $('#registerRePassword').attr('class', 'form-control')
 
-    $('#loginUsername').val("")
-    $('#loginPassword').val("")
-    $('#registerUsername').val("")
-    $('#registerPassword').val("")
-    $('#registerRePassword').val("")
+    $('#loginUsername').val('')
+    $('#loginPassword').val('')
+    $('#registerUsername').val('')
+    $('#registerPassword').val('')
+    $('#registerRePassword').val('')
 
     $('#loginPassword').attr('type', 'password');
     $('#registerPassword').attr('type', 'password');
@@ -196,7 +200,7 @@ function checkRePassword(inpPass, inpRePass, lblRePass) {
 
 function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
     $.ajax({
-        url: "/user/checkusername",
+        url: '/user/checkusername',
         type: 'POST',
         data: {
             uname: $(inpUsername).val()
@@ -234,7 +238,7 @@ $('#registerSubmit').on('click', (e) => {
 
 function setRegister(inpUsername, inpPassword) {
     $.ajax({
-        url: "/user/create",
+        url: '/user/create',
         type: 'POST',
         data: {
             uname: $(inpUsername).val(),
@@ -264,14 +268,21 @@ $('#loginSubmit').on('click', (e) => {
 
 function setLogin(inpUsername, inpPassword) {
     $.ajax({
-        url: "/user/getlogin",
+        url: '/user/getlogin',
         type: 'POST',
         data: {
             uname: $(inpUsername).val(),
             pass: $(inpPassword).val()
         },
         success: function (data) {
-            console.log(data)
+            if (data.tt) {
+                getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
+                $('.user-name').html(data.user.username)
+                $(".login-register").dialog('close');
+                $('.btn-login').hide()
+                return
+            }
+            getThongBao('error', 'Lỗi đăng nhập', data.mess)
         }
     })
 }
