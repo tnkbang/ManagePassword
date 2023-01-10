@@ -31,11 +31,11 @@ namespace Logic.Repositories
             }
         }
 
-        public async Task<User> Details(string id)
+        public User Details(string id)
         {
             try
             {
-                return await repositories.Details(id);
+                return repositories.Details(id);
             }
             catch
             {
@@ -43,21 +43,24 @@ namespace Logic.Repositories
             }
         }
 
-        public async void Create(string uname, string pass)
+        private string setUid()
+        {
+            User user = new User();
+            string uid = "";
+            do
+            {
+                uid = StringGenerator.StringNumber(10);
+                user = repositories.Details(uid);
+            } while (!string.IsNullOrEmpty(user.Uid));
+            return uid;
+        }
+
+        public void Create(string uname, string pass)
         {
             try
             {
                 User user = new User();
-
-                string ma = "";
-                do
-                {
-                    ma = StringGenerator.StringNumber(10);
-                    user = await repositories.Details(ma);
-                } while ( !string.IsNullOrEmpty(user.Uid) );
-
-                user = new User();
-                user.Uid = ma;
+                user.Uid = setUid();
                 user.Username = uname;
                 user.Password = Protect.AsPassword(pass, user.Uid);
                 user.Active = true;

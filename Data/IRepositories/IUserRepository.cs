@@ -12,7 +12,7 @@ namespace Data.IRepositories
     {
         Task<List<User>> GetList();
 
-        Task<User> Details(string id);
+        User Details(string id);
 
         Task<User> GetWithUsername(string uname);
 

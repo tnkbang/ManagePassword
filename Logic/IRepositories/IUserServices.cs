@@ -11,7 +11,7 @@ namespace Logic.IRepositories
     {
         Task<List<User>> GetList();
 
-        Task<User> Details(string id);
+        User Details(string id);
 
         void Create(string uname, string pass);
 

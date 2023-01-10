@@ -31,11 +31,11 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<User> Details(string id)
+        public User Details(string id)
         {
             try
             {
-                var user = await _db.Users.FirstOrDefaultAsync(x => x.Uid == id);
+                var user = _db.Users.FirstOrDefault(x => x.Uid == id);
                 return user != null ? user : new User();
             }
             catch
