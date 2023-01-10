@@ -157,13 +157,7 @@ function setStateInp(state, inp, lbl, text) {
     }
 }
 
-function checkUsername(inp, lbl) {
-    const checker = /^[a-zA-Z0-9]{5,20}$/;
-    if (!checker.test($(inp).val())) {
-        setStateInp(false, inp, lbl, 'Tên người dùng không hợp lệ !')
-        return false;
-    }
-
+function isNewUser(isNew, inp, lbl) {
     $.ajax({
         url: "/user/checkusername",
         type: 'POST',
@@ -171,16 +165,28 @@ function checkUsername(inp, lbl) {
             uname: $(inp).val()
         },
         success: function (data) {
-            if (!data) {
-                setStateInp(true, inp, lbl, 'Tên người dùng hợp lệ !')
-                return true;
+            if (data) {
+                setStateInp(!isNew, inp, lbl, 'Tên người dùng đã tồn tại !')
+                return !isNew;
             }
             else {
-                setStateInp(false, inp, lbl, 'Tên người dùng đã tồn tại !')
-                return false;
+                setStateInp(isNew, inp, lbl, 'Không tìm thấy tên người dùng !')
+                return isNew;
             }
+
         }
     });
+}
+
+function checkUsername(isRegister, inp, lbl) {
+    const checker = /^[a-zA-Z0-9]{5,20}$/;
+    if (!checker.test($(inp).val())) {
+        setStateInp(false, inp, lbl, 'Tên người dùng không hợp lệ !')
+        return false;
+    }
+
+    const ckcDb = isNewUser(isRegister, inp, lbl)
+    return ckcDb;
 }
 
 function checkPassword(inpUsername, inpPassword, lblPassword) {
@@ -215,7 +221,7 @@ function checkRePassword(inpPass, inpRePass, lblRePass) {
 $('#registerSubmit').on('click', (e) => {
     e.preventDefault()
 
-    const ckcUname = checkUsername('#registerUsername', '#ckcRegisterUsername')
+    const ckcUname = checkUsername(true, '#registerUsername', '#ckcRegisterUsername')
     const ckcPass = checkPassword('#registerUsername', '#registerPassword', '#ckcRegisterPassword')
     const ckcRePass = checkRePassword('#registerPassword', '#registerRePassword', '#ckcRegisterRePassword')
     if (!ckcUname || !ckcPass || !ckcRePass) return;
@@ -226,6 +232,27 @@ $('#registerSubmit').on('click', (e) => {
         data: {
             uname: $('#registerUsername').val(),
             pass: $('#registerPassword').val()
+        },
+        success: function (data) {
+            console.log(data)
+        }
+    });
+})
+
+//Xử lý đăng nhập
+$('#loginSubmit').on('click', (e) => {
+    e.preventDefault()
+
+    const ckcUname = checkUsername(false, '#loginUsername', '#ckcLoginUsername')
+    const ckcPass = checkPassword('#loginUsername', '#loginPassword', '#ckcLoginPassword')
+    if (!ckcUname || !ckcPass) return;
+
+    $.ajax({
+        url: "/user/login",
+        type: 'POST',
+        data: {
+            uname: $('#loginUsername').val(),
+            pass: $('#loginPassword').val()
         },
         success: function (data) {
             console.log(data)

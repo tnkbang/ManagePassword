@@ -43,5 +43,11 @@ namespace Website.Controllers
 
             return Json(new { tt = true, mess = "Đăng ký tài khoản thành công !" });
         }
+
+        [HttpPost]
+        public JsonResult Login(string uname, string pass)
+        {
+            return Json(new { tt = true, mess = "Đăng nhập thành công !" });
+        }
     }
 }
