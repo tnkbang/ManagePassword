@@ -95,7 +95,10 @@ namespace Website.Controllers
             int login = await setLogin(uname, pass);
             if (login == 2)
             {
-                return Json(new { tt = true });
+                string us = "";
+               if(User.Identity != null && User.Identity.IsAuthenticated)
+                    us = User.Claims.First().Value;
+                return Json(new { tt = true, us = us });
             }
             if (login == 1)
             {

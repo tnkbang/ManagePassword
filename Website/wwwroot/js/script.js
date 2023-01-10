@@ -185,7 +185,7 @@ function checkPassword(inpUsername, inpPassword, lblPassword) {
 
 function checkRePassword(inpPass, inpRePass, lblRePass) {
     if ($(inpPass).val() == $(inpRePass).val()) {
-        setStateInp(true, inpRePass, lblRePass, 'Mật khẩu hợp lệ !')
+        setStateInp(true, inpRePass, lblRePass, 'Mật khẩu nhập lại hợp lệ !')
         return true;
     }
     else {
