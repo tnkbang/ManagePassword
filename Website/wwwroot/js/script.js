@@ -69,12 +69,10 @@ $('#inpSearch').autocomplete({
     minLength: 1
 });
 
-////////////
-$('#dialog').dialog({
+//Hiển thị thông tin ứng dụng
+$('#appInfo').dialog({
     autoOpen: false,
-    height: 400,
-    width: 350,
-    modal: true,
+    modal: false,
     show: {
         effect: 'clip',
         duration: 1000
@@ -85,8 +83,8 @@ $('#dialog').dialog({
     }
 });
 
-$('#opener').on('click', function () {
-    $('#dialog').dialog('open');
+$('.view-info').on('click', function () {
+    $('#appInfo').dialog('open');
 });
 
 //Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
