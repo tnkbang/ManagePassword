@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Data.Models;
+@{
+    User uLogin = new User();
+    string hasLogin = "";
+    @if(User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        uLogin.Uid = User.Claims.First().Value;
+        uLogin.Username = User.Claims.Last().Value;
+        hasLogin = "hide";
+    }
+}
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
@@ -18,7 +30,7 @@
                 <img src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="">
             </div>
             <div>
-                <h3 class="user-name">ABC 123</h3>
+                <h3 class="user-name">@Html.Raw(uLogin.Username ?? "ABC 123")</h3>
                 <small class="user-email">abc123@gmail.com</small>
             </div>
         </div>
@@ -60,7 +72,7 @@
                 <span></span>
                 <span></span>
             </div>
-            <button class="btn-login glow-on-hover" type="button">Đăng nhập</button>
+            <button class="btn-login glow-on-hover @hasLogin" type="button">Đăng nhập</button>
         </div>
         <div class="content">
             @RenderBody()

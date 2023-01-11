@@ -101,6 +101,10 @@ img {
     margin-left: 2rem;
 }
 
+.header .btn-login.hide{
+    display: none;
+}
+
 .nav-toggler {
     height: 30px;
     width: 30px;
@@ -156,7 +160,7 @@ img {
 }
 
 .task-runner{
-    z-index: 100;
+    z-index: 1000;
     opacity: 1;
     text-align: right;
     background: none;

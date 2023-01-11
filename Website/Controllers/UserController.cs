@@ -35,7 +35,7 @@ namespace Website.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(string uname, string pass)
+        public async Task<JsonResult> Create(string uname, string pass)
         {
             if (string.IsNullOrEmpty(uname) || string.IsNullOrEmpty(pass))
                 return Json(new { tt = false, mess = "Thiếu thông tin !" });
@@ -45,19 +45,19 @@ namespace Website.Controllers
 
             userServices.Create(uname, pass);
 
-            return Json(new { tt = true, mess = "Đăng ký tài khoản thành công !" });
+            User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
+            await setLogin(user);
+
+            return Json(new { tt = true, user = user });
         }
 
         //Xác thực đăng nhập
-        private async Task<int> setLogin(string uname, string pass)
+        private async Task<int> setLogin(User user)
         {
             //Trạng thái của return:
             // 0 - Email hoặc mật khẩu không chính xác
             // 1 - Tài khoản bị khóa
             // 2 - Đăng nhập thành công
-
-            User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
-
             if (user.Uid != null)
             {
                 if (!user.Active)
@@ -92,15 +92,11 @@ namespace Website.Controllers
         [HttpPost]
         public async Task<IActionResult> getLogin(string uname, string pass)
         {
-            int login = await setLogin(uname, pass);
+            User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
+            int login = await setLogin(user);
+
             if (login == 2)
             {
-                User user = new User();
-                if (User.Identity != null && User.Identity.IsAuthenticated)
-                {
-                    user = userServices.Details(User.Claims.First().Value);
-                }
-
                 return Json(new { tt = true, user = user });
             }
             if (login == 1)

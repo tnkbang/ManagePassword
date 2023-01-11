@@ -1,4 +1,6 @@
-﻿
+﻿//Biến toàn cục
+const taskRunner = $('.task-runner');
+
 //Xử lý hiệu ứng tự gõ chữ
 const options = {
     strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
@@ -204,11 +206,14 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
             uname: $(inpUsername).val()
         },
         success: function (data) {
+            taskRunner.hide()
+
             if (data) setStateInp(!isRegister, inpUsername, ckcUsername, 'Tên người dùng đã tồn tại !')
             else setStateInp(isRegister, inpUsername, ckcUsername, 'Không tìm thấy tên người dùng !')
 
             if ($(inpUsername).hasClass('is-invalid')) return
 
+            taskRunner.show()
             if (isRegister) setRegister(inpUsername, inpPassword)
             else setLogin(inpUsername, inpPassword)
         }
@@ -231,6 +236,7 @@ $('#registerSubmit').on('click', (e) => {
     const ckcRePass = checkRePassword(inpPassword, inpRePassword, ckcRePassword)
     if (!ckcUname || !ckcPass || !ckcRePass) return;
 
+    taskRunner.show()
     callLoginRegister(true, inpUsername, inpPassword, ckcUsername)
 })
 
@@ -243,7 +249,15 @@ function setRegister(inpUsername, inpPassword) {
             pass: $(inpPassword).val()
         },
         success: function (data) {
-            console.log(data)
+            taskRunner.hide()
+            if (data.tt) {
+                getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
+                $('.user-name').html(data.user.username)
+                $(".login-register").dialog('close');
+                $('.btn-login').hide()
+                return
+            }
+            getThongBao('error', 'Lỗi đăng ký', data.mess)
         }
     });
 }
@@ -261,6 +275,7 @@ $('#loginSubmit').on('click', (e) => {
     const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
     if (!ckcUname || !ckcPass) return
 
+    taskRunner.show()
     callLoginRegister(false, inpUsername, inpPassword, ckcUsername)
 })
 
@@ -273,6 +288,7 @@ function setLogin(inpUsername, inpPassword) {
             pass: $(inpPassword).val()
         },
         success: function (data) {
+            taskRunner.hide()
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
                 $('.user-name').html(data.user.username)
