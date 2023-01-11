@@ -47,13 +47,14 @@ namespace Website.Controllers
             userServices.Create(uname, pass);
 
             User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
-            await setLogin(user);
+            await SetLogin(user);
+            user = userServices.HideSensitive(user);
 
             return Json(new { tt = true, user = user });
         }
 
         //Xác thực đăng nhập
-        private async Task<int> setLogin(User user)
+        private async Task<int> SetLogin(User user)
         {
             //Trạng thái của return:
             // 0 - Email hoặc mật khẩu không chính xác
@@ -91,13 +92,14 @@ namespace Website.Controllers
 
         //Gọi đăng nhập
         [HttpPost]
-        public async Task<IActionResult> getLogin(string uname, string pass)
+        public async Task<IActionResult> GetLogin(string uname, string pass)
         {
             User user = userServices.Details(uname, userServices.AsPassword(uname, pass));
-            int login = await setLogin(user);
+            int login = await SetLogin(user);
 
             if (login == 2)
             {
+                user = userServices.HideSensitive(user);
                 return Json(new { tt = true, user = user });
             }
             if (login == 1)

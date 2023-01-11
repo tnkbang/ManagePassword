@@ -134,5 +134,18 @@ namespace Logic.Repositories
                 throw;
             }
         }
+
+        public User HideSensitive(User user)
+        {
+            try
+            {
+                user.Password = "";
+                return user;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

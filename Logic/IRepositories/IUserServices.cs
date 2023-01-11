@@ -24,5 +24,7 @@ namespace Logic.IRepositories
         bool HasUsername(string uname);
 
         string AsPassword(string uname, string pass);
+
+        User HideSensitive(User user);
     }
 }

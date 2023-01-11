@@ -221,6 +221,23 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
     })
 }
 
+function setInfo(isLogin, user) {
+    const image = $('.user-image');
+    const username = $('.user-username');
+    const email = $('.user-email');
+
+    if (isLogin && user != '') {
+        if (user.image) image.attr('src', user.image)
+        username.html(user.username)
+        if (user.email) email.html(user.email)
+    }
+    else {
+        image.attr('src', 'https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg')
+        username.html('ABC 123')
+        email.html('abc123@gmail.com')
+    }
+}
+
 //Xử lý đăng ký tài khoản
 $('#registerSubmit').on('click', (e) => {
     e.preventDefault()
@@ -255,7 +272,8 @@ function setRegister(inpUsername, inpPassword) {
 
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
-                $('.user-name').html(data.user.username)
+                setInfo(true, data.user)
+
                 $(".login-register").dialog('close');
                 $('.btn-login').hide()
                 return
@@ -296,7 +314,8 @@ function setLogin(inpUsername, inpPassword) {
 
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
-                $('.user-name').html(data.user.username)
+                setInfo(true, data.user)
+
                 $(".login-register").dialog('close');
                 $('.btn-logout').attr('class', 'btn-logout text-danger')
                 $('.btn-login').hide()
@@ -319,7 +338,8 @@ $('.btn-logout').on('click', (e) => {
 
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
-                $('.user-name').html('ABC 123')
+                setInfo(false, '')
+
                 $('.btn-logout').attr('class', 'btn-logout text-danger hide')
                 $('.btn-login').show()
                 return
