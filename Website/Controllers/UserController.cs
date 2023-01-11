@@ -118,5 +118,18 @@ namespace Website.Controllers
 
             return Json(new { tt = true, mess = "Đăng xuất thành công !" });
         }
+
+        [HttpPost]
+        public JsonResult GetFile()
+        {
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\Data\\User\\List.html"))
+            {
+                body = reader.ReadToEnd();
+            }
+            body = body.Replace("{{test}}", "test");
+
+            return Json(new {body});
+        }
     }
 }

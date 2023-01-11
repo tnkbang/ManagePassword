@@ -348,3 +348,33 @@ $('.btn-logout').on('click', (e) => {
         }
     })
 })
+
+$('.abc').on('click', () => {
+    taskRunner.show()
+    $.ajax({
+        url: '/user/getfile',
+        type: 'POST',
+        success: function (data) {
+            taskRunner.hide()
+            console.log(data)
+
+            $('body').append(data.body)
+
+            $('.table').dialog({
+                autoOpen: false,
+                width: 350,
+                modal: true,
+                show: {
+                    effect: 'clip',
+                    duration: 1000
+                },
+                hide: {
+                    effect: 'clip',
+                    duration: 1000
+                }
+            });
+
+            $('.table').dialog('open')
+        }
+    })
+})
