@@ -71,19 +71,36 @@ $('#inpSearch').autocomplete({
     minLength: 1
 });
 
+function setDialog(dom, isOpen, isModel, mwidth, mheight, effect, duration) {
+    if (screen.width <= 290) mwidth = 260;
+
+    $(dom).dialog({
+        autoOpen: isOpen,
+        modal: isModel,
+        maxWidth: mwidth,
+        maxHeight: mheight,
+        show: {
+            effect: effect,
+            duration: duration
+        },
+        hide: {
+            effect: effect,
+            duration: duration
+        }
+    });
+}
+
+function appenBody(stringDom) {
+    $('body').append(stringDom)
+}
+
+function appenDialogBody(stringDom, nameDom, isModel, mwidth, mheight, effect, duration) {
+    $('body').append(stringDom)
+    setDialog(nameDom, false, isModel, mwidth, mheight, effect, duration)
+}
+
 //Hiển thị thông tin ứng dụng
-$('#appInfo').dialog({
-    autoOpen: false,
-    modal: false,
-    show: {
-        effect: 'clip',
-        duration: 1000
-    },
-    hide: {
-        effect: 'clip',
-        duration: 1000
-    }
-});
+setDialog('#appInfo', false, false, 250, 250, 'clip', 1000)
 
 $('.view-info').on('click', function () {
     $('#appInfo').dialog('open');
@@ -95,19 +112,7 @@ function runLoadAnimate(type) {
 }
 
 //Xử lý đăng nhập và đăng ký
-$('.login-register').dialog({
-    autoOpen: false,
-    width: 350,
-    modal: true,
-    show: {
-        effect: 'clip',
-        duration: 1000
-    },
-    hide: {
-        effect: 'clip',
-        duration: 1000
-    }
-});
+setDialog('.login-register', false, true, 350, 1000, 'clip', 1000)
 
 $('.login-register').tabs({
     activate: () => {
@@ -350,6 +355,10 @@ $('.btn-logout').on('click', (e) => {
 })
 
 $('.abc').on('click', () => {
+    let fixWidth = 0;
+    if (screen.width > 600) fixWidth = 500
+    if (screen.width < 600) fixWidth = screen.width - 20
+
     taskRunner.show()
     $.ajax({
         url: '/user/getfile',
@@ -358,11 +367,16 @@ $('.abc').on('click', () => {
             taskRunner.hide()
             console.log(data)
 
+            if ($('.table').length) {
+                $('.table').dialog('open')
+                return
+            }
+
             $('body').append(data.body)
 
             $('.table').dialog({
                 autoOpen: false,
-                width: 350,
+                width: fixWidth,
                 modal: true,
                 show: {
                     effect: 'clip',

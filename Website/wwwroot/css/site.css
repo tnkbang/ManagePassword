@@ -531,3 +531,55 @@ img {
         background-position: 0 0;
     }
 }
+
+/* custom user profile card*/
+.user-card {
+    width: 380px;
+    border: none;
+    border-radius: 15px;
+    padding: 8px;
+    background-color: #fff;
+    position: relative;
+    height: 370px;
+}
+
+    .user-card .upper {
+        height: 100px;
+    }
+
+    .user-card .upper img {
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .user-card .user {
+        position: relative;
+    }
+
+    .user-card .profile img {
+        height: 80px;
+        width: 80px;
+        margin-top: 2px;
+    }
+
+    .user-card .profile {
+        position: absolute;
+        top: -50px;
+        left: 38%;
+        height: 90px;
+        width: 90px;
+        border: 3px solid #fff;
+        border-radius: 50%;
+    }
+
+    .user-card .follow {
+        border-radius: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+        height: 35px;
+    }
+
+    .user-card .stats span {
+        font-size: 29px;
+    }
