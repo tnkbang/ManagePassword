@@ -2,11 +2,13 @@
 @{
     User uLogin = new User();
     string hasLogin = "";
+    string hasLogout = "hide";
     @if(User.Identity != null && User.Identity.IsAuthenticated)
     {
         uLogin.Uid = User.Claims.First().Value;
         uLogin.Username = User.Claims.Last().Value;
         hasLogin = "hide";
+        hasLogout = "";
     }
 }
 
@@ -61,6 +63,9 @@
             </li>
             <li>
                 <a class="view-info" href="javascript:void(0)"><span class="material-icons">info</span> <p>Thông tin</p></a>
+            </li>
+            <li>
+                <a class="btn-logout text-danger @hasLogout" href="javascript:void(0)"><span class="material-icons">logout</span> <p>Đăng xuất</p></a>
             </li>
         </ul>
     </aside>

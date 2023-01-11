@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Website.Controllers
 {
+    [AllowAnonymous]
     public class UserController : Controller
     {
         private readonly IUserServices userServices;
@@ -104,6 +105,16 @@ namespace Website.Controllers
                 return Json(new { tt = false, mess = "Tài khoản của bạn bị khóa !" });
             }
             return Json(new { tt = false, mess = "Không tìm thấy tài khoản đăng nhập !" });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            //Gọi hàm đăng xuất của HttpContext
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Json(new { tt = true, mess = "Đăng xuất thành công !" });
         }
     }
 }

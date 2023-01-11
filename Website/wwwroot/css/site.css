@@ -102,7 +102,7 @@ img {
 }
 
 .header .btn-login.hide{
-    display: none;
+    display: none
 }
 
 .nav-toggler {
@@ -224,7 +224,7 @@ img {
 
     .menu a .material-icons {
         color: #fff;
-        margin-right: 40px;
+        margin-right: 25px;
     }
 
     .menu a:hover,
@@ -243,7 +243,8 @@ img {
 }
 
 .drop-down .carrot {
-    margin-left: 70px;
+    margin-left: 100px;
+    margin-right: 0 !important
 }
 
 .dropdown.active {
@@ -286,6 +287,18 @@ img {
     .sidebar.show .menu li:nth-child(6) {
         animation-delay: 1.5s;
     }
+
+    .sidebar.show .menu li:nth-child(7) {
+        animation-delay: 1.8s;
+    }
+
+.btn-logout span, .btn-logout p {
+    color: #dc3545 !important;
+}
+
+.btn-logout.hide{
+    display: none
+}
 
 .content {
     position: absolute;

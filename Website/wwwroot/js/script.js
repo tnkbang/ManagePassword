@@ -199,6 +199,8 @@ function checkRePassword(inpPass, inpRePass, lblRePass) {
 }
 
 function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
+    taskRunner.show()
+
     $.ajax({
         url: '/user/checkusername',
         type: 'POST',
@@ -213,7 +215,6 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
 
             if ($(inpUsername).hasClass('is-invalid')) return
 
-            taskRunner.show()
             if (isRegister) setRegister(inpUsername, inpPassword)
             else setLogin(inpUsername, inpPassword)
         }
@@ -236,11 +237,12 @@ $('#registerSubmit').on('click', (e) => {
     const ckcRePass = checkRePassword(inpPassword, inpRePassword, ckcRePassword)
     if (!ckcUname || !ckcPass || !ckcRePass) return;
 
-    taskRunner.show()
     callLoginRegister(true, inpUsername, inpPassword, ckcUsername)
 })
 
 function setRegister(inpUsername, inpPassword) {
+    taskRunner.show()
+
     $.ajax({
         url: '/user/create',
         type: 'POST',
@@ -250,6 +252,7 @@ function setRegister(inpUsername, inpPassword) {
         },
         success: function (data) {
             taskRunner.hide()
+
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
                 $('.user-name').html(data.user.username)
@@ -275,11 +278,12 @@ $('#loginSubmit').on('click', (e) => {
     const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
     if (!ckcUname || !ckcPass) return
 
-    taskRunner.show()
     callLoginRegister(false, inpUsername, inpPassword, ckcUsername)
 })
 
 function setLogin(inpUsername, inpPassword) {
+    taskRunner.show()
+
     $.ajax({
         url: '/user/getlogin',
         type: 'POST',
@@ -289,10 +293,12 @@ function setLogin(inpUsername, inpPassword) {
         },
         success: function (data) {
             taskRunner.hide()
+
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
                 $('.user-name').html(data.user.username)
                 $(".login-register").dialog('close');
+                $('.btn-logout').attr('class', 'btn-logout text-danger')
                 $('.btn-login').hide()
                 return
             }
@@ -300,3 +306,25 @@ function setLogin(inpUsername, inpPassword) {
         }
     })
 }
+
+//Xử lý đăng xuất
+$('.btn-logout').on('click', (e) => {
+    taskRunner.show()
+
+    $.ajax({
+        url: '/user/logout',
+        type: 'GET',
+        success: function (data) {
+            taskRunner.hide()
+
+            if (data.tt) {
+                getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
+                $('.user-name').html('ABC 123')
+                $('.btn-logout').attr('class', 'btn-logout text-danger hide')
+                $('.btn-login').show()
+                return
+            }
+            getThongBao('error', 'Lỗi đăng xuất', data.mess)
+        }
+    })
+})
