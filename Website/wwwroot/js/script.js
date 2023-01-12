@@ -365,16 +365,15 @@ $('.abc').on('click', () => {
         type: 'POST',
         success: function (data) {
             taskRunner.hide()
-            console.log(data)
 
-            if ($('.table').length) {
-                $('.table').dialog('open')
+            if ($('#userProfile').length) {
+                $('#userProfile').dialog('open')
                 return
             }
 
             $('body').append(data.body)
 
-            $('.table').dialog({
+            $('#userProfile').dialog({
                 autoOpen: false,
                 width: fixWidth,
                 modal: true,
@@ -388,7 +387,7 @@ $('.abc').on('click', () => {
                 }
             });
 
-            $('.table').dialog('open')
+            $('#userProfile').dialog('open')
         }
     })
 })

@@ -533,14 +533,12 @@ img {
 }
 
 /* custom user profile card*/
+#userProfile{
+    padding: 0;
+}
+
 .user-card {
-    width: 380px;
-    border: none;
-    border-radius: 15px;
-    padding: 8px;
-    background-color: #fff;
-    position: relative;
-    height: 370px;
+    width: 100%;
 }
 
     .user-card .upper {
@@ -549,8 +547,6 @@ img {
 
     .user-card .upper img {
         width: 100%;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
     }
 
     .user-card .user {
@@ -566,7 +562,7 @@ img {
     .user-card .profile {
         position: absolute;
         top: -50px;
-        left: 38%;
+        left: 41.5%;
         height: 90px;
         width: 90px;
         border: 3px solid #fff;
@@ -583,3 +579,39 @@ img {
     .user-card .stats span {
         font-size: 29px;
     }
+
+@media only screen and (min-width: 275px) {
+    .user-card .profile {
+        left: 33.5%
+    }
+}
+
+@media only screen and (min-width: 359px) {
+    .user-card .profile {
+        left: 37%
+    }
+}
+
+@media only screen and (min-width: 374px) {
+    .user-card .profile {
+        left: 38%
+    }
+}
+
+@media only screen and (min-width: 410px) {
+    .user-card .profile {
+        left: 39%
+    }
+}
+
+@media only screen and (min-width: 520px) {
+    .user-card .profile {
+        left: 42%
+    }
+}
+
+@media only screen and (min-width: 750px) {
+    .user-card .profile {
+        left: 41%
+    }
+}

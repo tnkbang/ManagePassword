@@ -12,10 +12,12 @@ namespace Website.Controllers
     public class UserController : Controller
     {
         private readonly IUserServices userServices;
+        private readonly ReadFileController readFile;
 
         public UserController(IUserServices userServices)
         {
             this.userServices = userServices;
+            this.readFile = new ReadFileController();
         }
 
         [HttpPost]
@@ -122,13 +124,7 @@ namespace Website.Controllers
         [HttpPost]
         public JsonResult GetFile()
         {
-            string body = string.Empty;
-            using (StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\Data\\User\\List.html"))
-            {
-                body = reader.ReadToEnd();
-            }
-            body = body.Replace("{{test}}", "test");
-
+            string body = readFile.ReadProfile("\\Data\\User\\Profile.html", "123456789");
             return Json(new {body});
         }
     }
