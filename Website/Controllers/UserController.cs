@@ -122,9 +122,11 @@ namespace Website.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public JsonResult GetFile()
         {
-            string body = readFile.ReadProfile("\\Data\\User\\Profile.html", "123456789");
+            User user = userServices.Details(User.Claims.First().Value);
+            string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);
             return Json(new {body});
         }
     }

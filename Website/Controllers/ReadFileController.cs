@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Website.Controllers
 {
@@ -14,9 +15,16 @@ namespace Website.Controllers
             return body;
         }
 
-        public string ReadProfile(string url, string uname) {
+        public string ReadProfile(string url, User user) {
             string body = ReadHtml(url);
-            body = body.Replace("{{uname}}", uname);
+            string fullName = user.FistName + " " + user.LastName;
+            string sex = user.Sex == 1 ? "Nam" : "Nữ";
+            string? birthday = string.IsNullOrEmpty(user.Birthday.ToString()) ? "N/A" : user.Birthday?.ToString("dd/MM/yyyy");
+            body = body.Replace("{{name}}", string.IsNullOrWhiteSpace(fullName) ? user.Uid : fullName);
+            body = body.Replace("{{description}}", user.Description ?? "Không có gì cả");
+            body = body.Replace("{{age}}", birthday);
+            body = body.Replace("{{created}}", user.Created.ToString("dd/MM/yyyy"));
+            body = body.Replace("{{sex}}", sex);
 
             return body;
         }
