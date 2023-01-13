@@ -403,21 +403,7 @@ $.ajaxSetup({
         }
 
         $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-
-        $('#error').dialog({
-            autoOpen: false,
-            width: 350,
-            modal: true,
-            show: {
-                effect: 'clip',
-                duration: 1000
-            },
-            hide: {
-                effect: 'clip',
-                duration: 1000
-            }
-        });
-
+        setDialog('#error', false, true, 250, 250, 'clip', 1000)
         $('#error').dialog('open')
     }
 });
