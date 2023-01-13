@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Website.Controllers
 {
-    [AllowAnonymous]
     public class UserController : Controller
     {
         private readonly IUserServices userServices;
