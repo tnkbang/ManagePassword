@@ -1,6 +1,31 @@
 ﻿//Biến toàn cục
 const taskRunner = $('.task-runner');
 
+//Vô hiệu hóa đối với thẻ a
+$('a').click(function (e) {
+    e.preventDefault();
+});
+
+//Xử lý khi gọi ajax về server
+$.ajaxSetup({
+    beforeSend: function () {
+        taskRunner.show()
+    },
+    complete: function () {
+        taskRunner.hide()
+    },
+    error: function (xhr) {
+        if ($('#error').length) {
+            $('#error').dialog('open')
+            return
+        }
+
+        $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
+        setDialog('#error', false, true, 250, 250, 'clip', 1000)
+        $('#error').dialog('open')
+    }
+});
+
 //Xử lý hiệu ứng tự gõ chữ
 const options = {
     strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
@@ -204,8 +229,6 @@ function checkRePassword(inpPass, inpRePass, lblRePass) {
 }
 
 function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
-    taskRunner.show()
-
     $.ajax({
         url: '/user/checkusername',
         type: 'POST',
@@ -213,8 +236,6 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
             uname: $(inpUsername).val()
         },
         success: function (data) {
-            taskRunner.hide()
-
             if (data) setStateInp(!isRegister, inpUsername, ckcUsername, 'Tên người dùng đã tồn tại !')
             else setStateInp(isRegister, inpUsername, ckcUsername, 'Không tìm thấy tên người dùng !')
 
@@ -263,8 +284,6 @@ $('#registerSubmit').on('click', (e) => {
 })
 
 function setRegister(inpUsername, inpPassword) {
-    taskRunner.show()
-
     $.ajax({
         url: '/user/create',
         type: 'POST',
@@ -273,8 +292,6 @@ function setRegister(inpUsername, inpPassword) {
             pass: $(inpPassword).val()
         },
         success: function (data) {
-            taskRunner.hide()
-
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
                 setInfo(true, data.user)
@@ -305,8 +322,6 @@ $('#loginSubmit').on('click', (e) => {
 })
 
 function setLogin(inpUsername, inpPassword) {
-    taskRunner.show()
-
     $.ajax({
         url: '/user/getlogin',
         type: 'POST',
@@ -315,8 +330,6 @@ function setLogin(inpUsername, inpPassword) {
             pass: $(inpPassword).val()
         },
         success: function (data) {
-            taskRunner.hide()
-
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
                 setInfo(true, data.user)
@@ -333,14 +346,10 @@ function setLogin(inpUsername, inpPassword) {
 
 //Xử lý đăng xuất
 $('.btn-logout').on('click', (e) => {
-    taskRunner.show()
-
     $.ajax({
         url: '/user/logout',
         type: 'GET',
         success: function (data) {
-            taskRunner.hide()
-
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
                 setInfo(false, '')
@@ -359,13 +368,10 @@ $('.abc').on('click', () => {
     if (screen.width > 600) fixWidth = 500
     if (screen.width < 600) fixWidth = screen.width - 20
 
-    taskRunner.show()
     $.ajax({
         url: '/user/getfile',
         type: 'POST',
         success: function (data) {
-            taskRunner.hide()
-
             if ($('#userProfile').length) {
                 $('#userProfile').dialog('open')
                 return
@@ -391,19 +397,3 @@ $('.abc').on('click', () => {
         }
     })
 })
-
-//Trả về thông báo lỗi khi gọi server thất bại
-$.ajaxSetup({
-    error: function (xhr) {
-        taskRunner.hide()
-
-        if ($('#error').length) {
-            $('#error').dialog('open')
-            return
-        }
-
-        $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-        setDialog('#error', false, true, 250, 250, 'clip', 1000)
-        $('#error').dialog('open')
-    }
-});

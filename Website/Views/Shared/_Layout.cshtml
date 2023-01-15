@@ -16,8 +16,15 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Trang web cá nhân dùng dể training kỹ năng." />
     <meta name="author" content="TNKBang">
+
+    <meta property="og:title" content="Trang web cá nhân" />
+    <meta property="og:url" content="https://github.com/tnkbang" />
+    <meta property="og:image" content="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" />
+    <meta property="og:description" content="Trang web này tôi dùng dể traning kỹ năng của bản thân về xây dựng web với .Net Core" />
+
     <title>@ViewData["Title"] - Website</title>
     <link href="~/css/fonts.css" rel="stylesheet" asp-append-version="true">
     <link href="~/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
@@ -29,7 +36,7 @@
     <aside class="sidebar">
         <div class="sidebar_header">
             <div class="img">
-                <img class="user-image" src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="">
+                <img class="user-image" src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="avatar">
             </div>
             <div>
                 <h3 class="user-username">@Html.Raw(uLogin.Username ?? "ABC 123")</h3>
@@ -41,31 +48,31 @@
         </div>
         <ul class="menu">
             <li>
-                <a href=""><span class="material-icons">home</span> <p>Home</p></a>
+                <a href="/home"><span class="material-icons">home</span> <p>Trang chủ</p></a>
             </li>
             <li>
-                <a href=""><span class="material-icons">person</span> <p>My Profile</p></a>
+                <a href="/user"><span class="material-icons">person</span> <p>Người dùng</p></a>
             </li>
             <li>
-                <a href=""><span class="material-icons">chat</span> <p>Message</p></a>
+                <a href="/chat"><span class="material-icons">chat</span> <p>Tin nhắn</p></a>
             </li>
             <li>
-                <a href="#" class="drop-down"><span class="material-icons">web</span> <p>Projects</p> <span class="material-icons carrot">expand_more</span> </a>
+                <a href="/project" class="drop-down"><span class="material-icons">web</span> <p>Dự án</p> <span class="material-icons carrot">expand_more</span> </a>
                 <ul class="dropdown">
-                    <li><a href="">Solo Dating</a></li>
-                    <li><a href="">Solo Market</a></li>
-                    <li><a href="">Solo Video</a></li>
-                    <li><a href="">Solo Yoga</a></li>
+                    <li><a href="/project1">Dự án 1</a></li>
+                    <li><a href="/project2">Dự án 2</a></li>
+                    <li><a href="/project3">Dự án 3</a></li>
+                    <li><a href="/project4">Dự án 4</a></li>
                 </ul>
             </li>
             <li>
-                <a class="contact" href="javascript:void(0)"><span class="material-icons">group_add</span> <p>Contact Us</p></a>
+                <a class="contact" href="/contact"><span class="material-icons">group_add</span> <p>Liên hệ</p></a>
             </li>
             <li>
-                <a class="view-info" href="javascript:void(0)"><span class="material-icons">info</span> <p>Thông tin</p></a>
+                <a class="view-info" href="/info"><span class="material-icons">info</span> <p>Thông tin</p></a>
             </li>
             <li>
-                <a class="btn-logout text-danger @hasLogout" href="javascript:void(0)"><span class="material-icons">logout</span> <p>Đăng xuất</p></a>
+                <a class="btn-logout text-danger @hasLogout" href="/logout"><span class="material-icons">logout</span> <p>Đăng xuất</p></a>
             </li>
         </ul>
     </aside>
