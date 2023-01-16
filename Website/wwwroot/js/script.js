@@ -21,7 +21,7 @@ $.ajaxSetup({
         }
 
         $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-        setDialog('#error', false, true, 250, 250, 'clip', 1000)
+        setDialog('#error', false, true, 0, 0, 'clip', 1000)
         $('#error').dialog('open')
     }
 });
@@ -96,14 +96,17 @@ $('#inpSearch').autocomplete({
     minLength: 1
 });
 
-function setDialog(dom, isOpen, isModel, mwidth, mheight, effect, duration) {
-    if (screen.width <= 290) mwidth = 260;
+function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
+    if (height == 0) height = 'auto'
+    if (width == 0) width = 'auto'
+
+    if (screen.width <= 290 && screen.width < width) width = 260;
 
     $(dom).dialog({
         autoOpen: isOpen,
         modal: isModel,
-        maxWidth: mwidth,
-        maxHeight: mheight,
+        width: width,
+        height: height,
         show: {
             effect: effect,
             duration: duration
@@ -125,7 +128,7 @@ function appenDialogBody(stringDom, nameDom, isModel, mwidth, mheight, effect, d
 }
 
 //Hiển thị thông tin ứng dụng
-setDialog('#appInfo', false, false, 250, 250, 'clip', 1000)
+setDialog('#appInfo', false, false, 0, 0, 'clip', 1000)
 
 $('.view-info').on('click', function () {
     $('#appInfo').dialog('open');
@@ -137,7 +140,7 @@ function runLoadAnimate(type) {
 }
 
 //Xử lý đăng nhập và đăng ký
-setDialog('.login-register', false, true, 350, 1000, 'clip', 1000)
+setDialog('.login-register', false, true, 350, 0, 'clip', 1000)
 
 $('.login-register').tabs({
     activate: () => {
@@ -363,11 +366,8 @@ $('.btn-logout').on('click', (e) => {
     })
 })
 
-$('.abc').on('click', () => {
-    let fixWidth = 0;
-    if (screen.width > 600) fixWidth = 500
-    if (screen.width < 600) fixWidth = screen.width - 20
-
+//Lấy thông tin người dùng
+$('.user-btn').on('click', () => {
     $.ajax({
         url: '/user/getfile',
         type: 'POST',
@@ -377,22 +377,7 @@ $('.abc').on('click', () => {
                 return
             }
 
-            $('body').append(data.body)
-
-            $('#userProfile').dialog({
-                autoOpen: false,
-                width: fixWidth,
-                modal: true,
-                show: {
-                    effect: 'clip',
-                    duration: 1000
-                },
-                hide: {
-                    effect: 'clip',
-                    duration: 1000
-                }
-            });
-
+            appenDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
             $('#userProfile').dialog('open')
         }
     })

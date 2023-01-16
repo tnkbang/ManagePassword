@@ -190,6 +190,21 @@ img {
     font-size: 17px;
 }
 
+.sidebar_header .user-info {
+    width: 180px;
+    position: relative
+}
+
+.user-info .user-btn {
+    border: none;
+    background: none;
+    color: white;
+    bottom: -4px;
+    right: 0;
+    padding-top: -12px;
+    position: absolute;
+}
+
 .search-box {
     margin: 20px 0 25px;
 }

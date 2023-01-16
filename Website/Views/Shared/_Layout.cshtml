@@ -38,9 +38,10 @@
             <div class="img">
                 <img class="user-image" src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="avatar">
             </div>
-            <div>
+            <div class="user-info">
                 <h3 class="user-username">@Html.Raw(uLogin.Username ?? "ABC 123")</h3>
                 <small class="user-email">abc123@gmail.com</small>
+                <button type="button" class="user-btn"><span class="material-icons">manage_accounts</span></button>
             </div>
         </div>
         <div class="search-box">
@@ -88,7 +89,6 @@
         </div>
         <div class="content">
             @RenderBody()
-            <button class="abc">abc</button>
         </div>
         <div class="action-btn-group">
             <button class="btn-1"><span class="material-icons">favorite</span></button>
