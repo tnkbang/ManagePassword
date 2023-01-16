@@ -1,14 +1,8 @@
-﻿@using Data.Models;
-@{
-    User uLogin = new User();
+﻿@{
     string hasLogin = "";
-    string hasLogout = "hide";
     @if(User.Identity != null && User.Identity.IsAuthenticated)
     {
-        uLogin.Uid = User.Claims.First().Value;
-        uLogin.Username = User.Claims.Last().Value;
         hasLogin = "hide";
-        hasLogout = "";
     }
 }
 
@@ -33,50 +27,6 @@
     <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="sidebar_header">
-            <div class="img">
-                <img class="user-image" src="https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg" alt="avatar">
-            </div>
-            <div class="user-info">
-                <h3 class="user-username">@Html.Raw(uLogin.Username ?? "ABC 123")</h3>
-                <small class="user-email">abc123@gmail.com</small>
-                <button type="button" class="user-btn"><span class="material-icons">manage_accounts</span></button>
-            </div>
-        </div>
-        <div class="search-box">
-            <input type="text" id="inpSearch" class="search" />
-        </div>
-        <ul class="menu">
-            <li>
-                <a href="/home"><span class="material-icons">home</span> <p>Trang chủ</p></a>
-            </li>
-            <li>
-                <a href="/user"><span class="material-icons">person</span> <p>Người dùng</p></a>
-            </li>
-            <li>
-                <a href="/chat"><span class="material-icons">chat</span> <p>Tin nhắn</p></a>
-            </li>
-            <li>
-                <a href="/project" class="drop-down"><span class="material-icons">web</span> <p>Dự án</p> <span class="material-icons carrot">expand_more</span> </a>
-                <ul class="dropdown">
-                    <li><a href="/project1">Dự án 1</a></li>
-                    <li><a href="/project2">Dự án 2</a></li>
-                    <li><a href="/project3">Dự án 3</a></li>
-                    <li><a href="/project4">Dự án 4</a></li>
-                </ul>
-            </li>
-            <li>
-                <a class="contact" href="/contact"><span class="material-icons">group_add</span> <p>Liên hệ</p></a>
-            </li>
-            <li>
-                <a class="view-info" href="/info"><span class="material-icons">info</span> <p>Thông tin</p></a>
-            </li>
-            <li>
-                <a class="btn-logout text-danger @hasLogout" href="/logout"><span class="material-icons">logout</span> <p>Đăng xuất</p></a>
-            </li>
-        </ul>
-    </aside>
     <div class="overlay"></div>
     <main class="main">
         <div class="header">

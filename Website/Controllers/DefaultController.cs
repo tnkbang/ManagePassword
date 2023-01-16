@@ -1,5 +1,6 @@
 ﻿using Data.Models;
 using Logic.IRepositories;
+using Logic.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Website.Controllers
@@ -7,15 +8,33 @@ namespace Website.Controllers
     public class DefaultController : Controller
     {
         private readonly ITypeServices typeServices;
+        private readonly IUserServices userServices;
+        private readonly ReadFileController readFile;
 
-        public DefaultController(ITypeServices typeServices)
+        public DefaultController(ITypeServices typeServices, IUserServices userServices)
         {
             this.typeServices = typeServices;
+            this.readFile = new ReadFileController();
+            this.userServices = userServices;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public JsonResult getNavigation()
+        {
+            User user= new User();
+
+            if(User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                user = userServices.Details(User.Claims.First().Value);
+            }
+
+            string body = readFile.ReadNavigation("\\Data\\User\\Navigation.html", user);
+            return Json(new { body });
         }
 
         [HttpGet]

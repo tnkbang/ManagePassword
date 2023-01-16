@@ -1,11 +1,6 @@
 ﻿//Biến toàn cục
 const taskRunner = $('.task-runner');
 
-//Vô hiệu hóa đối với thẻ a
-$('a').click(function (e) {
-    e.preventDefault();
-});
-
 //Xử lý khi gọi ajax về server
 $.ajaxSetup({
     beforeSend: function () {
@@ -24,7 +19,7 @@ $.ajaxSetup({
         setDialog('#error', false, true, 0, 0, 'clip', 1000)
         $('#error').dialog('open')
     }
-});
+})
 
 //Xử lý hiệu ứng tự gõ chữ
 const options = {
@@ -37,21 +32,67 @@ const options = {
 $(document).on('DOMContentLoaded', () => {
     new Typed('#profession', options)
 
-    new Typed('#inpSearch', {
-        strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
-        typeSpeed: 100,
-        backSpeed: 100,
-        attr: 'placeholder',
-        shuffle: true,
-        bindInputFocusEvents: true,
-        loop: true
-    });
+    $.ajax({
+        url: '/default/getnavigation',
+        type: 'GET',
+        success: function (data) {
+            appendBody(data.body)
+
+            //Ẩn nav khi nhấn vào header nav
+            $('.sidebar_header').on('click', () => {
+                hideSidebar()
+            })
+
+            //Hiệu ứng gõ chữ vào ô tìm kiếm
+            new Typed('#inpSearch', {
+                strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
+                typeSpeed: 100,
+                backSpeed: 100,
+                attr: 'placeholder',
+                shuffle: true,
+                bindInputFocusEvents: true,
+                loop: true
+            })
+
+            //Xử lý đề xuất khi nhập vào textbox tìm kiếm
+            $('#inpSearch').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/default/gettype',
+                        type: 'GET',
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response(data)
+                        }
+                    });
+                },
+                minLength: 1
+            })
+
+            //Vô hiệu hóa đối với thẻ a
+            $('a').click(function (e) {
+                e.preventDefault();
+            })
+
+            //Xem thông tin
+            setViewInfo()
+            getUserInfo()
+
+            //Gọi đăng xuất
+            setLogout()
+        }
+    })
+
+    //Hiển thị thông tin ứng dụng
+    setDialog('#appInfo', false, false, 0, 0, 'clip', 1000)
 })
 
 //Xử lý thay đổi ký hiệu khi nhấn dropdown của nav
 $('.drop-down').on('click', (e) => {
-    e.preventDefault();
-    $('.dropdown').toggleClass('active');
+    e.preventDefault()
+    $('.dropdown').toggleClass('active')
     if ($('.dropdown').hasClass('active')) $('.material-icons.carrot').html('expand_less')
     else $('.material-icons.carrot').html('expand_more')
 })
@@ -59,16 +100,14 @@ $('.drop-down').on('click', (e) => {
 //Xử lý ẩn hiện nav
 $('.nav-toggler').on('click', () => {
     $('.sidebar').addClass('show')
+    $('.overlay').css('display', 'block')
     navigator.vibrate([50, 100, 50])
 })
 
 const hideSidebar = () => {
     $('.sidebar').removeClass('show')
+    $('.overlay').css('display', 'none')
 }
-
-$('.sidebar_header').on('click', () => {
-    hideSidebar()
-})
 
 $('.overlay').on('click', () => {
     hideSidebar()
@@ -78,23 +117,6 @@ $('.overlay').on('click', () => {
 $('.action-btn').on('click', () => {
     $('.action-btn-group').toggleClass('active')
 })
-
-//Xử lý đề xuất khi nhập vào textbox tìm kiếm
-$('#inpSearch').autocomplete({
-    source: function (request, response) {
-        $.ajax({
-            url: '/default/gettype',
-            type: 'GET',
-            data: {
-                term: request.term
-            },
-            success: function (data) {
-                response(data)
-            }
-        });
-    },
-    minLength: 1
-});
 
 //Khởi tạo dialog
 function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
@@ -116,7 +138,7 @@ function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
             effect: effect,
             duration: duration
         }
-    });
+    })
 }
 
 //Thêm dom vào body
@@ -130,12 +152,12 @@ function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, du
     setDialog(nameDom, false, isModel, width, height, effect, duration)
 }
 
-//Hiển thị thông tin ứng dụng
-setDialog('#appInfo', false, false, 0, 0, 'clip', 1000)
-
-$('.view-info').on('click', function () {
-    $('#appInfo').dialog('open')
-});
+//Xem thông tin ứng dụng
+function setViewInfo() {
+    $('.view-info').on('click', function () {
+        $('#appInfo').dialog('open')
+    })
+}
 
 //Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
 function runLoadAnimate(type) {
@@ -336,7 +358,7 @@ function setRegister(inpUsername, inpPassword) {
             }
             getThongBao('error', 'Lỗi đăng ký', data.mess)
         }
-    });
+    })
 }
 
 //Xử lý đăng nhập
@@ -364,23 +386,25 @@ function setLogin(inpUsername, inpPassword) {
 }
 
 //Xử lý đăng xuất
-$('.btn-logout').on('click', (e) => {
-    $.ajax({
-        url: '/user/logout',
-        type: 'GET',
-        success: function (data) {
-            if (data.tt) {
-                getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
-                setInfo(false, '')
+function setLogout() {
+    $('.btn-logout').on('click', (e) => {
+        $.ajax({
+            url: '/user/logout',
+            type: 'GET',
+            success: function (data) {
+                if (data.tt) {
+                    getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
+                    setInfo(false, '')
 
-                $('.btn-logout').attr('class', 'btn-logout text-danger hide')
-                $('.btn-login').show()
-                return
+                    $('.btn-logout').attr('class', 'btn-logout text-danger hide')
+                    $('.btn-login').show()
+                    return
+                }
+                getThongBao('error', 'Lỗi đăng xuất', data.mess)
             }
-            getThongBao('error', 'Lỗi đăng xuất', data.mess)
-        }
+        })
     })
-})
+}
 
 //Set thông tin người dùng
 function setInfo(isLogin, user) {
@@ -401,18 +425,20 @@ function setInfo(isLogin, user) {
 }
 
 //Lấy thông tin người dùng
-$('.user-btn').on('click', () => {
-    $.ajax({
-        url: '/user/getprofile',
-        type: 'POST',
-        success: function (data) {
-            if ($('#userProfile').length) {
-                $('#userProfile').dialog('open')
-                return
-            }
+function getUserInfo() {
+    $('.user-btn').on('click', () => {
+        $.ajax({
+            url: '/user/getprofile',
+            type: 'POST',
+            success: function (data) {
+                if ($('#userProfile').length) {
+                    $('#userProfile').dialog('open')
+                    return
+                }
 
-            appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
-            $('#userProfile').dialog('open')
-        }
+                appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
+                $('#userProfile').dialog('open')
+            }
+        })
     })
-})
+}
