@@ -102,52 +102,7 @@
     <div class="task-runner">
         <div class="lds-dual-ring"></div>
     </div>
-    <!-- form login and register-->
-    <div class="login-register" title="Tham gia hệ thống">
-        <ul class="mb-1">
-            <li><a href="#tabs-login">Đăng nhập</a></li>
-            <li><a href="#tabs-register">Đăng ký</a></li>
-        </ul>
-        <div id="tabs-login">
-            <form>
-                <div class="mb-3 floating-label">
-                    <input id="loginUsername" required type="text" maxlength="20" class="form-control" placeholder="Nhập tên người dùng..." />
-                    <label for="loginUsername">Username</label>
-                    <div id="ckcLoginUsername" class="valid-feedback">Kiểm tra thông tin</div>
-                </div>
-                <div class="mb-3 floating-label input-group">
-                    <input id="loginPassword" required type="password" maxlength="20" class="form-control" placeholder="Nhập mật khẩu..." />
-                    <label for="loginPassword">Password</label>
-                    <span class="input-group-text view-pass material-icons">visibility</span>
-                    <div id="ckcLoginPassword" class="valid-feedback">Kiểm tra thông tin</div>
-                </div>
-                <button type="submit" id="loginSubmit" class="btn btn-outline-primary float-end mb-3">Đăng nhập</button>
-            </form>
-        </div>
-        <div id="tabs-register">
-            <form>
-                <div class="mb-3 floating-label">
-                    <input id="registerUsername" required type="text" maxlength="20" class="form-control" placeholder="Nhập tên người dùng..." />
-                    <label for="registerUsername">Username</label>
-                    <div id="ckcRegisterUsername" class="valid-feedback">Kiểm tra thông tin</div>
-                </div>
-                <div class="mb-3 floating-label input-group">
-                    <input id="registerPassword" required type="password" maxlength="20" class="form-control" placeholder="Nhập mật khẩu..." />
-                    <label for="registerPassword">Password</label>
-                    <span class="input-group-text view-pass material-icons">visibility</span>
-                    <div id="ckcRegisterPassword" class="valid-feedback">Kiểm tra thông tin</div>
-                </div>
-                <div class="mb-3 floating-label input-group">
-                    <input id="registerRePassword" required type="password" maxlength="20" class="form-control" placeholder="Nhập lại mật khẩu..." />
-                    <label for="registerRePassword">Password</label>
-                    <span class="input-group-text view-pass material-icons">visibility</span>
-                    <div id="ckcRegisterRePassword" class="valid-feedback">Kiểm tra thông tin</div>
-                </div>
-                <button type="submit" id="registerSubmit" class="btn btn-outline-success float-end mb-3">Đăng ký</button>
-            </form>
-        </div>
-    </div>
-    
+
     <!-- script -->
     <script src="~/js/jquery.min.js" asp-append-version="true"></script>
     <script src="~/js/toastr.min.js" asp-append-version="true"></script>

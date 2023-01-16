@@ -28,6 +28,7 @@ namespace Website.Controllers
             return Json(lst);
         }
 
+        #region Đăng nhập và đăng ký
         [HttpPost]
         public JsonResult CheckUsername(string uname)
         {
@@ -52,6 +53,13 @@ namespace Website.Controllers
             user = userServices.HideSensitive(user);
 
             return Json(new { tt = true, user = user });
+        }
+        
+        [HttpGet]
+        public JsonResult GetFormLoginRegister()
+        {
+            string body = readFile.ReadHtml("\\Data\\User\\LoginRegister.html");
+            return Json(new { body });
         }
 
         //Xác thực đăng nhập
@@ -119,10 +127,11 @@ namespace Website.Controllers
 
             return Json(new { tt = true, mess = "Đăng xuất thành công !" });
         }
+        #endregion
 
         [HttpPost]
         [Authorize]
-        public JsonResult GetFile()
+        public JsonResult GetProfile()
         {
             User user = userServices.Details(User.Claims.First().Value);
             string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);

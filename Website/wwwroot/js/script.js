@@ -35,7 +35,7 @@ const options = {
 };
 
 $(document).on('DOMContentLoaded', () => {
-    new Typed('#profession', options);
+    new Typed('#profession', options)
 
     new Typed('#inpSearch', {
         strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
@@ -59,7 +59,7 @@ $('.drop-down').on('click', (e) => {
 //Xử lý ẩn hiện nav
 $('.nav-toggler').on('click', () => {
     $('.sidebar').addClass('show')
-    navigator.vibrate([50, 100, 50]);
+    navigator.vibrate([50, 100, 50])
 })
 
 const hideSidebar = () => {
@@ -76,7 +76,7 @@ $('.overlay').on('click', () => {
 
 //Xử lý ẩn hiện icon group
 $('.action-btn').on('click', () => {
-    $('.action-btn-group').toggleClass('active');
+    $('.action-btn-group').toggleClass('active')
 })
 
 //Xử lý đề xuất khi nhập vào textbox tìm kiếm
@@ -89,18 +89,19 @@ $('#inpSearch').autocomplete({
                 term: request.term
             },
             success: function (data) {
-                response(data);
+                response(data)
             }
         });
     },
     minLength: 1
 });
 
+//Khởi tạo dialog
 function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
     if (height == 0) height = 'auto'
     if (width == 0) width = 'auto'
 
-    if (screen.width <= 290 && screen.width < width) width = 260;
+    if (screen.width <= 290 && screen.width < width) width = 260
 
     $(dom).dialog({
         autoOpen: isOpen,
@@ -118,20 +119,22 @@ function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
     });
 }
 
-function appenBody(stringDom) {
+//Thêm dom vào body
+function appendBody(stringDom) {
     $('body').append(stringDom)
 }
 
-function appenDialogBody(stringDom, nameDom, isModel, mwidth, mheight, effect, duration) {
+//Thêm dialog vào body
+function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, duration) {
     $('body').append(stringDom)
-    setDialog(nameDom, false, isModel, mwidth, mheight, effect, duration)
+    setDialog(nameDom, false, isModel, width, height, effect, duration)
 }
 
 //Hiển thị thông tin ứng dụng
 setDialog('#appInfo', false, false, 0, 0, 'clip', 1000)
 
 $('.view-info').on('click', function () {
-    $('#appInfo').dialog('open');
+    $('#appInfo').dialog('open')
 });
 
 //Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
@@ -140,30 +143,88 @@ function runLoadAnimate(type) {
 }
 
 //Xử lý đăng nhập và đăng ký
-setDialog('.login-register', false, true, 350, 0, 'clip', 1000)
-
-$('.login-register').tabs({
-    activate: () => {
-        clearLoginRegister()
-    }
-});
-
 $('.btn-login').on('click', () => {
-    clearLoginRegister()
-    $(".login-register").dialog("open");
-});
+    if ($('.login-register').length) {
+        clearLoginRegister()
+        $('.login-register').dialog('open')
+        return
+    }
 
-$('.view-pass').on('click', (e) => {
-    if (e.target.textContent == 'visibility') {
-        $(e.target.parentElement.firstElementChild).attr('type', 'text');
-        $(e.target).html('visibility_off')
-    }
-    else {
-        $(e.target.parentElement.firstElementChild).attr('type', 'password');
-        $(e.target).html('visibility')
-    }
+    $.ajax({
+        url: '/user/getformloginregister',
+        type: 'GET',
+        success: function (data) {
+            appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
+
+            $('.login-register').tabs({
+                activate: () => {
+                    clearLoginRegister()
+                }
+            })
+
+            setValidLogin()
+            setValidRegister()
+            setViewPassword()
+
+            $('.login-register').dialog('open')
+        }
+    })
 })
 
+//Kiểm tra đăng nhập
+function setValidLogin() {
+    $('#loginSubmit').on('click', (e) => {
+        e.preventDefault()
+
+        const inpUsername = '#loginUsername'
+        const inpPassword = '#loginPassword'
+        const ckcUsername = '#ckcLoginUsername'
+        const ckcPassword = '#ckcLoginPassword'
+
+        const ckcUname = checkUsername(inpUsername, ckcUsername)
+        const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
+        if (!ckcUname || !ckcPass) return
+
+        callLoginRegister(false, inpUsername, inpPassword, ckcUsername)
+    })
+}
+
+//Kiểm tra đăng ký
+function setValidRegister() {
+    $('#registerSubmit').on('click', (e) => {
+        e.preventDefault()
+
+        const inpUsername = '#registerUsername'
+        const inpPassword = '#registerPassword'
+        const inpRePassword = '#registerRePassword'
+        const ckcUsername = '#ckcRegisterUsername'
+        const ckcPassword = '#ckcRegisterPassword'
+        const ckcRePassword = '#ckcRegisterRePassword'
+
+        const ckcUname = checkUsername(inpUsername, ckcUsername)
+        const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
+        const ckcRePass = checkRePassword(inpPassword, inpRePassword, ckcRePassword)
+        if (!ckcUname || !ckcPass || !ckcRePass) return
+
+        callLoginRegister(true, inpUsername, inpPassword, ckcUsername)
+    })
+}
+
+//Hiển thị mật khẩu
+function setViewPassword() {
+    $('.view-pass').on('click', (e) => {
+        if (e.target.textContent == 'visibility') {
+            $(e.target.parentElement.firstElementChild).attr('type', 'text')
+            $(e.target).html('visibility_off')
+        }
+        else {
+            $(e.target.parentElement.firstElementChild).attr('type', 'password')
+            $(e.target).html('visibility')
+        }
+    })
+}
+
+//làm mới form đăng nhập và đăng ký
 function clearLoginRegister() {
     $('#loginUsername').attr('class', 'form-control')
     $('#loginPassword').attr('class', 'form-control')
@@ -177,12 +238,13 @@ function clearLoginRegister() {
     $('#registerPassword').val('')
     $('#registerRePassword').val('')
 
-    $('#loginPassword').attr('type', 'password');
-    $('#registerPassword').attr('type', 'password');
-    $('#registerRePassword').attr('type', 'password');
+    $('#loginPassword').attr('type', 'password')
+    $('#registerPassword').attr('type', 'password')
+    $('#registerRePassword').attr('type', 'password')
     $('.view-pass').html('visibility')
 }
 
+//Set trạng thái inp
 function setStateInp(state, inp, lbl, text) {
     if (state) {
         $(inp).removeClass('is-invalid').addClass('is-valid')
@@ -194,43 +256,47 @@ function setStateInp(state, inp, lbl, text) {
     }
 }
 
+//Kiểm tra tên người dùng
 function checkUsername(inp, lbl) {
-    const checker = /^[a-zA-Z0-9]{5,20}$/;
+    const checker = /^[a-zA-Z0-9]{5,20}$/
     if (!checker.test($(inp).val())) {
         setStateInp(false, inp, lbl, 'Tên người dùng không hợp lệ !')
-        return false;
+        return false
     }
-    return true;
+    return true
 }
 
+//Kiểm tra mật khẩu
 function checkPassword(inpUsername, inpPassword, lblPassword) {
     const textPass = $(inpPassword).val()
 
     if ($(inpUsername).val() == $(inpPassword).val()) {
         setStateInp(false, inpPassword, lblPassword, 'Mật khẩu trùng với tên người dùng !')
-        return false;
+        return false
     }
 
     if (!textPass.match(/[0-9]/) || !textPass.match(/[a-z]/) || !textPass.match(/[A-Z]/) || textPass.length < 5) {
         setStateInp(false, inpPassword, lblPassword, 'Mật khẩu quá yếu !')
-        return false;
+        return false
     }
 
     setStateInp(true, inpPassword, lblPassword, 'Mật khẩu hợp lệ !')
-    return true;
+    return true
 }
 
+//Kiểm tra xác thực mật khẩu
 function checkRePassword(inpPass, inpRePass, lblRePass) {
     if ($(inpPass).val() == $(inpRePass).val()) {
         setStateInp(true, inpRePass, lblRePass, 'Mật khẩu nhập lại hợp lệ !')
-        return true;
+        return true
     }
     else {
         setStateInp(false, inpRePass, lblRePass, 'Nhập lại khẩu chưa khớp !')
-        return false;
+        return false
     }
 }
 
+//Gọi đăng nhập và đăng ký
 function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
     $.ajax({
         url: '/user/checkusername',
@@ -250,42 +316,7 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
     })
 }
 
-function setInfo(isLogin, user) {
-    const image = $('.user-image');
-    const username = $('.user-username');
-    const email = $('.user-email');
-
-    if (isLogin && user != '') {
-        if (user.image) image.attr('src', user.image)
-        username.html(user.username)
-        if (user.email) email.html(user.email)
-    }
-    else {
-        image.attr('src', 'https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg')
-        username.html('ABC 123')
-        email.html('abc123@gmail.com')
-    }
-}
-
 //Xử lý đăng ký tài khoản
-$('#registerSubmit').on('click', (e) => {
-    e.preventDefault()
-
-    const inpUsername = '#registerUsername'
-    const inpPassword = '#registerPassword'
-    const inpRePassword = '#registerRePassword'
-    const ckcUsername = '#ckcRegisterUsername'
-    const ckcPassword = '#ckcRegisterPassword'
-    const ckcRePassword = '#ckcRegisterRePassword'
-
-    const ckcUname = checkUsername(inpUsername, ckcUsername)
-    const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
-    const ckcRePass = checkRePassword(inpPassword, inpRePassword, ckcRePassword)
-    if (!ckcUname || !ckcPass || !ckcRePass) return;
-
-    callLoginRegister(true, inpUsername, inpPassword, ckcUsername)
-})
-
 function setRegister(inpUsername, inpPassword) {
     $.ajax({
         url: '/user/create',
@@ -299,7 +330,7 @@ function setRegister(inpUsername, inpPassword) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
                 setInfo(true, data.user)
 
-                $(".login-register").dialog('close');
+                $(".login-register").dialog('close')
                 $('.btn-login').hide()
                 return
             }
@@ -309,21 +340,6 @@ function setRegister(inpUsername, inpPassword) {
 }
 
 //Xử lý đăng nhập
-$('#loginSubmit').on('click', (e) => {
-    e.preventDefault()
-
-    const inpUsername = '#loginUsername'
-    const inpPassword = '#loginPassword'
-    const ckcUsername = '#ckcLoginUsername'
-    const ckcPassword = '#ckcLoginPassword'
-
-    const ckcUname = checkUsername(inpUsername, ckcUsername)
-    const ckcPass = checkPassword(inpUsername, inpPassword, ckcPassword)
-    if (!ckcUname || !ckcPass) return
-
-    callLoginRegister(false, inpUsername, inpPassword, ckcUsername)
-})
-
 function setLogin(inpUsername, inpPassword) {
     $.ajax({
         url: '/user/getlogin',
@@ -337,7 +353,7 @@ function setLogin(inpUsername, inpPassword) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
                 setInfo(true, data.user)
 
-                $(".login-register").dialog('close');
+                $(".login-register").dialog('close')
                 $('.btn-logout').attr('class', 'btn-logout text-danger')
                 $('.btn-login').hide()
                 return
@@ -366,10 +382,28 @@ $('.btn-logout').on('click', (e) => {
     })
 })
 
+//Set thông tin người dùng
+function setInfo(isLogin, user) {
+    const image = $('.user-image')
+    const username = $('.user-username')
+    const email = $('.user-email')
+
+    if (isLogin && user != '') {
+        if (user.image) image.attr('src', user.image)
+        username.html(user.username)
+        if (user.email) email.html(user.email)
+    }
+    else {
+        image.attr('src', 'https://haycafe.vn/wp-content/uploads/2021/12/Anh-anime-cute-1.jpg')
+        username.html('ABC 123')
+        email.html('abc123@gmail.com')
+    }
+}
+
 //Lấy thông tin người dùng
 $('.user-btn').on('click', () => {
     $.ajax({
-        url: '/user/getfile',
+        url: '/user/getprofile',
         type: 'POST',
         success: function (data) {
             if ($('#userProfile').length) {
@@ -377,7 +411,7 @@ $('.user-btn').on('click', () => {
                 return
             }
 
-            appenDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
+            appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
             $('#userProfile').dialog('open')
         }
     })
