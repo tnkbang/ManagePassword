@@ -24,7 +24,7 @@ namespace Website.Controllers
         }
 
         [HttpGet]
-        public JsonResult getNavigation()
+        public JsonResult GetNavigation()
         {
             User user= new User();
 
@@ -38,7 +38,7 @@ namespace Website.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> getType(string term)
+        public async Task<JsonResult> GetType(string term)
         {
             List <TypePassword> lst = await typeServices.GetList();
             lst = lst.Where(x => x.TypeName.ToLower().Contains(term.ToLower())).ToList();

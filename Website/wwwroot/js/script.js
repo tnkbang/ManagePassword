@@ -1,5 +1,5 @@
 ﻿//Biến toàn cục
-const taskRunner = $('.task-runner');
+const taskRunner = $('.task-runner')
 
 //Xử lý khi gọi ajax về server
 $.ajaxSetup({
@@ -27,8 +27,38 @@ const options = {
     typeSpeed: 100,
     backSpeed: 100,
     loop: true,
-};
+}
 
+//Hiệu ứng gõ chữ tại ô tìm kiếm
+function setSearchTyped() {
+    new Typed('#inpSearch', {
+        strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
+        typeSpeed: 100,
+        backSpeed: 100,
+        attr: 'placeholder',
+        shuffle: true,
+        bindInputFocusEvents: true,
+        loop: true
+    })
+
+    $('#inpSearch').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '/default/gettype',
+                type: 'GET',
+                data: {
+                    term: request.term
+                },
+                success: function (data) {
+                    response(data)
+                }
+            })
+        },
+        minLength: 1
+    })
+}
+
+//Xử lý sau khi load trang
 $(document).on('DOMContentLoaded', () => {
     new Typed('#profession', options)
 
@@ -43,45 +73,15 @@ $(document).on('DOMContentLoaded', () => {
                 hideSidebar()
             })
 
-            //Hiệu ứng gõ chữ vào ô tìm kiếm
-            new Typed('#inpSearch', {
-                strings: ['Tìm kiếm tại đây...', 'Bạn đang cần gì?', 'Bạn cần giúp đỡ?', 'Hãy nhập vào tôi...'],
-                typeSpeed: 100,
-                backSpeed: 100,
-                attr: 'placeholder',
-                shuffle: true,
-                bindInputFocusEvents: true,
-                loop: true
-            })
-
-            //Xử lý đề xuất khi nhập vào textbox tìm kiếm
-            $('#inpSearch').autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '/default/gettype',
-                        type: 'GET',
-                        data: {
-                            term: request.term
-                        },
-                        success: function (data) {
-                            response(data)
-                        }
-                    });
-                },
-                minLength: 1
-            })
-
             //Vô hiệu hóa đối với thẻ a
             $('a').click(function (e) {
-                e.preventDefault();
+                e.preventDefault()
             })
 
-            //Xem thông tin
             setViewInfo()
-            getUserInfo()
-
-            //Gọi đăng xuất
+            setSearchTyped()
             setLogout()
+            getUserInfo()
         }
     })
 
