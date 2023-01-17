@@ -59,9 +59,18 @@ function setSearchTyped() {
     })
 }
 
+//Xử lý background
+function setBackground() {
+    $('.main').css('background', 'linear-gradient(30deg,rgba(0,0,0,0.3),rgba(0,0,0,0.2)), url("/css/images/background.jfif")')
+    $('.main').css('background-size', 'cover')
+    $('.main').css('background-repeat', 'no-repeat')
+    $('.main').css('background-position', 'center center')
+}
+
 //Xử lý sau khi load trang
 $(document).on('DOMContentLoaded', () => {
     new Typed('#profession', options)
+    setBackground()
 
     $.ajax({
         url: '/default/getnavigation',
