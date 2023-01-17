@@ -79,6 +79,7 @@ $(document).on('DOMContentLoaded', () => {
                 e.preventDefault()
             })
 
+            setDropDown()
             setViewInfo()
             setSearchTyped()
             setLogout()
@@ -91,12 +92,14 @@ $(document).on('DOMContentLoaded', () => {
 })
 
 //Xử lý thay đổi ký hiệu khi nhấn dropdown của nav
-$('.drop-down').on('click', (e) => {
-    e.preventDefault()
-    $('.dropdown').toggleClass('active')
-    if ($('.dropdown').hasClass('active')) $('.material-icons.carrot').html('expand_less')
-    else $('.material-icons.carrot').html('expand_more')
-})
+function setDropDown() {
+    $('.drop-down').on('click', (e) => {
+        e.preventDefault()
+        $('.dropdown').toggleClass('active')
+        if ($('.dropdown').hasClass('active')) $('.material-icons.carrot').html('expand_less')
+        else $('.material-icons.carrot').html('expand_more')
+    })
+}
 
 //Xử lý ẩn hiện nav
 $('.nav-toggler').on('click', () => {
