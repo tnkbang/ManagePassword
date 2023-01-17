@@ -11,6 +11,7 @@ $.ajaxSetup({
     },
     error: function (xhr) {
         if ($('#error').length) {
+            $('#error').html('Với mã lỗi: ' + xhr.status)
             $('#error').dialog('open')
             return
         }
@@ -157,11 +158,6 @@ function setViewInfo() {
     $('.view-info').on('click', function () {
         $('#appInfo').dialog('open')
     })
-}
-
-//Xử lý hiện hiệu ứng loading khi thực hiện tác vụ
-function runLoadAnimate(type) {
-    return type ? $('.task-runner').css('display', 'block') : $('.task-runner').css('display', 'none')
 }
 
 //Xử lý đăng nhập và đăng ký
