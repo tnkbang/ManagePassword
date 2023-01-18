@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             })
         })
-    }, 1000);
+    }, 1000)
 })
 
 //Tải thêm js khi cần
@@ -119,10 +119,10 @@ function loadScript(src) {
             var script = document.createElement('script')
             script.onload = function () {
                 resolve()
-            };
+            }
             script.onerror = function () {
                 reject()
-            };
+            }
             script.src = src
             document.body.appendChild(script)
         } else {
@@ -391,6 +391,7 @@ function setRegister(inpUsername, inpPassword) {
                 setUserInfo(true, data.user)
 
                 $(".login-register").dialog('close')
+                $('.btn-logout').attr('class', 'btn-logout text-danger')
                 $('.btn-login').hide()
                 return
             }
