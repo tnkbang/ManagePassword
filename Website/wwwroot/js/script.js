@@ -110,6 +110,61 @@ document.addEventListener('DOMContentLoaded', async function () {
             })
         })
     }, 1000)
+
+    $('#user-edit-avt').on('change', async (e) => {
+        loadStyle('/css/cropper.css')
+        const src = '/js/cropper.js'
+        while (document.querySelector('script[src="' + src + '"]') === null) {
+            await loadScript(src)
+        }
+
+        if ($('#changeAvt').length) {
+            $('#changeAvt').dialog('open')
+            return
+        }
+
+        appendDialogBody('<div id="changeAvt"><div class="w-100"><img id="imgCropperAvt" src="/css/images/avt-default.jpg"></div><button type="button" id="cropperConfirm" class="btn btn-outline-primary float-end mb-3">Lưu</button></div>', '#changeAvt', false, 400, 400, 'clip', 1000)
+        $('#changeAvt').dialog('open')
+
+        var image = document.getElementById('imgCropperAvt');
+        var input = document.getElementById('user-edit-avt');
+        var cropper;
+
+        var files = e.target.files;
+        var done = function (url) {
+            console.log(image)
+            input.value = '';
+            image.src = url;
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 3,
+            });
+        };
+        var reader;
+        var file;
+
+        //Gán đã chọn vào vùng cropper
+        if (files && files.length > 0) {
+            file = files[0];
+
+            //Kiểm tra đúng định dạng ảnh
+            var anh = /(\.jpg|\.jpeg|\.png)$/i;
+            if (!anh.exec(file.name)) {
+                getThongBao('error', 'Lỗi', 'Định dạng ảnh không chính xác !')
+                return;
+            }
+
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                reader = new FileReader();
+                reader.onload = function (e) {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    })
 })
 
 //Tải thêm js khi cần
@@ -129,6 +184,16 @@ function loadScript(src) {
             resolve()
         }
     })
+}
+
+//Tải thêm css khi cần
+function loadStyle(url) {
+    var head = document.getElementsByTagName('head')[0];
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+    head.appendChild(link);
 }
 
 //Hiệu ứng gõ chữ tại ô tìm kiếm
