@@ -33,7 +33,14 @@ namespace Website.Controllers
                 user = userServices.Details(User.Claims.First().Value);
             }
 
-            string body = readFile.ReadNavigation("\\Data\\User\\Navigation.html", user);
+            string body = readFile.ReadNavigation("\\Data\\Web\\Navigation.html", user);
+            return Json(new { body });
+        }
+
+        [HttpGet]
+        public JsonResult GetInfo()
+        {
+            string body = readFile.ReadHtml("\\Data\\Web\\Info.html");
             return Json(new { body });
         }
 

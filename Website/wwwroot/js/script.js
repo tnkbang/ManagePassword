@@ -1,33 +1,135 @@
-﻿//Biến toàn cục
-const taskRunner = $('.task-runner')
+﻿//Xử lý sau khi web đã tải
+document.addEventListener('DOMContentLoaded', async function () {
+    await loadScript('/js/lib-script.js')
 
-//Xử lý khi gọi ajax về server
-$.ajaxSetup({
-    beforeSend: function () {
-        taskRunner.show()
-    },
-    complete: function () {
-        taskRunner.hide()
-    },
-    error: function (xhr) {
-        if ($('#error').length) {
-            $('#error').html('Với mã lỗi: ' + xhr.status)
+    //Biến toàn cục
+    const taskRunner = $('.task-runner')
+
+    //Xử lý khi gọi ajax về server
+    $.ajaxSetup({
+        beforeSend: function () {
+            taskRunner.show()
+        },
+        complete: function () {
+            taskRunner.hide()
+        },
+        error: function (xhr) {
+            if ($('#error').length) {
+                $('#error').html('Với mã lỗi: ' + xhr.status)
+                $('#error').dialog('open')
+                return
+            }
+
+            $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
+            setDialog('#error', false, true, 0, 0, 'clip', 1000)
             $('#error').dialog('open')
+        }
+    })
+
+    //Xử lý hiệu ứng tự gõ chữ
+    const options = {
+        strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
+        typeSpeed: 100,
+        backSpeed: 100,
+        loop: true,
+    }
+
+    //Xử lý sau khi load trang
+    new Typed('#profession', options)
+    setBackground()
+
+    $.ajax({
+        url: '/default/getnavigation',
+        type: 'GET',
+        success: function (data) {
+            appendBody(data.body)
+
+            //Ẩn nav khi nhấn vào header nav
+            $('.sidebar_header').on('click', () => {
+                hideSidebar()
+            })
+
+            //Vô hiệu hóa đối với thẻ a
+            $('a').click(function (e) {
+                e.preventDefault()
+            })
+
+            setDropDown()
+            setViewInfo()
+            setSearchTyped()
+            setLogout()
+            getUserInfo()
+        }
+    })
+
+    //Xử lý ẩn hiện nav
+    $('.nav-toggler').on('click', () => {
+        $('.sidebar').addClass('show')
+        $('.overlay').css('display', 'block')
+        navigator.vibrate([50, 100, 50])
+    })
+
+    const hideSidebar = () => {
+        $('.sidebar').removeClass('show')
+        $('.overlay').css('display', 'none')
+    }
+
+    $('.overlay').on('click', () => {
+        hideSidebar()
+    })
+
+    //Xử lý ẩn hiện icon group
+    $('.action-btn').on('click', () => {
+        $('.action-btn-group').toggleClass('active')
+    })
+
+    //Xử lý đăng nhập và đăng ký
+    $('.btn-login').on('click', () => {
+        if ($('.login-register').length) {
+            clearLoginRegister()
+            $('.login-register').dialog('open')
             return
         }
 
-        $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-        setDialog('#error', false, true, 0, 0, 'clip', 1000)
-        $('#error').dialog('open')
-    }
+        $.ajax({
+            url: '/user/getformloginregister',
+            type: 'GET',
+            success: function (data) {
+                appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
+
+                $('.login-register').tabs({
+                    activate: () => {
+                        clearLoginRegister()
+                    }
+                })
+
+                setValidLogin()
+                setValidRegister()
+                setViewPassword()
+
+                $('.login-register').dialog('open')
+            }
+        })
+    })
 })
 
-//Xử lý hiệu ứng tự gõ chữ
-const options = {
-    strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
-    typeSpeed: 100,
-    backSpeed: 100,
-    loop: true,
+//Tải thêm js khi cần
+function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+        if (document.querySelector('script[src="' + src + '"]') === null) {
+            var script = document.createElement('script')
+            script.onload = function () {
+                resolve()
+            };
+            script.onerror = function () {
+                reject()
+            };
+            script.src = src
+            document.body.appendChild(script)
+        } else {
+            resolve()
+        }
+    })
 }
 
 //Hiệu ứng gõ chữ tại ô tìm kiếm
@@ -67,39 +169,6 @@ function setBackground() {
     $('.main').css('background-position', 'center center')
 }
 
-//Xử lý sau khi load trang
-$(document).on('DOMContentLoaded', () => {
-    new Typed('#profession', options)
-    setBackground()
-
-    $.ajax({
-        url: '/default/getnavigation',
-        type: 'GET',
-        success: function (data) {
-            appendBody(data.body)
-
-            //Ẩn nav khi nhấn vào header nav
-            $('.sidebar_header').on('click', () => {
-                hideSidebar()
-            })
-
-            //Vô hiệu hóa đối với thẻ a
-            $('a').click(function (e) {
-                e.preventDefault()
-            })
-
-            setDropDown()
-            setViewInfo()
-            setSearchTyped()
-            setLogout()
-            getUserInfo()
-        }
-    })
-
-    //Hiển thị thông tin ứng dụng
-    setDialog('#appInfo', false, false, 0, 0, 'clip', 1000)
-})
-
 //Xử lý thay đổi ký hiệu khi nhấn dropdown của nav
 function setDropDown() {
     $('.drop-down').on('click', (e) => {
@@ -109,27 +178,6 @@ function setDropDown() {
         else $('.material-icons.carrot').html('expand_more')
     })
 }
-
-//Xử lý ẩn hiện nav
-$('.nav-toggler').on('click', () => {
-    $('.sidebar').addClass('show')
-    $('.overlay').css('display', 'block')
-    navigator.vibrate([50, 100, 50])
-})
-
-const hideSidebar = () => {
-    $('.sidebar').removeClass('show')
-    $('.overlay').css('display', 'none')
-}
-
-$('.overlay').on('click', () => {
-    hideSidebar()
-})
-
-//Xử lý ẩn hiện icon group
-$('.action-btn').on('click', () => {
-    $('.action-btn-group').toggleClass('active')
-})
 
 //Khởi tạo dialog
 function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
@@ -167,39 +215,22 @@ function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, du
 
 //Xem thông tin ứng dụng
 function setViewInfo() {
-    $('.view-info').on('click', function () {
-        $('#appInfo').dialog('open')
+    $('.view-info').on('click', () => {
+        if ($('#appInfo').length) {
+            $('#appInfo').dialog('open')
+            return
+        }
+
+        $.ajax({
+            url: '/default/getinfo',
+            type: 'GET',
+            success: function (data) {
+                appendDialogBody(data.body, '#appInfo', false, 0, 0, 'clip', 1000)
+                $('#appInfo').dialog('open')
+            }
+        })
     })
 }
-
-//Xử lý đăng nhập và đăng ký
-$('.btn-login').on('click', () => {
-    if ($('.login-register').length) {
-        clearLoginRegister()
-        $('.login-register').dialog('open')
-        return
-    }
-
-    $.ajax({
-        url: '/user/getformloginregister',
-        type: 'GET',
-        success: function (data) {
-            appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
-
-            $('.login-register').tabs({
-                activate: () => {
-                    clearLoginRegister()
-                }
-            })
-
-            setValidLogin()
-            setValidRegister()
-            setViewPassword()
-
-            $('.login-register').dialog('open')
-        }
-    })
-})
 
 //Kiểm tra đăng nhập
 function setValidLogin() {
@@ -358,7 +389,7 @@ function setRegister(inpUsername, inpPassword) {
         success: function (data) {
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
-                setInfo(true, data.user)
+                setUserInfo(true, data.user)
 
                 $(".login-register").dialog('close')
                 $('.btn-login').hide()
@@ -381,7 +412,7 @@ function setLogin(inpUsername, inpPassword) {
         success: function (data) {
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
-                setInfo(true, data.user)
+                setUserInfo(true, data.user)
 
                 $(".login-register").dialog('close')
                 $('.btn-logout').attr('class', 'btn-logout text-danger')
@@ -402,7 +433,7 @@ function setLogout() {
             success: function (data) {
                 if (data.tt) {
                     getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
-                    setInfo(false, '')
+                    setUserInfo(false, '')
 
                     $('.btn-logout').attr('class', 'btn-logout text-danger hide')
                     $('.btn-login').show()
@@ -415,7 +446,7 @@ function setLogout() {
 }
 
 //Set thông tin người dùng
-function setInfo(isLogin, user) {
+function setUserInfo(isLogin, user) {
     const image = $('.user-image')
     const username = $('.user-username')
     const email = $('.user-email')
@@ -434,16 +465,15 @@ function setInfo(isLogin, user) {
 
 //Lấy thông tin người dùng
 function getUserInfo() {
+    if ($('#userProfile').length) {
+        $('#userProfile').dialog('open')
+        return
+    }
     $('.user-btn').on('click', () => {
         $.ajax({
             url: '/user/getprofile',
             type: 'POST',
             success: function (data) {
-                if ($('#userProfile').length) {
-                    $('#userProfile').dialog('open')
-                    return
-                }
-
                 appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
                 $('#userProfile').dialog('open')
             }
