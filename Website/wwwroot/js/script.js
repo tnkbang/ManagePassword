@@ -1,116 +1,115 @@
 ﻿//Xử lý sau khi web đã tải
 document.addEventListener('DOMContentLoaded', async function () {
     await loadScript('/js/lib-script.js')
+    setBackground()
 
-    //Biến toàn cục
-    const taskRunner = $('.task-runner')
+    //Trì hoãn 1s mới thực hiện js để tăng hiệu suất
+    setTimeout(() => {
+        //Xử lý loading khi gọi ajax về server
+        $.ajaxSetup({
+            beforeSend: function () {
+                $('.task-runner').show()
+            },
+            complete: function () {
+                $('.task-runner').hide()
+            },
+            error: function (xhr) {
+                if ($('#error').length) {
+                    $('#error').html('Với mã lỗi: ' + xhr.status)
+                    $('#error').dialog('open')
+                    return
+                }
 
-    //Xử lý khi gọi ajax về server
-    $.ajaxSetup({
-        beforeSend: function () {
-            taskRunner.show()
-        },
-        complete: function () {
-            taskRunner.hide()
-        },
-        error: function (xhr) {
-            if ($('#error').length) {
-                $('#error').html('Với mã lỗi: ' + xhr.status)
+                $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
+                setDialog('#error', false, true, 0, 0, 'clip', 1000)
                 $('#error').dialog('open')
+            }
+        })
+
+        //Xử lý hiệu ứng tự gõ chữ
+        const options = {
+            strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
+            typeSpeed: 100,
+            backSpeed: 100,
+            loop: true,
+        }
+        new Typed('#profession', options)
+
+        //Gọi ajax để gán nav
+        $.ajax({
+            url: '/default/getnavigation',
+            type: 'GET',
+            success: function (data) {
+                appendBody(data.body)
+
+                //Ẩn nav khi nhấn vào header nav
+                $('.sidebar_header').on('click', () => {
+                    hideSidebar()
+                })
+
+                //Vô hiệu hóa đối với thẻ a
+                $('a').click(function (e) {
+                    e.preventDefault()
+                })
+
+                setDropDown()
+                setViewInfo()
+                setSearchTyped()
+                setLogout()
+                getUserInfo()
+            }
+        })
+
+        //Xử lý ẩn hiện nav
+        $('.nav-toggler').on('click', () => {
+            $('.sidebar').addClass('show')
+            $('.overlay').css('display', 'block')
+            navigator.vibrate([50, 100, 50])
+        })
+
+        const hideSidebar = () => {
+            $('.sidebar').removeClass('show')
+            $('.overlay').css('display', 'none')
+        }
+
+        $('.overlay').on('click', () => {
+            hideSidebar()
+        })
+
+        //Xử lý ẩn hiện icon group
+        $('.action-btn').on('click', () => {
+            $('.action-btn-group').toggleClass('active')
+        })
+
+        //Xử lý đăng nhập và đăng ký
+        $('.btn-login').on('click', () => {
+            if ($('.login-register').length) {
+                clearLoginRegister()
+                $('.login-register').dialog('open')
                 return
             }
 
-            $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-            setDialog('#error', false, true, 0, 0, 'clip', 1000)
-            $('#error').dialog('open')
-        }
-    })
+            $.ajax({
+                url: '/user/getformloginregister',
+                type: 'GET',
+                success: function (data) {
+                    appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
 
-    //Xử lý hiệu ứng tự gõ chữ
-    const options = {
-        strings: ["Good boy", "Web Designer", "Web Developer", "full stack web developer", "Accountant", "Comedian", "Good Advisor", "good boy 😍", "Astrologer"],
-        typeSpeed: 100,
-        backSpeed: 100,
-        loop: true,
-    }
+                    $('.login-register').tabs({
+                        activate: () => {
+                            clearLoginRegister()
+                        }
+                    })
 
-    //Xử lý sau khi load trang
-    new Typed('#profession', options)
-    setBackground()
+                    setValidLogin()
+                    setValidRegister()
+                    setViewPassword()
 
-    $.ajax({
-        url: '/default/getnavigation',
-        type: 'GET',
-        success: function (data) {
-            appendBody(data.body)
-
-            //Ẩn nav khi nhấn vào header nav
-            $('.sidebar_header').on('click', () => {
-                hideSidebar()
+                    $('.login-register').dialog('open')
+                }
             })
-
-            //Vô hiệu hóa đối với thẻ a
-            $('a').click(function (e) {
-                e.preventDefault()
-            })
-
-            setDropDown()
-            setViewInfo()
-            setSearchTyped()
-            setLogout()
-            getUserInfo()
-        }
-    })
-
-    //Xử lý ẩn hiện nav
-    $('.nav-toggler').on('click', () => {
-        $('.sidebar').addClass('show')
-        $('.overlay').css('display', 'block')
-        navigator.vibrate([50, 100, 50])
-    })
-
-    const hideSidebar = () => {
-        $('.sidebar').removeClass('show')
-        $('.overlay').css('display', 'none')
-    }
-
-    $('.overlay').on('click', () => {
-        hideSidebar()
-    })
-
-    //Xử lý ẩn hiện icon group
-    $('.action-btn').on('click', () => {
-        $('.action-btn-group').toggleClass('active')
-    })
-
-    //Xử lý đăng nhập và đăng ký
-    $('.btn-login').on('click', () => {
-        if ($('.login-register').length) {
-            clearLoginRegister()
-            $('.login-register').dialog('open')
-            return
-        }
-
-        $.ajax({
-            url: '/user/getformloginregister',
-            type: 'GET',
-            success: function (data) {
-                appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
-
-                $('.login-register').tabs({
-                    activate: () => {
-                        clearLoginRegister()
-                    }
-                })
-
-                setValidLogin()
-                setValidRegister()
-                setViewPassword()
-
-                $('.login-register').dialog('open')
-            }
         })
-    })
+    }, 1000);
 })
 
 //Tải thêm js khi cần
