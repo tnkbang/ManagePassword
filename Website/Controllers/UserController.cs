@@ -137,5 +137,18 @@ namespace Website.Controllers
             string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);
             return Json(new {body});
         }
+
+        [HttpGet]
+        public JsonResult GetFormChangeAvt()
+        {
+            string body = readFile.ReadHtml("\\Data\\User\\ChangeAvt.html");
+            return Json(new { body });
+        }
+
+        [HttpPost]
+        public JsonResult ChangeAvt()
+        {
+            return Json(new { tt = true });
+        }
     }
 }

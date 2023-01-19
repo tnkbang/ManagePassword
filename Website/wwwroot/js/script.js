@@ -1,5 +1,5 @@
 ﻿//Xử lý sau khi web đã tải
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async () => {
     await loadScript('/js/lib-script.js')
     setBackground()
 
@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     setTimeout(() => {
         //Xử lý loading khi gọi ajax về server
         $.ajaxSetup({
-            beforeSend: function () {
+            beforeSend: () => {
                 $('.task-runner').show()
             },
-            complete: function () {
+            complete: () => {
                 $('.task-runner').hide()
             },
-            error: function (xhr) {
+            error: (xhr) => {
                 if ($('#error').length) {
                     $('#error').html('Với mã lỗi: ' + xhr.status)
                     $('#error').dialog('open')
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-                setDialog('#error', false, true, 0, 0, 'clip', 1000)
+                setDialog('#error', false, true, 0, 0, 0, 0, 'clip', 1000)
                 $('#error').dialog('open')
             }
         })
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         $.ajax({
             url: '/default/getnavigation',
             type: 'GET',
-            success: function (data) {
+            success: (data) => {
                 appendBody(data.body)
 
                 //Ẩn nav khi nhấn vào header nav
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 })
 
                 //Vô hiệu hóa đối với thẻ a
-                $('a').click(function (e) {
+                $('a').click((e) => {
                     e.preventDefault()
                 })
 
@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             $.ajax({
                 url: '/user/getformloginregister',
                 type: 'GET',
-                success: function (data) {
-                    appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
+                success: (data) => {
+                    appendDialogBody(data.body, '.login-register', false, 350, 0, 0, 0, 'clip', 1000)
 
                     $('.login-register').tabs({
                         activate: () => {
@@ -112,70 +112,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     }, 1000)
 
     $('#user-edit-avt').on('change', async (e) => {
-        loadStyle('/css/cropper.css')
-        const src = '/js/cropper.js'
-        while (document.querySelector('script[src="' + src + '"]') === null) {
-            await loadScript(src)
-        }
-
-        if ($('#changeAvt').length) {
-            $('#changeAvt').dialog('open')
-            return
-        }
-
-        appendDialogBody('<div id="changeAvt"><div class="w-100"><img id="imgCropperAvt" src="/css/images/avt-default.jpg"></div><button type="button" id="cropperConfirm" class="btn btn-outline-primary float-end mb-3">Lưu</button></div>', '#changeAvt', false, 400, 400, 'clip', 1000)
-        $('#changeAvt').dialog('open')
-
-        var image = document.getElementById('imgCropperAvt');
-        var input = document.getElementById('user-edit-avt');
-        var cropper;
-
-        var files = e.target.files;
-        var done = function (url) {
-            console.log(image)
-            input.value = '';
-            image.src = url;
-            cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 3,
-            });
-        };
-        var reader;
-        var file;
-
-        //Gán đã chọn vào vùng cropper
-        if (files && files.length > 0) {
-            file = files[0];
-
-            //Kiểm tra đúng định dạng ảnh
-            var anh = /(\.jpg|\.jpeg|\.png)$/i;
-            if (!anh.exec(file.name)) {
-                getThongBao('error', 'Lỗi', 'Định dạng ảnh không chính xác !')
-                return;
-            }
-
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function (e) {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+        setFormChangeAvt()
+        setStartCropImg(e.target.files)
     })
 })
 
 //Tải thêm js khi cần
 function loadScript(src) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         if (document.querySelector('script[src="' + src + '"]') === null) {
-            var script = document.createElement('script')
-            script.onload = function () {
+            let script = document.createElement('script')
+            script.onload = () => {
                 resolve()
             }
-            script.onerror = function () {
+            script.onerror = () => {
                 reject()
             }
             script.src = src
@@ -188,12 +138,24 @@ function loadScript(src) {
 
 //Tải thêm css khi cần
 function loadStyle(url) {
-    var head = document.getElementsByTagName('head')[0];
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = url;
-    head.appendChild(link);
+    return new Promise((resolve, reject) => {
+        if (document.querySelector('link[href="' + url + '"]') === null) {
+            let head = document.getElementsByTagName('head')[0]
+            let link = document.createElement('link')
+            link.onload = () => {
+                resolve()
+            }
+            link.onerror = () => {
+                reject()
+            }
+            link.rel = 'stylesheet'
+            link.type = 'text/css'
+            link.href = url
+            head.appendChild(link)
+        } else {
+            resolve()
+        }
+    })
 }
 
 //Hiệu ứng gõ chữ tại ô tìm kiếm
@@ -209,14 +171,14 @@ function setSearchTyped() {
     })
 
     $('#inpSearch').autocomplete({
-        source: function (request, response) {
+        source: (request, response) => {
             $.ajax({
                 url: '/default/gettype',
                 type: 'GET',
                 data: {
                     term: request.term
                 },
-                success: function (data) {
+                success: (data) => {
                     response(data)
                 }
             })
@@ -244,9 +206,11 @@ function setDropDown() {
 }
 
 //Khởi tạo dialog
-function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
+function setDialog(dom, isOpen, isModel, width, height, maxWidth, maxHeight, effect, duration) {
     if (height == 0) height = 'auto'
     if (width == 0) width = 'auto'
+    if (maxWidth == 0) maxWidth = 'auto'
+    if (maxHeight == 0) maxHeight = 'auto'
 
     if (screen.width <= 290 && screen.width < width) width = 260
 
@@ -255,6 +219,8 @@ function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
         modal: isModel,
         width: width,
         height: height,
+        maxWidth: maxWidth,
+        maxHeight: maxHeight,
         show: {
             effect: effect,
             duration: duration
@@ -272,9 +238,9 @@ function appendBody(stringDom) {
 }
 
 //Thêm dialog vào body
-function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, duration) {
+function appendDialogBody(stringDom, nameDom, isModel, width, height, maxWidth, maxHeight, effect, duration) {
     $('body').append(stringDom)
-    setDialog(nameDom, false, isModel, width, height, effect, duration)
+    setDialog(nameDom, false, isModel, width, height, maxWidth, maxHeight, effect, duration)
 }
 
 //Xem thông tin ứng dụng
@@ -288,8 +254,8 @@ function setViewInfo() {
         $.ajax({
             url: '/default/getinfo',
             type: 'GET',
-            success: function (data) {
-                appendDialogBody(data.body, '#appInfo', false, 0, 0, 'clip', 1000)
+            success: (data) => {
+                appendDialogBody(data.body, '#appInfo', false, 0, 0, 0, 0, 'clip', 1000)
                 $('#appInfo').dialog('open')
             }
         })
@@ -429,7 +395,7 @@ function callLoginRegister(isRegister, inpUsername, inpPassword, ckcUsername) {
         data: {
             uname: $(inpUsername).val()
         },
-        success: function (data) {
+        success: (data) => {
             if (data) setStateInp(!isRegister, inpUsername, ckcUsername, 'Tên người dùng đã tồn tại !')
             else setStateInp(isRegister, inpUsername, ckcUsername, 'Không tìm thấy tên người dùng !')
 
@@ -450,7 +416,7 @@ function setRegister(inpUsername, inpPassword) {
             uname: $(inpUsername).val(),
             pass: $(inpPassword).val()
         },
-        success: function (data) {
+        success: (data) => {
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng ký tài khoản thành công !')
                 setUserInfo(true, data.user)
@@ -474,7 +440,7 @@ function setLogin(inpUsername, inpPassword) {
             uname: $(inpUsername).val(),
             pass: $(inpPassword).val()
         },
-        success: function (data) {
+        success: (data) => {
             if (data.tt) {
                 getThongBao('success', 'Thông báo', 'Đăng nhập thành công !')
                 setUserInfo(true, data.user)
@@ -495,7 +461,7 @@ function setLogout() {
         $.ajax({
             url: '/user/logout',
             type: 'GET',
-            success: function (data) {
+            success: (data) => {
                 if (data.tt) {
                     getThongBao('success', 'Thông báo', 'Đã đăng xuất tài khoản !')
                     setUserInfo(false, '')
@@ -538,10 +504,127 @@ function getUserInfo() {
         $.ajax({
             url: '/user/getprofile',
             type: 'POST',
-            success: function (data) {
-                appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
+            success: (data) => {
+                appendDialogBody(data.body, '#userProfile', false, 500, 0, 0, 0, 'clip', 1000)
                 $('#userProfile').dialog('open')
             }
         })
     })
+}
+
+//Tạo form đổi ảnh
+function setFormChangeAvt() {
+    if ($('#changeAvt').length) return
+
+    $.ajax({
+        url: '/user/getformchangeavt',
+        type: 'GET',
+        success: (data) => {
+            appendDialogBody(data.body, '#changeAvt', false, 400, 0, 0, 400, 'clip', 1000)
+
+            $('#changeAvt').dialog({
+                close: (event, ui) => {
+                    if (cropper != null) {
+                        cropper.destroy()
+                        cropper = null
+                    }
+                }
+            })
+
+            $('#cropperConfirm').on('click', () => {
+                confirmCropImg()
+            })
+        }
+    })
+}
+
+//Xử lý cắt ảnh
+let cropper
+async function setStartCropImg(fileSelected) {
+    const srcStyle = '/css/cropper.css'
+    const srcScript = '/js/cropper.js'
+    while (document.querySelector('link[href="' + srcStyle + '"]') === null || document.querySelector('script[src="' + srcScript + '"]') === null) {
+        console.log('load')
+        await loadStyle(srcStyle)
+        await loadScript(srcScript)
+    }
+
+    let image = document.getElementById('imgCropperAvt')
+    const input = document.getElementById('user-edit-avt')
+
+    let files = fileSelected
+    let done = (url) => {
+        input.value = ''
+        image.src = url
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 3,
+        })
+    }
+
+    let reader
+    let file
+
+    //Gán đã chọn vào vùng cropper
+    if (files && files.length > 0) {
+        file = files[0]
+
+        //Kiểm tra đúng định dạng ảnh
+        const anh = /(\.jpg|\.jpeg|\.png)$/i
+        if (!anh.exec(file.name)) {
+            getThongBao('error', 'Lỗi', 'Định dạng ảnh không chính xác !')
+            return
+        }
+
+        if (URL) {
+            done(URL.createObjectURL(file))
+        } else if (FileReader) {
+            reader = new FileReader()
+            reader.onload = (e) => {
+                done(reader.result)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    $('#changeAvt').dialog('open')
+}
+
+//Xử lý sau khi đã chọn vùng cắt ảnh
+function confirmCropImg() {
+    let initialAvatarURL
+    let canvas
+    let uAvatar = document.querySelector('.user-image')
+
+    if (cropper) {
+        canvas = cropper.getCroppedCanvas({
+            width: 72,
+            height: 72,
+        })
+        initialAvatarURL = uAvatar.src
+        uAvatar.src = canvas.toDataURL()
+
+        canvas.toBlob((blob) => {
+            let formData = new FormData()
+            formData.append('avt', blob, 'avatar.jpg')
+
+            //Gọi về server lưu ảnh
+            $.ajax({
+                url: '/user/changeavt',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    $('#changeAvt').dialog('close')
+                    getThongBao('success', 'Thành công', "Cập nhật ảnh đại diện thành công !")
+                },
+                error: () => {
+                    cropper.destroy()
+                    cropper = null
+                    avatar.src = initialAvatarURL
+                }
+            })
+        })
+    }
 }
