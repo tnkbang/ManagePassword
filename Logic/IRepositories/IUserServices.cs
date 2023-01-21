@@ -1,4 +1,5 @@
 ﻿using Data.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,7 @@ namespace Logic.IRepositories
         string AsPassword(string uname, string pass);
 
         User HideSensitive(User user);
+
+        Task<string?> SetImages(string code, IFormFile img);
     }
 }

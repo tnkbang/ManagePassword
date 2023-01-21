@@ -146,8 +146,15 @@ namespace Website.Controllers
         }
 
         [HttpPost]
-        public JsonResult ChangeAvt()
+        [Authorize]
+        public async Task<JsonResult> ChangeAvt(IFormFile img)
         {
+            User user = userServices.Details(User.Claims.First().Value);
+            string? urlImg = await userServices.SetImages(user.Uid, img);
+
+            user.Image = urlImg;
+            userServices.Update(user);
+
             return Json(new { tt = true });
         }
     }

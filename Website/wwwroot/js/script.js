@@ -14,15 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 $('.task-runner').hide()
             },
             error: (xhr) => {
-                if ($('#error').length) {
-                    $('#error').html('Với mã lỗi: ' + xhr.status)
-                    $('#error').dialog('open')
-                    return
-                }
-
-                $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-                setDialog('#error', false, true, 0, 0, 0, 0, 'clip', 1000)
-                $('#error').dialog('open')
+                setPopupError()
             }
         })
 
@@ -156,6 +148,19 @@ function loadStyle(url) {
             resolve()
         }
     })
+}
+
+//Set popup error
+function setPopupError(xhr) {
+    if ($('#error').length) {
+        $('#error').html('Với mã lỗi: ' + xhr.status)
+        $('#error').dialog('open')
+        return
+    }
+
+    $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
+    setDialog('#error', false, true, 0, 0, 0, 0, 'clip', 1000)
+    $('#error').dialog('open')
 }
 
 //Hiệu ứng gõ chữ tại ô tìm kiếm
@@ -543,11 +548,11 @@ let cropper
 async function setStartCropImg(fileSelected) {
     const srcStyle = '/css/cropper.css'
     const srcScript = '/js/cropper.js'
-    while (document.querySelector('link[href="' + srcStyle + '"]') === null || document.querySelector('script[src="' + srcScript + '"]') === null) {
-        console.log('load')
+    do {
         await loadStyle(srcStyle)
         await loadScript(srcScript)
     }
+    while (document.querySelector('script[src="' + srcScript + '"]') === null)
 
     let image = document.getElementById('imgCropperAvt')
     const input = document.getElementById('user-edit-avt')
@@ -606,7 +611,7 @@ function confirmCropImg() {
 
         canvas.toBlob((blob) => {
             let formData = new FormData()
-            formData.append('avt', blob, 'avatar.jpg')
+            formData.append('img', blob, 'avatar.jpg')
 
             //Gọi về server lưu ảnh
             $.ajax({
@@ -620,9 +625,8 @@ function confirmCropImg() {
                     getThongBao('success', 'Thành công', "Cập nhật ảnh đại diện thành công !")
                 },
                 error: () => {
-                    cropper.destroy()
-                    cropper = null
-                    avatar.src = initialAvatarURL
+                    setPopupError()
+                    uAvatar.src = initialAvatarURL
                 }
             })
         })

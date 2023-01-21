@@ -2,6 +2,7 @@
 using Data.Models;
 using Logic.IRepositories;
 using Logic.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,6 +147,39 @@ namespace Logic.Repositories
             {
                 throw;
             }
+        }
+
+        public async Task<string?> SetImages(string code, IFormFile img)
+        {
+            //Khai báo đường dẫn lưu file
+            var basePath = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\content\\img\\user\\");
+            bool basePathExists = Directory.Exists(basePath);
+
+            //Nếu thư mục không có thì tạo mới
+            if (!basePathExists) Directory.CreateDirectory(basePath);
+
+            string file_extension = Path.GetFileName(img.FileName).Substring(Path.GetFileName(img.FileName).LastIndexOf('.'));
+            var fileName = "user-" + code + "-" + DateTime.Now.Millisecond + file_extension;
+            var filePath = Path.Combine(basePath, fileName);
+
+            //Xóa file cũ khỏi server
+            User user = Details(code);
+            if (!String.IsNullOrEmpty(user.Image) && System.IO.File.Exists(Path.Combine(basePath, user.Image)))
+            {
+                System.IO.File.Delete(basePath + user.Image);
+            }
+
+            //Thêm file vào server và trả về tên file
+            if (fileName != null && !System.IO.File.Exists(filePath))
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await img.CopyToAsync(stream);
+                }
+                return fileName;
+            }
+
+            return null;
         }
     }
 }

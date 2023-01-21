@@ -32,7 +32,7 @@ namespace Website.Controllers
         public string ReadNavigation(string url, User user)
         {
             string body = ReadHtml(url);
-            body = body.Replace("{{user-image}}", string.IsNullOrEmpty(user.Image) ? "/css/images/avt-default.jpg" : "/css/images/" + user.Image);
+            body = body.Replace("{{user-image}}", string.IsNullOrEmpty(user.Image) ? "/css/images/avt-default.jpg" : "/content/img/user/" + user.Image);
             body = body.Replace("{{user-username}}", user.Username ?? "ABC 123");
             body = body.Replace("{{user-email}}", string.IsNullOrEmpty(user.Uid) ? "abc123@gmail.com" : user.Username + "@gmail.com");
             body = body.Replace("{{hasLogout}}", string.IsNullOrEmpty(user.Uid) ? "hide" : null);
