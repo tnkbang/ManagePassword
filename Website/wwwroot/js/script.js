@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 $('.task-runner').hide()
             },
             error: (xhr) => {
-                setPopupError()
+                setPopupError(xhr)
             }
         })
 
@@ -103,9 +103,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }, 1000)
 
-    $('#user-edit-avt').on('change', async (e) => {
-        setFormChangeAvt()
-        setStartCropImg(e.target.files)
+    $('#user-edit-avt').on('change', (e) => {
+        setFormChangeAvt(e.target.files)
     })
 })
 
@@ -518,8 +517,11 @@ function getUserInfo() {
 }
 
 //Tạo form đổi ảnh
-function setFormChangeAvt() {
-    if ($('#changeAvt').length) return
+function setFormChangeAvt(fileSelected) {
+    if ($('#changeAvt').length) {
+        setStartCropImg(fileSelected)
+        return
+    }
 
     $.ajax({
         url: '/user/getformchangeavt',
@@ -536,6 +538,8 @@ function setFormChangeAvt() {
                 }
             })
 
+            setStartCropImg(fileSelected)
+
             $('#cropperConfirm').on('click', () => {
                 confirmCropImg()
             })
@@ -548,11 +552,8 @@ let cropper
 async function setStartCropImg(fileSelected) {
     const srcStyle = '/css/cropper.css'
     const srcScript = '/js/cropper.js'
-    do {
-        await loadStyle(srcStyle)
-        await loadScript(srcScript)
-    }
-    while (document.querySelector('script[src="' + srcScript + '"]') === null)
+    await loadStyle(srcStyle)
+    await loadScript(srcScript)
 
     let image = document.getElementById('imgCropperAvt')
     const input = document.getElementById('user-edit-avt')
@@ -624,8 +625,8 @@ function confirmCropImg() {
                     $('#changeAvt').dialog('close')
                     getThongBao('success', 'Thành công', "Cập nhật ảnh đại diện thành công !")
                 },
-                error: () => {
-                    setPopupError()
+                error: (xhr) => {
+                    setPopupError(xhr)
                     uAvatar.src = initialAvatarURL
                 }
             })
