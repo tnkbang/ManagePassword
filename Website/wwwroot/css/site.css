@@ -122,6 +122,15 @@ img {
     padding: 10px;
 }
 
+    .sidebar .close-nav {
+        position: absolute;
+        color: white;
+        cursor: pointer;
+        top: 5px;
+        right: 5px;
+        font-size: 15px;
+    }
+
     .sidebar.show {
         transform: translateX(0);
     }

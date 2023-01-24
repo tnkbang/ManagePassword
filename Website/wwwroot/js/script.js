@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 appendBody(data.body)
 
                 //Ẩn nav khi nhấn vào header nav
-                $('sidebar-header').on('click', () => {
+                $('.close-nav').on('click', () => {
                     hideSidebar()
                 })
 
