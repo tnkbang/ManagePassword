@@ -89,8 +89,8 @@ namespace Website.Controllers
                 //Gọi hàm đăng nhập bất đồng bộ của HttpContext
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties()
                 {
-                    //Không nhớ tài khoản
-                    IsPersistent = false
+                    //Nhớ tài khoản
+                    IsPersistent = true
                 });
 
                 return 2;

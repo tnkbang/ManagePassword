@@ -487,7 +487,7 @@ function setUserInfo(isLogin, user) {
     const email = $('.user-email')
 
     if (isLogin && user != '') {
-        if (user.image) image.attr('src', user.image)
+        if (user.image) image.attr('src', '/content/img/user/' + user.image)
         username.html(user.username)
         if (user.email) email.html(user.email)
     }
