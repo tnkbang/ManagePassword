@@ -35,13 +35,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 appendBody(data.body)
 
                 //Ẩn nav khi nhấn vào header nav
-                $('.sidebar_header').on('click', () => {
+                $('sidebar-header').on('click', () => {
                     hideSidebar()
                 })
 
                 //Vô hiệu hóa đối với thẻ a
                 $('a').click((e) => {
                     e.preventDefault()
+                })
+
+                //Xử lý nhấn thay đổi ảnh
+                $('#inpChangeAvt').on('change', (e) => {
+                    setFormChangeAvt(e.target.files)
                 })
 
                 setDropDown()
@@ -102,10 +107,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         })
     }, 1000)
-
-    $('#user-edit-avt').on('change', (e) => {
-        setFormChangeAvt(e.target.files)
-    })
 })
 
 //Tải thêm js khi cần
@@ -556,7 +557,7 @@ async function setStartCropImg(fileSelected) {
     await loadScript(srcScript)
 
     let image = document.getElementById('imgCropperAvt')
-    const input = document.getElementById('user-edit-avt')
+    const input = document.getElementById('inpChangeAvt')
 
     let files = fileSelected
     let done = (url) => {

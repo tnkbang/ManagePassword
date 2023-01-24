@@ -151,7 +151,7 @@ img {
     background: none;
 }
 
-.sidebar_header {
+.sidebar-header {
     display: flex;
     align-items: center;
     padding: 10px 0;
@@ -167,13 +167,30 @@ img {
     box-shadow: 0 0px 5px rgba(255,255,255,0.5);
 }
 
-.sidebar_header h3 {
+.sidebar-header h3 {
     font-size: 17px;
 }
 
-.sidebar_header .user-info {
+.sidebar-header .user-info {
     width: 180px;
     position: relative
+}
+
+.sidebar-header .change-img {
+    position: absolute;
+    left: 9px;
+    top: 60px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    width: 70px;
+    padding-top: 4px;
+    color: white;
+    font-size: 5px;
+    border-bottom-left-radius: 35px;
+    border-bottom-right-radius: 35px;
+    background: black;
+    opacity: .5;
 }
 
 .user-info .user-btn {
