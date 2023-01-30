@@ -387,12 +387,12 @@ img {
     transition-delay: 0.5s;
 }
 
-.btn-3 {
+.btn-change-profile {
     background: #9900ff;
     transform: translateY(20px);
 }
 
-.btn-1, .btn-2, .btn-3 {
+.btn-1, .btn-2, .btn-change-profile {
     opacity: 0;
 }
 
@@ -406,7 +406,7 @@ img {
     opacity: 1;
 }
 
-.action-btn-group.active .btn-3 {
+.action-btn-group.active .btn-change-profile {
     transform: translateY(0) scale(0.9);
     opacity: 1;
 }
@@ -599,7 +599,7 @@ img {
     }
 
     .user-card .stats span {
-        font-size: 29px;
+        font-size: 20px;
     }
 
 @media only screen and (min-width: 275px) {

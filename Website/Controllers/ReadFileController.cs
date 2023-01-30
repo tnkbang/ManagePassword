@@ -21,6 +21,7 @@ namespace Website.Controllers
             string[] gioiTinh = { "Khác", "Nam", "Nữ" };
             string? birthday = string.IsNullOrEmpty(user.Birthday.ToString()) ? "N/A" : user.Birthday?.ToString("dd/MM/yyyy");
 
+            body = body.Replace("{{image}}", string.IsNullOrEmpty(user.Image) ? "/content/img/user/avt-default.jpg" : "/content/img/user/" + user.Image);
             body = body.Replace("{{name}}", string.IsNullOrWhiteSpace(fullName) ? user.Uid : fullName);
             body = body.Replace("{{description}}", user.Description ?? "Không có gì cả");
             body = body.Replace("{{age}}", birthday);
@@ -45,7 +46,7 @@ namespace Website.Controllers
         public string ReadNavigation(string url, User user)
         {
             string body = ReadHtml(url);
-            body = body.Replace("{{user-image}}", string.IsNullOrEmpty(user.Image) ? "/css/images/avt-default.jpg" : "/content/img/user/" + user.Image);
+            body = body.Replace("{{user-image}}", string.IsNullOrEmpty(user.Image) ? "/content/img/user/avt-default.jpg" : "/content/img/user/" + user.Image);
             body = body.Replace("{{user-username}}", user.Username ?? "ABC 123");
             body = body.Replace("{{user-email}}", string.IsNullOrEmpty(user.Uid) ? "abc123@gmail.com" : user.Username + "@gmail.com");
             body = body.Replace("{{hasLogout}}", string.IsNullOrEmpty(user.Uid) ? "hide" : null);

@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //Trì hoãn 1s mới thực hiện js để tăng hiệu suất
     setTimeout(() => {
-        $('#abc').on('click', () => {
-            setFormChangeProfile()
-        })
         //Xử lý loading khi gọi ajax về server
         $.ajaxSetup({
             beforeSend: () => {
@@ -108,6 +105,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     $('.login-register').dialog('open')
                 }
             })
+        })
+
+        //Xử lý thay đổi thông tin người dùng
+        $('.btn-change-profile').on('click', () => {
+            setFormChangeProfile()
         })
     }, 1000)
 })
