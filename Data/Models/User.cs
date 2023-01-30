@@ -7,7 +7,7 @@ public partial class User
 {
     public string Uid { get; set; } = null!;
 
-    public string? FistName { get; set; }
+    public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
 

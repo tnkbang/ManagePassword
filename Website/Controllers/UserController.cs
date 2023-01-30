@@ -23,7 +23,7 @@ namespace Website.Controllers
         public async Task<JsonResult> GetList(string name)
         {
             List<User> lst = await userServices.GetList();
-            lst = lst.Where(x => string.Concat(x.FistName, " ", x.LastName).ToLower().Contains(name.ToLower())).ToList();
+            lst = lst.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToLower().Contains(name.ToLower())).ToList();
 
             return Json(lst);
         }
@@ -153,6 +153,32 @@ namespace Website.Controllers
             string? urlImg = await userServices.SetImages(user.Uid, img);
 
             user.Image = urlImg;
+            userServices.Update(user);
+
+            return Json(new { tt = true });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public JsonResult GetFormChangeProfile()
+        {
+            User user = userServices.HideSensitive(userServices.Details(User.Claims.First().Value));
+            string body = readFile.ChangeProfile("\\Data\\User\\ChangeProfile.html", user);
+            return Json(new { body, user });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public JsonResult ChangeProfile(string first_name, string last_name, DateTime birthday, string phone, string description)
+        {
+            User user = userServices.Details(User.Claims.First().Value);
+
+            user.FirstName = first_name;
+            user.LastName = last_name;
+            user.Birthday = birthday;
+            user.Phone = phone;
+            user.Description = description;
+
             userServices.Update(user);
 
             return Json(new { tt = true });

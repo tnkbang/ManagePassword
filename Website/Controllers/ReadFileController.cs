@@ -17,7 +17,7 @@ namespace Website.Controllers
 
         public string ReadProfile(string url, User user) {
             string body = ReadHtml(url);
-            string fullName = user.FistName + " " + user.LastName;
+            string fullName = user.FirstName + " " + user.LastName;
             string sex = user.Sex == 1 ? "Nam" : "Nữ";
             string? birthday = string.IsNullOrEmpty(user.Birthday.ToString()) ? "N/A" : user.Birthday?.ToString("dd/MM/yyyy");
             body = body.Replace("{{name}}", string.IsNullOrWhiteSpace(fullName) ? user.Uid : fullName);
@@ -25,6 +25,18 @@ namespace Website.Controllers
             body = body.Replace("{{age}}", birthday);
             body = body.Replace("{{created}}", user.Created.ToString("dd/MM/yyyy"));
             body = body.Replace("{{sex}}", sex);
+
+            return body;
+        }
+
+        public string ChangeProfile(string url, User user)
+        {
+            string body = ReadHtml(url);
+            body = body.Replace("{{first_name}}", user.FirstName);
+            body = body.Replace("{{last_name}}", user.LastName);
+            body = body.Replace("{{birthday}}", user.Birthday?.ToString("yyyy-MM-dd"));
+            body = body.Replace("{{phone}}", user.Phone);
+            body = body.Replace("{{description}}", user.Description);
 
             return body;
         }

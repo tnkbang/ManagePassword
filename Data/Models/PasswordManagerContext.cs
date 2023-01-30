@@ -135,9 +135,9 @@ public partial class PasswordManagerContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
-            entity.Property(e => e.FistName)
+            entity.Property(e => e.FirstName)
                 .HasMaxLength(20)
-                .HasColumnName("fist_name");
+                .HasColumnName("first_name");
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .IsUnicode(false)

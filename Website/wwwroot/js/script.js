@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //Trì hoãn 1s mới thực hiện js để tăng hiệu suất
     setTimeout(() => {
+        $('#abc').on('click', () => {
+            setFormChangeProfile()
+        })
         //Xử lý loading khi gọi ajax về server
         $.ajaxSetup({
             beforeSend: () => {
@@ -633,4 +636,110 @@ function confirmCropImg() {
             })
         })
     }
+}
+
+//làm mới form thay đổi thông tin
+function clearChangeProfile() {
+    $('#changeFirstName').attr('class', 'form-control')
+    $('#changeLastName').attr('class', 'form-control')
+    $('#changeBirthday').attr('class', 'form-control')
+    $('#changePhone').attr('class', 'form-control')
+    $('#changeDescription').attr('class', 'form-control')
+}
+
+//Tạo form đổi thông tin
+function setFormChangeProfile() {
+    if ($('#changeProfile').length) {
+        clearChangeProfile()
+        $('#changeProfile').dialog('open')
+        return
+    }
+
+    $.ajax({
+        url: '/user/getformchangeprofile',
+        type: 'GET',
+        success: (data) => {
+            appendDialogBody(data.body, '#changeProfile', false, 400, 0, 0, 0, 'clip', 1000)
+
+            $('#changeProfileSubmit').on('click', (e) => {
+                e.preventDefault()
+
+                let check = checkInputProfile()
+                if (!check) return
+                confirmChangeProfile()
+            })
+
+            $('#changeProfile').dialog('open')
+        }
+    })
+}
+
+//Kiểm tra thông tin nhập vào của change profile
+function checkInputProfile() {
+    const firstName = '#changeFirstName'
+    const lastName = '#changeLastName'
+    const birthday = '#changeBirthday'
+    const phone = '#changePhone'
+    const description = '#changeDescription'
+
+    const ckcFirstName = '#ckcChangeFirstName'
+    const ckcLastName = '#ckcChangeLastName'
+    const ckcBirthday = '#ckcChangeBirthday'
+    const ckcPhone = '#ckcChangePhone'
+    const ckcDescription = '#ckcChangeDescription'
+
+    setStateInp(true, firstName, ckcFirstName, 'Họ lót hợp lệ !')
+    setStateInp(true, lastName, ckcLastName, 'Tên hợp lệ !')
+    setStateInp(true, birthday, ckcBirthday, 'Ngày sinh hợp lệ !')
+    setStateInp(true, phone, ckcPhone, 'Sđt hợp lệ !')
+    setStateInp(true, description, ckcDescription, 'Mô tả hợp lệ !')
+
+    if ($(firstName).val() == '') {
+        setStateInp(false, firstName, ckcFirstName, 'Họ lót không được để trống !')
+        return false
+    }
+
+    if ($(lastName).val() == '') {
+        setStateInp(false, lastName, ckcLastName, 'Tên không được để trống !')
+        return false
+    }
+
+    if ($(birthday).val() == '') {
+        setStateInp(false, birthday, ckcBirthday, 'Ngày sinh không được để trống !')
+        return false
+    }
+
+    if ($(phone).val() == '') {
+        setStateInp(false, phone, ckcPhone, 'Sđt không được để trống !')
+        return false
+    }
+
+    if ($(description).val() == '') {
+        setStateInp(false, description, ckcDescription, 'Mô tả không được để trống !')
+        return false
+    }
+
+    return true
+}
+
+//Lưu thay đổi thông tin
+function confirmChangeProfile() {
+    let formData = new FormData()
+    formData.append('first_name', $('#changeFirstName').val())
+    formData.append('last_name', $('#changeLastName').val())
+    formData.append('birthday', $('#changeBirthday').val())
+    formData.append('phone', $('#changePhone').val())
+    formData.append('description', $('#changeDescription').val())
+
+    $.ajax({
+        url: '/user/changeprofile',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
+            $('#changeProfile').dialog('close')
+        }
+    })
 }

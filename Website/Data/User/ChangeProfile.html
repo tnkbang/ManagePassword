@@ -1,0 +1,31 @@
+﻿<!-- form change profile-->
+<div id="changeProfile" title="Thay đổi thông tin">
+    <form>
+        <div class="mt-2 mb-3 floating-label">
+            <input id="changeFirstName" required type="text" maxlength="20" class="form-control" placeholder="Nhập họ lót..." value="{{first_name}}" />
+            <label for="changeFirstName">Họ lót</label>
+            <div id="ckcChangeFirstName" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <div class="mb-3 floating-label">
+            <input id="changeLastName" required type="text" maxlength="7" class="form-control" placeholder="Nhập tên..." value="{{last_name}}" />
+            <label for="changeLastName">Tên</label>
+            <div id="ckcChangeLastName" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <div class="mb-3 floating-label">
+            <input id="changeBirthday" required type="date" class="form-control" placeholder="Nhập ngày sinh..." value="{{birthday}}" />
+            <label for="changeBirthday">Ngày sinh</label>
+            <div id="ckcChangeBirthday" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <div class="mb-3 floating-label">
+            <input id="changePhone" required type="number" class="form-control" placeholder="Nhập số điện thoại..." value="{{phone}}" />
+            <label for="changePhone">Điện thoại</label>
+            <div id="ckcChangePhone" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <div class="mb-3 floating-label">
+            <textarea id="changeDescription" required type="text" class="form-control" rows="3" placeholder="Nhập mô tả...">{{description}}</textarea>
+            <label for="changeDescription">Mô tả</label>
+            <div id="ckcChangeDescription" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <button type="submit" id="changeProfileSubmit" class="btn btn-outline-success float-end mb-3">Lưu</button>
+    </form>
+</div>

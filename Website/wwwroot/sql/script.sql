@@ -6,7 +6,7 @@ GO
 
 create table Users(
 	uid char(10) primary key,
-	fist_name nvarchar(20),
+	first_name nvarchar(20),
 	last_name nvarchar(7),
 	birthday datetime,
 	sex int,
