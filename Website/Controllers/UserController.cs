@@ -133,9 +133,9 @@ namespace Website.Controllers
         [Authorize]
         public JsonResult GetProfile()
         {
-            User user = userServices.HideSensitive(userServices.Details(User.Claims.First().Value));
+            User user = userServices.Details(User.Claims.First().Value);
             string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);
-            return Json(new {body, user});
+            return Json(new { body });
         }
 
         [HttpGet]
@@ -164,7 +164,7 @@ namespace Website.Controllers
         {
             User user = userServices.HideSensitive(userServices.Details(User.Claims.First().Value));
             string body = readFile.ChangeProfile("\\Data\\User\\ChangeProfile.html", user);
-            return Json(new { body, user });
+            return Json(new { body, user.Sex });
         }
 
         [HttpPost]

@@ -636,29 +636,16 @@ function confirmCropImg() {
     }
 }
 
-//làm mới form thay đổi thông tin
-function clearChangeProfile() {
-    $('#changeFirstName').attr('class', 'form-control')
-    $('#changeLastName').attr('class', 'form-control')
-    $('#changeBirthday').attr('class', 'form-control')
-    $('#changePhone').attr('class', 'form-control')
-    $('#changeDescription').attr('class', 'form-control')
-}
-
 //Tạo form đổi thông tin
 function setFormChangeProfile() {
-    if ($('#changeProfile').length) {
-        clearChangeProfile()
-        $('#changeProfile').dialog('open')
-        return
-    }
-
     $.ajax({
         url: '/user/getformchangeprofile',
         type: 'GET',
         success: (data) => {
+            $('#changeProfile').remove()
+
             appendDialogBody(data.body, '#changeProfile', false, 400, 0, 0, 0, 'clip', 1000)
-            $('#changeSex').val(data.user.sex)
+            $('#changeSex').val(data.sex)
 
             $('#changeProfileSubmit').on('click', (e) => {
                 e.preventDefault()
