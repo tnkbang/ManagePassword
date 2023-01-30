@@ -711,8 +711,8 @@ function checkInputProfile() {
 //Lưu thay đổi thông tin
 function confirmChangeProfile() {
     let formData = new FormData()
-    formData.append('first_name', $('#changeFirstName').val())
-    formData.append('last_name', $('#changeLastName').val())
+    formData.append('firstName', $('#changeFirstName').val())
+    formData.append('lastName', $('#changeLastName').val())
     formData.append('sex', $('#changeSex').val())
     formData.append('birthday', $('#changeBirthday').val())
     formData.append('phone', $('#changePhone').val())

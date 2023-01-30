@@ -169,16 +169,16 @@ namespace Website.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult ChangeProfile(string first_name, string last_name, int sex, DateTime birthday, string phone, string description)
+        public JsonResult ChangeProfile(User uUpdate)
         {
             User user = userServices.Details(User.Claims.First().Value);
 
-            user.FirstName = first_name;
-            user.LastName = last_name;
-            user.Sex = sex;
-            user.Birthday = birthday;
-            user.Phone = phone;
-            user.Description = description;
+            user.FirstName = uUpdate.FirstName;
+            user.LastName = uUpdate.LastName;
+            user.Sex = uUpdate.Sex;
+            user.Birthday = uUpdate.Birthday;
+            user.Phone = uUpdate.Phone;
+            user.Description = uUpdate.Description;
 
             userServices.Update(user);
 
