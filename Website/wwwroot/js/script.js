@@ -592,9 +592,9 @@ async function setStartCropImg(fileSelected) {
             }
             reader.readAsDataURL(file)
         }
-    }
 
-    $('#changeAvt').dialog('open')
+        $('#changeAvt').dialog('open')
+    }
 }
 
 //Xử lý sau khi đã chọn vùng cắt ảnh
