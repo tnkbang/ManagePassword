@@ -12,6 +12,14 @@
             <div id="ckcChangeLastName" class="valid-feedback">Kiểm tra thông tin</div>
         </div>
         <div class="mb-3 floating-label">
+            <select class="form-select" id="changeSex" aria-label="Giới tính">
+                <option selected value="0">Khác</option>
+                <option value="1">Nam</option>
+                <option value="2">Nữ</option>
+            </select>
+            <label for="changeSex">Giới tính</label>
+        </div>
+        <div class="mb-3 floating-label">
             <input id="changeBirthday" required type="date" class="form-control" placeholder="Nhập ngày sinh..." value="{{birthday}}" />
             <label for="changeBirthday">Ngày sinh</label>
             <div id="ckcChangeBirthday" class="valid-feedback">Kiểm tra thông tin</div>

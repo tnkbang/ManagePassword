@@ -660,6 +660,7 @@ function setFormChangeProfile() {
         type: 'GET',
         success: (data) => {
             appendDialogBody(data.body, '#changeProfile', false, 400, 0, 0, 0, 'clip', 1000)
+            $('#changeSex').val(data.user.sex)
 
             $('#changeProfileSubmit').on('click', (e) => {
                 e.preventDefault()
@@ -727,6 +728,7 @@ function confirmChangeProfile() {
     let formData = new FormData()
     formData.append('first_name', $('#changeFirstName').val())
     formData.append('last_name', $('#changeLastName').val())
+    formData.append('sex', $('#changeSex').val())
     formData.append('birthday', $('#changeBirthday').val())
     formData.append('phone', $('#changePhone').val())
     formData.append('description', $('#changeDescription').val())
