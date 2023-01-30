@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 url: '/user/getformloginregister',
                 type: 'GET',
                 success: (data) => {
-                    appendDialogBody(data.body, '.login-register', false, 350, 0, 0, 0, 'clip', 1000)
+                    appendDialogBody(data.body, '.login-register', false, 350, 0, 'clip', 1000)
 
                     $('.login-register').tabs({
                         activate: () => {
@@ -164,7 +164,7 @@ function setPopupError(xhr) {
     }
 
     $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
-    setDialog('#error', false, true, 0, 0, 0, 0, 'clip', 1000)
+    setDialog('#error', false, true, 0, 0, 'clip', 1000)
     $('#error').dialog('open')
 }
 
@@ -216,21 +216,20 @@ function setDropDown() {
 }
 
 //Khởi tạo dialog
-function setDialog(dom, isOpen, isModel, width, height, maxWidth, maxHeight, effect, duration) {
+function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
     if (height == 0) height = 'auto'
     if (width == 0) width = 'auto'
-    if (maxWidth == 0) maxWidth = 'auto'
-    if (maxHeight == 0) maxHeight = 'auto'
 
-    if (screen.width <= 290 && screen.width < width) width = 260
+    if ($(window).width() < width) width = $(window).width()
+    if ($(window).height() < height) height = $(window).height()
 
     $(dom).dialog({
         autoOpen: isOpen,
         modal: isModel,
         width: width,
         height: height,
-        maxWidth: maxWidth,
-        maxHeight: maxHeight,
+        maxWidth: $(window).width(),
+        maxHeight: $(window).height(),
         show: {
             effect: effect,
             duration: duration
@@ -248,9 +247,9 @@ function appendBody(stringDom) {
 }
 
 //Thêm dialog vào body
-function appendDialogBody(stringDom, nameDom, isModel, width, height, maxWidth, maxHeight, effect, duration) {
+function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, duration) {
     $('body').append(stringDom)
-    setDialog(nameDom, false, isModel, width, height, maxWidth, maxHeight, effect, duration)
+    setDialog(nameDom, false, isModel, width, height, effect, duration)
 }
 
 //Xem thông tin ứng dụng
@@ -265,7 +264,7 @@ function setViewInfo() {
             url: '/default/getinfo',
             type: 'GET',
             success: (data) => {
-                appendDialogBody(data.body, '#appInfo', false, 0, 0, 0, 0, 'clip', 1000)
+                appendDialogBody(data.body, '#appInfo', false, 0, 0, 'clip', 1000)
                 $('#appInfo').dialog('open')
             }
         })
@@ -513,7 +512,7 @@ function getUserInfo() {
             success: (data) => {
                 $('#userProfile').remove()
 
-                appendDialogBody(data.body, '#userProfile', false, 500, 0, 0, 0, 'clip', 1000)
+                appendDialogBody(data.body, '#userProfile', false, 500, 0, 'clip', 1000)
                 $('#userProfile').dialog('open')
             }
         })
@@ -531,7 +530,7 @@ function setFormChangeAvt(fileSelected) {
         url: '/user/getformchangeavt',
         type: 'GET',
         success: (data) => {
-            appendDialogBody(data.body, '#changeAvt', false, 400, 0, 0, 400, 'clip', 1000)
+            appendDialogBody(data.body, '#changeAvt', false, 400, 0, 'clip', 1000)
 
             $('#changeAvt').dialog({
                 close: (event, ui) => {
@@ -646,7 +645,7 @@ function setFormChangeProfile() {
         success: (data) => {
             $('#changeProfile').remove()
 
-            appendDialogBody(data.body, '#changeProfile', false, 400, 0, 0, 0, 'clip', 1000)
+            appendDialogBody(data.body, '#changeProfile', false, 400, 0, 'clip', 1000)
             $('#changeSex').val(data.sex)
 
             $('#changeProfileSubmit').on('click', (e) => {
