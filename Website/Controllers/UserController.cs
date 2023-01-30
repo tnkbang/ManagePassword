@@ -133,9 +133,9 @@ namespace Website.Controllers
         [Authorize]
         public JsonResult GetProfile()
         {
-            User user = userServices.Details(User.Claims.First().Value);
+            User user = userServices.HideSensitive(userServices.Details(User.Claims.First().Value));
             string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);
-            return Json(new {body});
+            return Json(new {body, user});
         }
 
         [HttpGet]

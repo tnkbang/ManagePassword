@@ -504,15 +504,13 @@ function setUserInfo(isLogin, user) {
 
 //Lấy thông tin người dùng
 function getUserInfo() {
-    if ($('#userProfile').length) {
-        $('#userProfile').dialog('open')
-        return
-    }
     $('.user-btn').on('click', () => {
         $.ajax({
             url: '/user/getprofile',
             type: 'POST',
             success: (data) => {
+                $('#userProfile').remove()
+
                 appendDialogBody(data.body, '#userProfile', false, 500, 0, 0, 0, 'clip', 1000)
                 $('#userProfile').dialog('open')
             }
