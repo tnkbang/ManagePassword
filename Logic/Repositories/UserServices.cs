@@ -152,7 +152,7 @@ namespace Logic.Repositories
         public async Task<string?> SetImages(string code, IFormFile img)
         {
             //Khai báo đường dẫn lưu file
-            var basePath = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\content\\img\\user\\");
+            var basePath = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/content/img/user/");
             bool basePathExists = Directory.Exists(basePath);
 
             //Nếu thư mục không có thì tạo mới

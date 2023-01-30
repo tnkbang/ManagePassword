@@ -58,7 +58,7 @@ namespace Website.Controllers
         [HttpGet]
         public JsonResult GetFormLoginRegister()
         {
-            string body = readFile.ReadHtml("\\Data\\User\\LoginRegister.html");
+            string body = readFile.ReadHtml("/Data/User/LoginRegister.html");
             return Json(new { body });
         }
 
@@ -134,14 +134,14 @@ namespace Website.Controllers
         public JsonResult GetProfile()
         {
             User user = userServices.Details(User.Claims.First().Value);
-            string body = readFile.ReadProfile("\\Data\\User\\Profile.html", user);
+            string body = readFile.ReadProfile("/Data/User/Profile.html", user);
             return Json(new { body });
         }
 
         [HttpGet]
         public JsonResult GetFormChangeAvt()
         {
-            string body = readFile.ReadHtml("\\Data\\User\\ChangeAvt.html");
+            string body = readFile.ReadHtml("/Data/User/ChangeAvt.html");
             return Json(new { body });
         }
 
@@ -163,7 +163,7 @@ namespace Website.Controllers
         public JsonResult GetFormChangeProfile()
         {
             User user = userServices.HideSensitive(userServices.Details(User.Claims.First().Value));
-            string body = readFile.ChangeProfile("\\Data\\User\\ChangeProfile.html", user);
+            string body = readFile.ChangeProfile("/Data/User/ChangeProfile.html", user);
             return Json(new { body, user.Sex });
         }
 

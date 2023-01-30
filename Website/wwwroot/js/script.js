@@ -608,8 +608,8 @@ function confirmCropImg() {
 
     if (cropper) {
         canvas = cropper.getCroppedCanvas({
-            width: 72,
-            height: 72,
+            width: 500,
+            height: 500,
         })
         initialAvatarURL = uAvatar.src
         uAvatar.src = canvas.toDataURL()
