@@ -229,7 +229,7 @@ function setDialog(dom, isOpen, isModel, width, height, effect, duration) {
         width: width,
         height: height,
         maxWidth: $(window).width(),
-        maxHeight: $(window).height(),
+        maxHeight: $(window).height() - 90,
         show: {
             effect: effect,
             duration: duration
@@ -521,15 +521,12 @@ function getUserInfo() {
 
 //Tạo form đổi ảnh
 function setFormChangeAvt(fileSelected) {
-    if ($('#changeAvt').length) {
-        setStartCropImg(fileSelected)
-        return
-    }
-
     $.ajax({
         url: '/user/getformchangeavt',
         type: 'GET',
         success: (data) => {
+            $('#changeAvt').remove()
+
             appendDialogBody(data.body, '#changeAvt', false, 400, 0, 'clip', 1000)
 
             $('#changeAvt').dialog({
@@ -569,6 +566,7 @@ async function setStartCropImg(fileSelected) {
             aspectRatio: 1,
             viewMode: 3,
         })
+        $('#changeAvt').dialog('open')
     }
 
     let reader
@@ -594,8 +592,6 @@ async function setStartCropImg(fileSelected) {
             }
             reader.readAsDataURL(file)
         }
-
-        $('#changeAvt').dialog('open')
     }
 }
 
