@@ -45,6 +45,19 @@ namespace Data.Repositories
             }
         }
 
+        public List<HasPassword> Details(string uid, string code)
+        {
+            try
+            {
+                List<HasPassword> pass = _db.HasPasswords.Where(x => x.Uid == uid && x.TypeCode == code).ToList();
+                return pass;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Create(HasPassword password)
         {
             try

@@ -23,6 +23,19 @@ namespace Website.Controllers
         }
 
         [HttpPost]
+        public JsonResult Details(HasPassword pass)
+        {
+            string uid = User.Claims.First().Value;
+
+            List<HasPassword> lstPass = passwordServices.Details(uid, pass.TypeCode);
+
+            if (lstPass.Count == 0)
+                return Json(new { tt = false, mess = "Hiện không có tài khoản nào !" });
+
+            return Json(new { tt = true, lstPass });
+        }
+
+        [HttpPost]
         public JsonResult Create(HasPassword pass)
         {
             string uid = User.Claims.First().Value;

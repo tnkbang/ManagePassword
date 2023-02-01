@@ -46,6 +46,25 @@ namespace Logic.Repositories
             }
         }
 
+        public List<HasPassword> Details(string uid, string code)
+        {
+            try
+            {
+                List<HasPassword> passwords = repositories.Details(uid, code);
+
+                foreach(HasPassword p in passwords)
+                {
+                    p.Password = Protect.Decrypt(p.Password, p.Uid + p.TypeCode);
+                }
+
+                return passwords;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Create(HasPassword password)
         {
             try

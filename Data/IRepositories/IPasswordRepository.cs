@@ -13,6 +13,8 @@ namespace Data.IRepositories
 
         HasPassword Details(string uid, string code, string uname);
 
+        List<HasPassword> Details(string uid, string code);
+
         void Create(HasPassword password);
 
         void Update(HasPassword password);

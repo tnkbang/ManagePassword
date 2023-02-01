@@ -751,6 +751,10 @@ function setFormCreatePass() {
                 $('#passCreateType').append(new Option(value.typeName, value.typeCode));
             })
 
+            $('#passCreateType').on('change', () => {
+                test()
+            })
+
             $('#passCreateSubmit').on('click', (e) => {
                 e.preventDefault()
 
@@ -823,6 +827,23 @@ function confirmCreatePass() {
             }
             getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
             $('#passCreate').dialog('close')
+        }
+    })
+}
+
+//
+function test() {
+    let formData = new FormData()
+    formData.append('typeCode', $('#passCreateType').val())
+
+    $.ajax({
+        url: '/password/details',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            console.log(data)
         }
     })
 }
