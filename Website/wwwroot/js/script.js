@@ -163,7 +163,7 @@ function setPopupError(xhr) {
         return
     }
 
-    $('body').append('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
+    appendBody('<div id="error" title="Lỗi truy cập">Với mã lỗi: ' + xhr.status + '</div>')
     setDialog('#error', false, true, 0, 0, 'clip', 1000)
     $('#error').dialog('open')
 }
@@ -248,7 +248,7 @@ function appendBody(stringDom) {
 
 //Thêm dialog vào body
 function appendDialogBody(stringDom, nameDom, isModel, width, height, effect, duration) {
-    $('body').append(stringDom)
+    appendBody(stringDom)
     setDialog(nameDom, false, isModel, width, height, effect, duration)
 }
 
