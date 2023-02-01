@@ -32,11 +32,11 @@ namespace Data.Repositories
             }
         }
 
-        public HasPassword Details(string id, string code, string uname)
+        public HasPassword Details(string uid, string code, string uname)
         {
             try
             {
-                var pass = _db.HasPasswords.FirstOrDefault(x => x.Uid == id && x.TypeCode == code && x.Username == uname);
+                var pass = _db.HasPasswords.FirstOrDefault(x => x.Uid == uid && x.TypeCode == code && x.Username == uname);
                 return pass != null ? pass : new HasPassword();
             }
             catch
@@ -45,11 +45,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Create(HasPassword model)
+        public void Create(HasPassword password)
         {
             try
             {
-                _db.Set<HasPassword>().Add(model);
+                _db.Set<HasPassword>().Add(password);
                 _db.SaveChanges();
             }
             catch
@@ -58,11 +58,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Update(HasPassword model)
+        public void Update(HasPassword password)
         {
             try
             {
-                _db.Set<HasPassword>().Update(model);
+                _db.Set<HasPassword>().Update(password);
                 _db.SaveChanges();
             }
             catch
@@ -71,11 +71,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Delete(HasPassword model)
+        public void Delete(HasPassword password)
         {
             try
             {
-                _db.Set<HasPassword>().Remove(model);
+                _db.Set<HasPassword>().Remove(password);
                 _db.SaveChanges();
             }
             catch

@@ -84,7 +84,7 @@ namespace Logic.Repositories
         public bool HasCode(string code)
         {
             TypePassword type = Details(code);
-            return string.IsNullOrEmpty(type.TypeCode) ? true : false;
+            return string.IsNullOrEmpty(type.TypeCode) ? false : true;
         }
 
         public bool HasReferences(string code)

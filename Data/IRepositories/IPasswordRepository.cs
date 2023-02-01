@@ -11,13 +11,13 @@ namespace Data.IRepositories
     {
         Task<List<HasPassword>> GetList();
 
-        HasPassword Details(string id, string code, string uname);
+        HasPassword Details(string uid, string code, string uname);
 
-        void Create(HasPassword model);
+        void Create(HasPassword password);
 
-        void Update(HasPassword model);
+        void Update(HasPassword password);
 
-        void Delete(HasPassword model);
+        void Delete(HasPassword password);
 
         bool HasUser(string uid);
 

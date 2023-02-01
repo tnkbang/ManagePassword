@@ -70,11 +70,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Create(User model)
+        public void Create(User user)
         {
             try
             {
-                _db.Set<User>().Add(model);
+                _db.Set<User>().Add(user);
                 _db.SaveChanges();
             }
             catch
@@ -83,11 +83,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Update(User model)
+        public void Update(User user)
         {
             try
             {
-                _db.Set<User>().Update(model);
+                _db.Set<User>().Update(user);
                 _db.SaveChanges();
             }
             catch
@@ -96,11 +96,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Delete(User model)
+        public void Delete(User user)
         {
             try
             {
-                _db.Set<User>().Remove(model);
+                _db.Set<User>().Remove(user);
                 _db.SaveChanges();
             }
             catch

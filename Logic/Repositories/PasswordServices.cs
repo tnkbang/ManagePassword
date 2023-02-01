@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Data.IRepositories;
 using Data.Models;
 using Logic.IRepositories;
+using Logic.Models;
 
 namespace Logic.Repositories
 {
@@ -30,11 +31,14 @@ namespace Logic.Repositories
             }
         }
 
-        public HasPassword Details(string id, string code, string uname)
+        public HasPassword Details(string uid, string code, string uname)
         {
             try
             {
-                return repositories.Details(id, code, uname);
+                HasPassword password = repositories.Details(uid, code, uname);
+
+                if(!string.IsNullOrEmpty(password.Uid)) password.Password = Protect.Decrypt(password.Password, password.Uid + password.TypeCode);
+                return password;
             }
             catch
             {
@@ -42,11 +46,12 @@ namespace Logic.Repositories
             }
         }
 
-        public void Create(HasPassword type)
+        public void Create(HasPassword password)
         {
             try
             {
-                repositories.Create(type);
+                password.Password = Protect.Encrypt(password.Password, password.Uid + password.TypeCode);
+                repositories.Create(password);
             }
             catch
             {
@@ -54,11 +59,12 @@ namespace Logic.Repositories
             }
         }
 
-        public void Update(HasPassword type)
+        public void Update(HasPassword password)
         {
             try
             {
-                repositories.Update(type);
+                password.Password = Protect.Encrypt(password.Password, password.Uid + password.TypeCode);
+                repositories.Update(password);
             }
             catch
             {
@@ -66,11 +72,11 @@ namespace Logic.Repositories
             }
         }
 
-        public void Delete(HasPassword type)
+        public void Delete(HasPassword password)
         {
             try
             {
-                repositories.Delete(type);
+                repositories.Delete(password);
             }
             catch
             {
@@ -95,6 +101,19 @@ namespace Logic.Repositories
             try
             {
                 return repositories.HasType(code);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool HasPassword(string uid, string code, string uname)
+        {
+            try
+            {
+                HasPassword password = Details(uid, code, uname);
+                return string.IsNullOrEmpty(password.Uid) ? false : true;
             }
             catch
             {

@@ -13,10 +13,10 @@ namespace Data.IRepositories
 
         TypePassword Details(string id);
 
-        void Create(TypePassword model);
+        void Create(TypePassword type);
 
-        void Update(TypePassword model);
+        void Update(TypePassword type);
 
-        void Delete(TypePassword model);
+        void Delete(TypePassword type);
     }
 }

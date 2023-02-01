@@ -44,11 +44,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Create(TypePassword model)
+        public void Create(TypePassword type)
         {
             try
             {
-                _db.Set<TypePassword>().Add(model);
+                _db.Set<TypePassword>().Add(type);
                 _db.SaveChanges();
             }
             catch
@@ -57,11 +57,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Update(TypePassword model)
+        public void Update(TypePassword type)
         {
             try
             {
-                _db.Set<TypePassword>().Update(model);
+                _db.Set<TypePassword>().Update(type);
                 _db.SaveChanges();
             }
             catch
@@ -70,11 +70,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Delete(TypePassword model)
+        public void Delete(TypePassword type)
         {
             try
             {
-                _db.Set<TypePassword>().Remove(model);
+                _db.Set<TypePassword>().Remove(type);
                 _db.SaveChanges();
             }
             catch

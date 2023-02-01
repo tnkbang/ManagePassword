@@ -18,10 +18,10 @@ namespace Data.IRepositories
 
         User GetWithUsername(string uname);
 
-        void Create(User model);
+        void Create(User user);
 
-        void Update(User model);
+        void Update(User user);
 
-        void Delete(User model);
+        void Delete(User user);
     }
 }

@@ -19,15 +19,6 @@ namespace Website.Controllers
             this.readFile = new ReadFileController();
         }
 
-        [HttpPost]
-        public async Task<JsonResult> GetList(string name)
-        {
-            List<User> lst = await userServices.GetList();
-            lst = lst.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToLower().Contains(name.ToLower())).ToList();
-
-            return Json(lst);
-        }
-
         #region Đăng nhập và đăng ký
         [HttpPost]
         public JsonResult CheckUsername(string uname)
@@ -129,6 +120,8 @@ namespace Website.Controllers
         }
         #endregion
 
+        #region Thay đổi thông tin
+
         [HttpPost]
         [Authorize]
         public JsonResult GetProfile()
@@ -184,5 +177,7 @@ namespace Website.Controllers
 
             return Json(new { tt = true });
         }
+
+        #endregion
     }
 }
