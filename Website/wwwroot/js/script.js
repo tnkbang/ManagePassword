@@ -759,6 +759,7 @@ function setFormCreatePass() {
                 confirmCreatePass()
             })
 
+            setViewPassword()
             $('#passCreate').dialog('open')
 
             setTimeout(() => {
