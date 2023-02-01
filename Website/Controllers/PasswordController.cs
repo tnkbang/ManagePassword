@@ -3,6 +3,8 @@ using Logic.IRepositories;
 using Logic.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Website.Controllers
 {
@@ -10,10 +12,14 @@ namespace Website.Controllers
     public class PasswordController : Controller
     {
         private readonly IPasswordServices passwordServices;
+        private readonly ITypeServices typeServices;
+        private readonly ReadFileController readFile;
 
-        public PasswordController(IPasswordServices passwordServices)
+        public PasswordController(IPasswordServices passwordServices, ITypeServices typeServices)
         {
             this.passwordServices = passwordServices;
+            readFile = new ReadFileController();
+            this.typeServices = typeServices;
         }
 
         [HttpPost]
@@ -70,6 +76,28 @@ namespace Website.Controllers
             passwordServices.Delete(password);
 
             return Json(new { tt = true, mess = "Xóa mật khẩu thành công !" });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<JsonResult> GetFormCreate()
+        {
+            List<TypePassword> types = new List<TypePassword>();
+            types = await typeServices.GetList();
+
+            List<dynamic> result = new List<dynamic>();
+            types.ForEach(x => {
+                dynamic temp = new
+                {
+                    TypeCode = x.TypeCode,
+                    TypeName = x.TypeName
+                };
+
+                result.Add(temp);
+            });
+
+            string body = readFile.ReadHtml("/Data/Pass/Create.html");
+            return Json(new { body, type = result });
         }
     }
 }

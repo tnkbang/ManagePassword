@@ -111,6 +111,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('.btn-change-profile').on('click', () => {
             setFormChangeProfile()
         })
+
+        //Xử lý thêm tài khoản quản lý
+        $('.btn-create-pass').on('click', () => {
+            setFormCreatePass()
+        })
     }, 1000)
 })
 
@@ -724,6 +729,38 @@ function confirmChangeProfile() {
         success: (data) => {
             getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
             $('#changeProfile').dialog('close')
+        }
+    })
+}
+
+//Tạo form thêm tài khoản quản lý
+function setFormCreatePass() {
+    $.ajax({
+        url: '/password/getformcreate',
+        type: 'GET',
+        success: (data) => {
+            $('#passCreate').remove()
+
+            appendDialogBody(data.body, '#passCreate', false, 400, 0, 'clip', 1000)
+            $.each(data.type, (index, value) => {
+                $('#passCreateType').append(new Option(value.typeName, value.typeCode));
+            })
+
+            //$('#changeProfileSubmit').on('click', (e) => {
+            //    e.preventDefault()
+
+            //    let check = checkInputProfile()
+            //    if (!check) return
+            //    confirmChangeProfile()
+            //})
+
+            $('#passCreate').dialog('open')
+
+            setTimeout(() => {
+                $('#passCreateType').focus()
+                $('#passCreateUnname').val('')
+                $('#passCreatePass').val('')
+            }, 900)
         }
     })
 }

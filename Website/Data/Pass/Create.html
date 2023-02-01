@@ -1,0 +1,23 @@
+﻿<!-- form create password -->
+<div id="passCreate" title="Thêm mới tài khoản">
+    <form>
+        <div class="mt-2 mb-3 floating-label">
+            <select class="form-select" id="passCreateType" aria-label="Loại tài khoản">
+                <option selected value="0">Chọn loại tài khoản</option>
+            </select>
+            <label for="passCreateType">Loại tài khoản</label>
+        </div>
+        <div class="mb-3 floating-label">
+            <input id="passCreateUnname" required type="text" maxlength="50" class="form-control" placeholder="Nhập tên người dùng, email..." value="" />
+            <label for="passCreateUnname">Tên người dùng</label>
+            <div id="ckcPassCreateUnname" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <div class="mb-3 floating-label input-group">
+            <input id="passCreatePass" required type="password" maxlength="20" class="form-control" placeholder="Nhập mật khẩu..." />
+            <label for="passCreatePass">Mật khẩu</label>
+            <span class="input-group-text view-pass material-icons">visibility</span>
+            <div id="ckcPassCreatePass" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <button type="submit" id="passCreateSubmit" class="btn btn-outline-success float-end mb-3">Lưu</button>
+    </form>
+</div>
