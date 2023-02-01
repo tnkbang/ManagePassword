@@ -349,6 +349,11 @@ function clearLoginRegister() {
     $('.view-pass').html('visibility')
 }
 
+//làm mới thẻ input
+function clearStateInput(input) {
+    $(input).attr('class', 'form-control')
+}
+
 //Set trạng thái inp
 function setStateInp(state, inp, lbl, text) {
     if (state) {
@@ -676,11 +681,11 @@ function checkInputProfile() {
     const ckcPhone = '#ckcChangePhone'
     const ckcDescription = '#ckcChangeDescription'
 
-    setStateInp(true, firstName, ckcFirstName, 'Họ lót hợp lệ !')
-    setStateInp(true, lastName, ckcLastName, 'Tên hợp lệ !')
-    setStateInp(true, birthday, ckcBirthday, 'Ngày sinh hợp lệ !')
-    setStateInp(true, phone, ckcPhone, 'Sđt hợp lệ !')
-    setStateInp(true, description, ckcDescription, 'Mô tả hợp lệ !')
+    clearStateInput(firstName)
+    clearStateInput(lastName)
+    clearStateInput(birthday)
+    clearStateInput(phone)
+    clearStateInput(description)
 
     if ($(firstName).val() == '') {
         setStateInp(false, firstName, ckcFirstName, 'Họ lót không được để trống !')
@@ -746,13 +751,13 @@ function setFormCreatePass() {
                 $('#passCreateType').append(new Option(value.typeName, value.typeCode));
             })
 
-            //$('#changeProfileSubmit').on('click', (e) => {
-            //    e.preventDefault()
+            $('#passCreateSubmit').on('click', (e) => {
+                e.preventDefault()
 
-            //    let check = checkInputProfile()
-            //    if (!check) return
-            //    confirmChangeProfile()
-            //})
+                let check = checkCreatePass()
+                if (!check) return
+                confirmCreatePass()
+            })
 
             $('#passCreate').dialog('open')
 
@@ -761,6 +766,62 @@ function setFormCreatePass() {
                 $('#passCreateUnname').val('')
                 $('#passCreatePass').val('')
             }, 900)
+        }
+    })
+}
+
+//Kiểm tra thêm mới quản lý mật khẩu
+function checkCreatePass() {
+    const type = '#passCreateType'
+    const uname = '#passCreateUnname'
+    const pass = '#passCreatePass'
+
+    const ckcType = '#ckcPassCreateType'
+    const ckcUname = '#ckcPassCreateUnname'
+    const ckcPass = '#ckcPassCreatePass'
+
+    $(type).attr('class', 'form-select')
+    clearStateInput(uname)
+    clearStateInput(pass)
+
+    if ($(type).val() == '0') {
+        setStateInp(false, type, ckcType, 'Chưa chọn loại tài khoản !')
+        return false
+    }
+
+    if ($(uname).val() == '') {
+        setStateInp(false, uname, ckcUname, 'Tên người dùng không được để trống !')
+        return false
+    }
+
+    if ($(pass).val() == '') {
+        setStateInp(false, pass, ckcPass, 'Mật khẩu không được để trống !')
+        return false
+    }
+
+    return true
+}
+
+//Xác nhận thêm mới tài khoản
+function confirmCreatePass() {
+    let formData = new FormData()
+    formData.append('typeCode', $('#passCreateType').val())
+    formData.append('username', $('#passCreateUnname').val())
+    formData.append('password', $('#passCreatePass').val())
+
+    $.ajax({
+        url: '/password/create',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            if (!data.tt) {
+                getThongBao('error', 'Lỗi', data.mess)
+                return
+            }
+            getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
+            $('#passCreate').dialog('close')
         }
     })
 }
