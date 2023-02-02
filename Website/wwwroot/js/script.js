@@ -116,11 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('.btn-change-profile').on('click', () => {
             setFormChangeProfile()
         })
-
-        //Xử lý thêm tài khoản quản lý
-        $('.btn-create-pass').on('click', () => {
-            setFormCreatePass()
-        })
     }, 1000)
 })
 
@@ -751,7 +746,7 @@ function setFormCreatePass() {
         success: (data) => {
             $('#passCreate').remove()
 
-            appendDialogBody(data.body, '#passCreate', false, 400, 0, 'clip', 1000)
+            appendDialogBody(data.body, '#passCreate', false, 400, 0, 'size', 1000)
             $.each(data.type, (index, value) => {
                 $('#passCreateType').append(new Option(value.typeName, value.typeCode));
             })
@@ -845,8 +840,14 @@ function setFormDetailsPass() {
                 $('#passDetailsType').append(new Option(value.typeName, value.typeCode));
             })
 
+            //Xử lý sự kiện chọn loại tài khoản
             $('#passDetailsType').on('change', () => {
                 setPassDetailsItems()
+            })
+
+            //Xử lý thêm tài khoản quản lý
+            $('.btn-create-pass').on('click', () => {
+                setFormCreatePass()
             })
 
             $('#passDetails').dialog('open')
