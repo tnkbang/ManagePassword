@@ -858,7 +858,7 @@ function setFormDetailsPass() {
 //Xử lý chuỗi hiển thị thông tin tài khoản quản lý
 function setStringPass(dom, value) {
     dom = dom.replace('{{title}}', value.username)
-    dom = dom.replace('{{uname}}', value.username)
+    dom = dom.replace(/\{{uname}}/g, value.username)
     dom = dom.replace('{{pass}}', value.password)
 
     $('#passDetailsItemList').append(dom);
@@ -909,8 +909,8 @@ function setPassDetailsItems() {
 
 //Ghi vào bộ nhớ tạm tài khoản và mật khẩu
 function copyClipboardPassItem(e) {
-    let uname = $($($($(e.target).parent().parent().parent().children()[0]).children()[0]).children()[1]).html()
-    let pass = $($($($(e.target).parent().parent().parent().children()[0]).children()[2]).children()[2]).html()
+    let uname = $(e.target).data('uname')
+    let pass = $(e.target).data('pass')
 
     navigator.clipboard.writeText(uname + '/' + pass);
 
