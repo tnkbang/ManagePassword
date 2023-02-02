@@ -27,12 +27,13 @@ namespace Website.Controllers
         {
             string uid = User.Claims.First().Value;
 
+            string dom = readFile.ReadHtml("/Data/Pass/Item.html");
             List<HasPassword> lstPass = passwordServices.Details(uid, pass.TypeCode);
 
             if (lstPass.Count == 0)
                 return Json(new { tt = false, mess = "Hiện không có tài khoản nào !" });
 
-            return Json(new { tt = true, lstPass });
+            return Json(new { tt = true, dom,  lstPass });
         }
 
         [HttpPost]

@@ -194,7 +194,7 @@
 }
 
 .ui-accordion .ui-accordion-content {
-    padding: 10px 0 0 10px;
+    padding: 5px 8px;
     border-top: 0;
     overflow: auto
 }

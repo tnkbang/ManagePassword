@@ -856,13 +856,12 @@ function setFormDetailsPass() {
 }
 
 //Xử lý chuỗi hiển thị thông tin tài khoản quản lý
-function setStringPass(value) {
-    const title = '<h3>' + value.username + '</h3>'
-    const uname = 'Username: ' + value.username
-    const pass = 'Password: ' + value.password
-    const body = '<div><p class="text-dark">' + uname + '<br />' + pass + '</p></div>'
+function setStringPass(dom, value) {
+    dom = dom.replace('{{title}}', value.username)
+    dom = dom.replace('{{uname}}', value.username)
+    dom = dom.replace('{{pass}}', value.password)
 
-    $('#passDetailsItemList').append(title + body);
+    $('#passDetailsItemList').append(dom);
 }
 
 //Lấy danh sách tài khoản khi chọn '#passDetailsType'
@@ -890,7 +889,7 @@ function setPassDetailsItems() {
             }
 
             $.each(data.lstPass, (index, value) => {
-                setStringPass(value)
+                setStringPass(data.dom, value)
             })
 
             $('#passDetailsItemList').accordion({
@@ -899,7 +898,21 @@ function setPassDetailsItems() {
                 heightStyle: 'content'
             })
 
+            $('.copy-pass').on('click', (e) => {
+                copyClipboardPassItem(e)
+            })
+
             $('#passDetailsItemList').show()
         }
     })
+}
+
+//Ghi vào bộ nhớ tạm tài khoản và mật khẩu
+function copyClipboardPassItem(e) {
+    let uname = $($($($(e.target).parent().parent().parent().children()[0]).children()[0]).children()[1]).html()
+    let pass = $($($($(e.target).parent().parent().parent().children()[0]).children()[2]).children()[2]).html()
+
+    navigator.clipboard.writeText(uname + '/' + pass);
+
+    getThongBao('success', 'Thành công', "Đã lưu tài khoản vào bộ nhớ tạm !")
 }

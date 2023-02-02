@@ -411,6 +411,11 @@ img {
     opacity: 1;
 }
 
+.action-pass {
+    font-size: 17px;
+    cursor: pointer
+}
+
 .ui-autocomplete-loading {
     background: rgba(255,255,255,0.1) url("/css/images/loading.gif") right center no-repeat;
 }
