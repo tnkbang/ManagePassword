@@ -112,5 +112,27 @@ namespace Website.Controllers
             string body = readFile.ReadHtml("/Data/Pass/Create.html");
             return Json(new { body, type = result });
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<JsonResult> GetFormDetails()
+        {
+            List<TypePassword> types = new List<TypePassword>();
+            types = await typeServices.GetList();
+
+            List<dynamic> result = new List<dynamic>();
+            types.ForEach(x => {
+                dynamic temp = new
+                {
+                    TypeCode = x.TypeCode,
+                    TypeName = x.TypeName
+                };
+
+                result.Add(temp);
+            });
+
+            string body = readFile.ReadHtml("/Data/Pass/Details.html");
+            return Json(new { body, type = result });
+        }
     }
 }

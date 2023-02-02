@@ -49,6 +49,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     setFormChangeAvt(e.target.files)
                 })
 
+                //Xử lý thêm tài khoản quản lý
+                $('.manage-pass').on('click', () => {
+                    setFormDetailsPass()
+                })
+
                 setDropDown()
                 setViewInfo()
                 setSearchTyped()
@@ -751,10 +756,6 @@ function setFormCreatePass() {
                 $('#passCreateType').append(new Option(value.typeName, value.typeCode));
             })
 
-            $('#passCreateType').on('change', () => {
-                test()
-            })
-
             $('#passCreateSubmit').on('click', (e) => {
                 e.preventDefault()
 
@@ -831,10 +832,42 @@ function confirmCreatePass() {
     })
 }
 
-//
-function test() {
+//Tạo form xem tài khoản quản lý
+function setFormDetailsPass() {
+    $.ajax({
+        url: '/password/getformdetails',
+        type: 'GET',
+        success: (data) => {
+            $('#passDetails').remove()
+
+            appendDialogBody(data.body, '#passDetails', false, 400, 0, 'clip', 1000)
+            $.each(data.type, (index, value) => {
+                $('#passDetailsType').append(new Option(value.typeName, value.typeCode));
+            })
+
+            $('#passDetailsType').on('change', () => {
+                setPassDetailsItems()
+            })
+
+            $('#passDetails').dialog('open')
+        }
+    })
+}
+
+//Xử lý chuỗi hiển thị thông tin tài khoản quản lý
+function setStringPass(value) {
+    const title = '<h3>' + value.username + '</h3>'
+    const uname = 'Username: ' + value.username
+    const pass = 'Password: ' + value.password
+    const body = '<div><p class="text-dark">' + uname + '<br />' + pass + '</p></div>'
+
+    $('#passDetailsItemList').append(title + body);
+}
+
+//Lấy danh sách tài khoản khi chọn '#passDetailsType'
+function setPassDetailsItems() {
     let formData = new FormData()
-    formData.append('typeCode', $('#passCreateType').val())
+    formData.append('typeCode', $('#passDetailsType').val())
 
     $.ajax({
         url: '/password/details',
@@ -843,7 +876,29 @@ function test() {
         contentType: false,
         processData: false,
         success: (data) => {
-            console.log(data)
+            $('#passDetailsItemsEmpty').hide()
+
+            if ($('#passDetailsItemList').html() != '') {
+                $('#passDetailsItemList').accordion('destroy')
+                $('#passDetailsItemList').html('').hide()
+            }
+
+            if (!data.tt) {
+                $('#passDetailsItemsEmpty').show()
+                return
+            }
+
+            $.each(data.lstPass, (index, value) => {
+                setStringPass(value)
+            })
+
+            $('#passDetailsItemList').accordion({
+                active: false,
+                collapsible: true,
+                heightStyle: 'content'
+            })
+
+            $('#passDetailsItemList').show()
         }
     })
 }
