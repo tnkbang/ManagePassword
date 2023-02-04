@@ -913,10 +913,10 @@ function setPassDetailsItems() {
 
 //Ghi vào bộ nhớ tạm tài khoản và mật khẩu
 function copyClipboardPassItem(e) {
-    let uname = $(e.target).data('uname')
+    //let uname = $(e.target).data('uname')
     let pass = $(e.target).data('pass')
 
-    navigator.clipboard.writeText(uname + '/' + pass);
+    navigator.clipboard.writeText(pass);
 
     getThongBao('success', 'Thành công', "Đã lưu tài khoản vào bộ nhớ tạm !")
 }
