@@ -931,6 +931,15 @@ function setFormUpdatePass(e) {
             $('#passUpdate').remove()
 
             appendDialogBody(data.body, '#passUpdate', false, 400, 0, 'size', 1000)
+            $('#passUpdate').dialog({
+                close: (event, ui) => {
+                    setPassDetailsItems()
+                    $('#passDetails').dialog('open')
+                },
+                open: (event, ui) => {
+                    $('#passDetails').dialog('close')
+                }
+            })
 
             $('#passUpdateType').append(new Option(data.type.typeName, data.type.typeCode));
             $('#passUpdateType').val(data.type.typeCode)
@@ -945,7 +954,6 @@ function setFormUpdatePass(e) {
                 confirmUpdatePass()
             })
 
-            $('#passDetails').dialog('close')
             $('#passUpdate').dialog('open')
         }
     })
@@ -985,9 +993,6 @@ function confirmUpdatePass() {
             }
             getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
             $('#passUpdate').dialog('close')
-
-            setPassDetailsItems()
-            $('#passDetails').dialog('open')
         }
     })
 }
