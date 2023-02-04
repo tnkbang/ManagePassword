@@ -64,17 +64,15 @@ namespace Website.Controllers
         {
             string uid = User.Claims.First().Value;
 
-            if (string.IsNullOrEmpty(pass.Username) || string.IsNullOrEmpty(pass.Password))
-                return Json(new { tt = false, mess = "Thiếu thông tin !" });
+            if (string.IsNullOrEmpty(pass.Password))
+                return Json(new { tt = false, mess = "Mật khẩu không thể trống !" });
 
-            HasPassword password = passwordServices.Details(uid, pass.Username, pass.Password);
-            password.TypeCode = pass.TypeCode;
-            password.Username = pass.Username;
+            HasPassword password = passwordServices.Details(uid, pass.TypeCode, pass.Username);
             password.Password = pass.Password;
 
             passwordServices.Update(password);
 
-            return Json(new { tt = true, mess = "Cập nhật mật khẩu thành công !" });
+            return Json(new { tt = true, mess = "Cập nhật tài khoản thành công !" });
         }
 
         [HttpPost]
@@ -93,7 +91,6 @@ namespace Website.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<JsonResult> GetFormCreate()
         {
             List<TypePassword> types = new List<TypePassword>();
@@ -115,7 +112,6 @@ namespace Website.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<JsonResult> GetFormDetails()
         {
             List<TypePassword> types = new List<TypePassword>();
@@ -134,6 +130,26 @@ namespace Website.Controllers
 
             string body = readFile.ReadHtml("/Data/Pass/Details.html");
             return Json(new { body, type = result });
+        }
+
+        [HttpGet]
+        public JsonResult GetFormUpdate(string typeCode, string username)
+        {
+            string uid = User.Claims.First().Value;
+            HasPassword uPass = passwordServices.Details(uid, typeCode, username);
+            TypePassword type = typeServices.Details(uPass.TypeCode);
+
+            dynamic typeResult = new
+            {
+                TypeCode = type.TypeCode,
+                TypeName = type.TypeName
+            };
+
+            string body = readFile.ReadHtml("/Data/Pass/Edit.html");
+            body = body.Replace("{{uname}}", uPass.Username);
+            body = body.Replace("{{pass}}", uPass.Password);
+
+            return Json(new { body, type = typeResult});
         }
     }
 }

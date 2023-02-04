@@ -1,0 +1,20 @@
+﻿<!-- form update password -->
+<div id="passUpdate" title="Thay đổi thông tin tài khoản">
+    <form>
+        <div class="mt-2 mb-3 floating-label">
+            <select class="form-select" id="passUpdateType" aria-label="Loại tài khoản"></select>
+            <label for="passUpdateType">Loại tài khoản</label>
+        </div>
+        <div class="mb-3 floating-label">
+            <input id="passUpdateUnname" readonly required type="text" maxlength="50" class="form-control" placeholder="Nhập tên người dùng, email..." value="{{uname}}" />
+            <label for="passUpdateUnname">Tên người dùng</label>
+        </div>
+        <div class="mb-3 floating-label input-group">
+            <input id="passUpdatePass" required type="password" maxlength="20" class="form-control" placeholder="Nhập mật khẩu..." value="{{pass}}" />
+            <label for="passUpdatePass">Mật khẩu</label>
+            <span class="input-group-text view-pass material-icons">visibility</span>
+            <div id="ckcPassUpdatePass" class="valid-feedback">Kiểm tra thông tin</div>
+        </div>
+        <button type="submit" id="passUpdateSubmit" class="btn btn-outline-success float-end">Lưu</button>
+    </form>
+</div>

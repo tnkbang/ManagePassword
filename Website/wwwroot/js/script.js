@@ -898,6 +898,10 @@ function setPassDetailsItems() {
                 heightStyle: 'content'
             })
 
+            $('.update-pass').on('click', (e) => {
+                setFormUpdatePass(e)
+            })
+
             $('.copy-pass').on('click', (e) => {
                 copyClipboardPassItem(e)
             })
@@ -915,4 +919,75 @@ function copyClipboardPassItem(e) {
     navigator.clipboard.writeText(uname + '/' + pass);
 
     getThongBao('success', 'Thành công', "Đã lưu tài khoản vào bộ nhớ tạm !")
+}
+
+//Tạo form chỉnh sửa tài khoản quản lý
+function setFormUpdatePass(e) {
+    $.ajax({
+        url: '/password/getformupdate',
+        type: 'GET',
+        data: { typeCode: $('#passDetailsType').val(), username: $(e.target).data('uname') },
+        success: (data) => {
+            $('#passUpdate').remove()
+
+            appendDialogBody(data.body, '#passUpdate', false, 400, 0, 'size', 1000)
+
+            $('#passUpdateType').append(new Option(data.type.typeName, data.type.typeCode));
+            $('#passUpdateType').val(data.type.typeCode)
+            
+            setViewPassword()
+
+            $('#passUpdateSubmit').on('click', (e) => {
+                e.preventDefault()
+
+                let check = checkUpdatePass()
+                if (!check) return
+                confirmUpdatePass()
+            })
+
+            $('#passDetails').dialog('close')
+            $('#passUpdate').dialog('open')
+        }
+    })
+}
+
+//Kiểm tra cập nhật quản lý mật khẩu
+function checkUpdatePass() {
+    const pass = '#passUpdatePass'
+    const ckcPass = '#ckcPassUpdatePass'
+    clearStateInput(pass)
+
+    if ($(pass).val() == '') {
+        setStateInp(false, pass, ckcPass, 'Mật khẩu không được để trống !')
+        return false
+    }
+
+    return true
+}
+
+//Xác nhận cập nhật tài khoản
+function confirmUpdatePass() {
+    let formData = new FormData()
+    formData.append('typeCode', $('#passUpdateType').val())
+    formData.append('username', $('#passUpdateUnname').val())
+    formData.append('password', $('#passUpdatePass').val())
+
+    $.ajax({
+        url: '/password/update',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            if (!data.tt) {
+                getThongBao('error', 'Lỗi', data.mess)
+                return
+            }
+            getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
+            $('#passUpdate').dialog('close')
+
+            setPassDetailsItems()
+            $('#passDetails').dialog('open')
+        }
+    })
 }
