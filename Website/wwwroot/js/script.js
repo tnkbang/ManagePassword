@@ -8,9 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         //Xử lý loading khi gọi ajax về server
         $.ajaxSetup({
             beforeSend: () => {
+                $('body').css('cursor', 'wait');
                 $('.task-runner').show()
             },
             complete: () => {
+                $('body').css('cursor', 'default');
                 $('.task-runner').hide()
             },
             error: (xhr) => {
@@ -896,6 +898,15 @@ function setPassDetailsItems() {
                 active: false,
                 collapsible: true,
                 heightStyle: 'content'
+            })
+
+            $('.password').on('mouseenter', (e) => {
+                $(e.target).css('cursor', 'zoom-in');
+                const pass = $(e.target).data('pass')
+                $(e.target).html(pass)
+            })
+            $('.password').on('mouseleave', (e) => {
+                $(e.target).html('**********')
             })
 
             $('.update-pass').on('click', (e) => {
