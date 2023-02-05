@@ -749,6 +749,16 @@ function setFormCreatePass() {
             $('#passCreate').remove()
 
             appendDialogBody(data.body, '#passCreate', false, 400, 0, 'size', 1000)
+            $('#passCreate').dialog({
+                close: (event, ui) => {
+                    setPassDetailsItems()
+                    $('#passDetails').dialog('open')
+                },
+                open: (event, ui) => {
+                    $('#passDetails').dialog('close')
+                }
+            })
+
             $.each(data.type, (index, value) => {
                 $('#passCreateType').append(new Option(value.typeName, value.typeCode));
             })
@@ -861,7 +871,7 @@ function setFormDetailsPass() {
 function setStringPass(dom, value) {
     dom = dom.replace('{{title}}', value.username)
     dom = dom.replace(/\{{uname}}/g, value.username)
-    dom = dom.replace('{{pass}}', value.password)
+    dom = dom.replace(/\{{pass}}/g, value.password)
 
     $('#passDetailsItemList').append(dom);
 }
@@ -911,6 +921,10 @@ function setPassDetailsItems() {
 
             $('.update-pass').on('click', (e) => {
                 setFormUpdatePass(e)
+            })
+
+            $('.delete-pass').on('click', (e) => {
+                setFormDeletePass(e)
             })
 
             $('.copy-pass').on('click', (e) => {
@@ -1004,6 +1018,63 @@ function confirmUpdatePass() {
             }
             getThongBao('success', 'Thành công', "Cập nhật thông tin thành công !")
             $('#passUpdate').dialog('close')
+        }
+    })
+}
+
+//Tạo form xóa tài khoản quản lý
+function setFormDeletePass(e) {
+    $.ajax({
+        url: '/password/getformdelete',
+        type: 'GET',
+        data: { typeCode: $('#passDetailsType').val(), username: $(e.target).data('uname') },
+        success: (data) => {
+            $('#passDelete').remove()
+
+            appendDialogBody(data.body, '#passDelete', false, 400, 0, 'size', 1000)
+            $('#passDelete').dialog({
+                close: (event, ui) => {
+                    setPassDetailsItems()
+                    $('#passDetails').dialog('open')
+                },
+                open: (event, ui) => {
+                    $('#passDetails').dialog('close')
+                }
+            })
+
+            $('#passDeleteSubmit').on('click', (e) => {
+                e.preventDefault()
+                confirmDeletePass(e)
+            })
+
+            $('#passDeleteCancel').on('click', (e) => {
+                $('#passDelete').dialog('close')
+            })
+
+            $('#passDelete').dialog('open')
+        }
+    })
+}
+
+//Xác nhận cập nhật tài khoản
+function confirmDeletePass(e) {
+    let formData = new FormData()
+    formData.append('typeCode', $(e.target).data('type'))
+    formData.append('username', $(e.target).data('uname'))
+
+    $.ajax({
+        url: '/password/delete',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            if (!data.tt) {
+                getThongBao('error', 'Lỗi', data.mess)
+                return
+            }
+            getThongBao('success', 'Thành công', "Xóa thành công !")
+            $('#passDelete').dialog('close')
         }
     })
 }

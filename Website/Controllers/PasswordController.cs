@@ -82,7 +82,7 @@ namespace Website.Controllers
 
             HasPassword password = passwordServices.Details(uid, pass.TypeCode, pass.Username);
 
-            if (string.IsNullOrEmpty(pass.Uid))
+            if (string.IsNullOrEmpty(password.Uid))
                 return Json(new { tt = false, mess = "Không tìm thấy thông tin !" });
 
             passwordServices.Delete(password);
@@ -150,6 +150,19 @@ namespace Website.Controllers
             body = body.Replace("{{pass}}", uPass.Password);
 
             return Json(new { body, type = typeResult});
+        }
+
+        [HttpGet]
+        public JsonResult GetFormDelete(string typeCode, string username)
+        {
+            string uid = User.Claims.First().Value;
+            HasPassword uPass = passwordServices.Details(uid, typeCode, username);
+
+            string body = readFile.ReadHtml("/Data/Pass/Delete.html");
+            body = body.Replace("{{uname}}", uPass.Username);
+            body = body.Replace("{{type}}", uPass.TypeCode);
+
+            return Json(new { body });
         }
     }
 }
