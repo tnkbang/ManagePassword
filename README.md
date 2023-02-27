@@ -1,4 +1,4 @@
-﻿# Manage Password
+﻿# Quản lý tài khoản cá nhân
 
 Website quản lý tài khoản cá nhân sử dụng jquery UI.
 </br>
