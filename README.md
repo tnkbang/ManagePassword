@@ -1,8 +1,8 @@
 ﻿# Quản lý tài khoản cá nhân
 
-Website quản lý tài khoản cá nhân sử dụng jquery UI.
+Website quản lý tài khoản cá nhân sử dụng Jquery UI.
 </br>
-Có thể sử dụng để quản lý các tài khoản cá nhân phòng trừ thất lạc. Hệ thống sử dụng giải thuật AES để mã hóa mật khẩu nên tính an toàn cực cao.
+Có thể sử dụng để quản lý và lưu trữ các tài khoản cá nhân. Hệ thống sử dụng giải thuật AES để mã hóa mật khẩu nên tính an toàn tương đối cao.
 
 ## Kỹ Thuật
 
